@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="0_Shell概述 内核  内核其主要模块（或组件）包括以下几个部分：存储管理、CPU和进程管理、文件系统、设备管理和驱动、网络通信，以及系统的初始化（引导）、系统调用等，完成对硬件的控制。  Shell：  俗称壳（用来区别于内核），是机器外面的一层壳，用于人机交互，是人与电脑之间交互的接口，“提供使用者使用界面”的软件（命令解析器）它接收用户命令，然后调用相应的应用程序。表现为其作用是用户输入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell基本语法">
+<meta property="og:url" content="https://mapan.tech/cn/5ef7.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="0_Shell概述 内核  内核其主要模块（或组件）包括以下几个部分：存储管理、CPU和进程管理、文件系统、设备管理和驱动、网络通信，以及系统的初始化（引导）、系统调用等，完成对硬件的控制。  Shell：  俗称壳（用来区别于内核），是机器外面的一层壳，用于人机交互，是人与电脑之间交互的接口，“提供使用者使用界面”的软件（命令解析器）它接收用户命令，然后调用相应的应用程序。表现为其作用是用户输入">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/5ef7/1560773228203.png">
+<meta property="article:published_time" content="2017-06-16T09:07:51.000Z">
+<meta property="article:modified_time" content="2019-10-20T12:25:07.780Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/5ef7/1560773228203.png">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/5ef7.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/5ef7.html","path":"5ef7.html","title":"shell基本语法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>shell基本语法 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-Shell%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">0_Shell概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell%E8%A7%A3%E6%9E%90%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">1_Shell解析器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell%E8%84%9A%E6%9C%AC%E5%85%A5%E9%97%A8"><span class="nav-number">3.</span> <span class="nav-text">2_Shell脚本入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">2.1格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2%E7%AC%AC%E4%B8%80%E4%B8%AAShell%E8%84%9A%E6%9C%AC%EF%BC%9Ahelloworld"><span class="nav-number">3.2.</span> <span class="nav-text">2.2第一个Shell脚本：helloworld</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shell%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">4.</span> <span class="nav-text">3_Shell中的变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text">3.1系统变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-number">4.2.</span> <span class="nav-text">3.2定义变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="nav-number">4.3.</span> <span class="nav-text">3.3特殊变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">5.</span> <span class="nav-text">4_运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">4.1基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D%EF%BC%9A"><span class="nav-number">5.2.</span> <span class="nav-text">4.2案例实操：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="nav-number">6.</span> <span class="nav-text">5_条件判断</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">6.1.</span> <span class="nav-text">5.1基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2%E5%B8%B8%E7%94%A8%E5%88%A4%E6%96%AD%E6%9D%A1%E4%BB%B6"><span class="nav-number">6.2.</span> <span class="nav-text">5.2常用判断条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="nav-number">6.3.</span> <span class="nav-text">5.3案例实操</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">6_流程控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1if-%E5%88%A4%E6%96%AD"><span class="nav-number">7.1.</span> <span class="nav-text">6.1if 判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2case-%E8%AF%AD%E5%8F%A5"><span class="nav-number">7.2.</span> <span class="nav-text">6.2case 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3for-%E5%BE%AA%E7%8E%AF"><span class="nav-number">7.3.</span> <span class="nav-text">6.3for 循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4while-%E5%BE%AA%E7%8E%AF"><span class="nav-number">7.4.</span> <span class="nav-text">6.4while 循环</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#07-read%E6%8C%87%E4%BB%A4"><span class="nav-number">8.</span> <span class="nav-text">07_read指令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">8.1.</span> <span class="nav-text">7.1基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="nav-number">8.2.</span> <span class="nav-text">7.2案例实操</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#08-%E5%87%BD%E6%95%B0"><span class="nav-number">9.</span> <span class="nav-text">08_函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">8.1系统函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">8.2自定义函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#09-Shell%E5%B7%A5%E5%85%B7"><span class="nav-number">10.</span> <span class="nav-text">09_Shell工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-cut"><span class="nav-number">10.1.</span> <span class="nav-text">9.1 cut</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-sed"><span class="nav-number">10.2.</span> <span class="nav-text">9.2 sed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-awk"><span class="nav-number">10.3.</span> <span class="nav-text">9.3 awk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-sort"><span class="nav-number">10.4.</span> <span class="nav-text">9.4 sort</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/5ef7.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          shell基本语法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-06-16 17:07:51" itemprop="dateCreated datePublished" datetime="2017-06-16T17:07:51+08:00">2017-06-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-10-20 20:25:07" itemprop="dateModified" datetime="2019-10-20T20:25:07+08:00">2019-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="0-Shell概述"><a href="#0-Shell概述" class="headerlink" title="0_Shell概述"></a>0_Shell概述</h1><ul>
+<li>内核</li>
+</ul>
+<p>内核其主要模块（或组件）包括以下几个部分：存储管理、CPU和进程管理、文件系统、设备管理和驱动、网络通信，以及系统的初始化（引导）、系统调用等，完成对硬件的控制。</p>
+<ul>
+<li>Shell：</li>
+</ul>
+<p>俗称壳（用来区别于内核），是机器外面的一层壳，用于人机交互，是人与电脑之间交互的接口，“提供使用者使用界面”的软件（命令解析器）它接收用户命令，然后调用相应的应用程序。表现为其作用是用户输入一条命令，shell 就立即解释执行一条。不局限于系统、语言等概念、操作方式和表现方式等。 比如我们平时在黑框框里输入命令，叫 command-line interface (CLI)；在屏幕上点点点，叫graphical user interface (GUI)</p>
+<ul>
+<li>Bash：</li>
+</ul>
+<p>它的名字是一系列缩写：Bourne-Again SHell，顾名思义，再生的Shell，所以，Bash是Shell的一种，而且是最常见的shell，Mac 中默认 shell 就是 bash</p>
+<img src="/cn/5ef7/1560773228203.png" class="1560773228203">
+
+<h1 id="1-Shell解析器"><a href="#1-Shell解析器" class="headerlink" title="1_Shell解析器"></a>1_Shell解析器</h1><p>（1）Linux提供的Shell解析器有：</p>
+<p>centOS6下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 ~]$ cat /etc/shells </span><br><span class="line">/bin/sh</span><br><span class="line">/bin/bash</span><br><span class="line">/sbin/nologin</span><br><span class="line">/bin/dash</span><br><span class="line">/bin/tcsh</span><br><span class="line">/bin/csh</span><br></pre></td></tr></table></figure>
+<p>Raspberry下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pi@raspberrypi:~ $ cat /etc/shells</span><br><span class="line"><span class="comment"># /etc/shells: valid login shells</span></span><br><span class="line">/bin/sh</span><br><span class="line">/bin/dash</span><br><span class="line">/bin/bash</span><br><span class="line">/bin/rbash</span><br><span class="line">/usr/bin/screen</span><br></pre></td></tr></table></figure>
+
+<p>（2）bash和sh的关系</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 bin]$ ll | grep bash</span><br><span class="line">-rwxr-xr-x. 1 root root 941880 5月  11 2016 bash</span><br><span class="line">lrwxrwxrwx. 1 root root      4 5月  27 2017 sh -&gt; bash</span><br></pre></td></tr></table></figure>
+<p>（3）Centos默认的解析器是bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 bin]$ echo $SHELL</span><br><span class="line">/bin/bash</span><br></pre></td></tr></table></figure>
+<h1 id="2-Shell脚本入门"><a href="#2-Shell脚本入门" class="headerlink" title="2_Shell脚本入门"></a>2_Shell脚本入门</h1><h2 id="2-1格式"><a href="#2-1格式" class="headerlink" title="2.1格式"></a>2.1格式</h2><p>脚本以#!/bin/bash开头（指定解析器）</p>
+<h2 id="2-2第一个Shell脚本：helloworld"><a href="#2-2第一个Shell脚本：helloworld" class="headerlink" title="2.2第一个Shell脚本：helloworld"></a>2.2第一个Shell脚本：helloworld</h2><p>（1）需求：创建一个Shell脚本，输出helloworld<br>（2）案例实操：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch helloworld.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vi helloworld.sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在helloworld.sh中输入如下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;helloworld&quot;</span></span><br></pre></td></tr></table></figure>
+<p>（3）脚本的常用执行方式<br>第一种：采用bash或sh+脚本的相对路径或绝对路径（不用赋予脚本+x权限）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sh+脚本的相对路径</span><br><span class="line">[mapan@hadoop101 datas]$ sh helloworld.sh </span><br><span class="line">Helloworld</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sh+脚本的绝对路径</span><br><span class="line">[mapan@hadoop101 datas]$ sh /home/mapan/datas/helloworld.sh </span><br><span class="line">helloworld</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash+脚本的相对路径</span><br><span class="line">[mapan@hadoop101 datas]$ bash helloworld.sh </span><br><span class="line">Helloworld</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bash+脚本的绝对路径</span><br><span class="line">[mapan@hadoop101 datas]$ bash /home/mapan/datas/helloworld.sh </span><br><span class="line">Helloworld</span><br></pre></td></tr></table></figure>
+<p>第二种：采用输入脚本的绝对路径或相对路径执行脚本（必须具有可执行权限+x）<br>（a）首先要赋予helloworld.sh 脚本的+x权限<br><code>[mapan@hadoop101 datas]$ chmod +x helloworld.sh</code><br>（b）执行脚本<br>相对路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ ./helloworld.sh </span><br><span class="line">Helloworld</span><br></pre></td></tr></table></figure>
+<p>绝对路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ /home/mapan/datas/helloworld.sh </span><br><span class="line">Helloworld</span><br></pre></td></tr></table></figure>
+<p>注意：第一种执行方法，本质是bash解析器帮你执行脚本，所以脚本本身不需要执行权限。第二种执行方法，本质是脚本需要自己执行，所以需要执行权限。<br>3．第二个Shell脚本：多命令处理<br>（1）需求：<br>在/home/mapan/目录下创建一个banzhang.txt,在banzhang.txt文件中增加“I love cls”。<br>（2）案例实操：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch batch.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vi batch.sh</span><br></pre></td></tr></table></figure>
+<p>在batch.sh中输入如下内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">cd</span> /home/mapan</span><br><span class="line">touch cls.txt</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;I love cls&quot;</span> &gt;&gt;cls.txt</span><br></pre></td></tr></table></figure>
+<h1 id="3-Shell中的变量"><a href="#3-Shell中的变量" class="headerlink" title="3_Shell中的变量"></a>3_Shell中的变量</h1><h2 id="3-1系统变量"><a href="#3-1系统变量" class="headerlink" title="3.1系统变量"></a>3.1系统变量</h2><p>1.常用系统变量<br><code>$HOME</code>、<code>$PWD</code>、<code>$SHELL</code>、<code>$USER</code>等</p>
+<p>2.案例实操<br>（1）查看系统变量的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> <span class="variable">$HOME</span></span><br><span class="line">/home/mapan</span><br></pre></td></tr></table></figure>
+<p>（2）显示当前Shell中所有变量：<code>set</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">set</span></span><br><span class="line">BASH=/bin/bash</span><br><span class="line">BASH_ALIASES=()</span><br><span class="line">BASH_ARGC=()</span><br><span class="line">BASH_ARGV=()</span><br></pre></td></tr></table></figure>
+<h2 id="3-2定义变量"><a href="#3-2定义变量" class="headerlink" title="3.2定义变量"></a>3.2定义变量</h2><p>1．基本语法<br>（1）定义变量：变量=值<br>（2）撤销变量：unset 变量<br>（3）声明静态变量：readonly变量，注意：不能unset<br>2．变量定义规则<br>（1）变量名称可以由字母、数字和下划线组成，但是不能以数字开头，环境变量名建议大写。<br>（2）等号两侧不能有空格<br>（3）在bash中，变量默认类型都是字符串类型，无法直接进行数值运算。<br>（4）变量的值如果有空格，需要使用双引号或单引号括起来。<br>3．案例实操<br>（1）定义变量A</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ A=5</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> <span class="variable">$A</span></span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>（2）给变量A重新赋值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ A=8</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> <span class="variable">$A</span></span><br><span class="line">8</span><br></pre></td></tr></table></figure>
+<p>（3）撤销变量A</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">unset</span> A</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> <span class="variable">$A</span></span><br></pre></td></tr></table></figure>
+
+<p>（4）声明静态的变量B=2，不能unset</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">readonly</span> B=2</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> <span class="variable">$B</span></span><br><span class="line">2</span><br><span class="line">[mapan@hadoop101 datas]$ B=9</span><br><span class="line">-bash: B: <span class="built_in">readonly</span> variable</span><br></pre></td></tr></table></figure>
+<p>（5）在bash中，变量默认类型都是字符串类型，无法直接进行数值运算</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 ~]$ C=1+2</span><br><span class="line">[mapan@hadoop102 ~]$ <span class="built_in">echo</span> <span class="variable">$C</span></span><br><span class="line">1+2</span><br></pre></td></tr></table></figure>
+<p>（6）变量的值如果有空格，需要使用双引号或单引号括起来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 ~]$ D=I love banzhang</span><br><span class="line">-bash: world: <span class="built_in">command</span> not found</span><br><span class="line">[mapan@hadoop102 ~]$ D=<span class="string">&quot;I love banzhang&quot;</span></span><br><span class="line">[mapan@hadoop102 ~]$ <span class="built_in">echo</span> <span class="variable">$D</span></span><br><span class="line">I love banzhang</span><br></pre></td></tr></table></figure>
+<p>（7）可把变量提升为全局环境变量，可供其他Shell程序使用<br><code>export 变量名</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ vim helloworld.sh </span><br></pre></td></tr></table></figure>
+<p>在helloworld.sh文件中增加echo $B</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;helloworld&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$B</span></span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ ./helloworld.sh </span><br><span class="line">Helloworld</span><br></pre></td></tr></table></figure>
+<p>发现并没有打印输出变量B的值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">export</span> B</span><br><span class="line">[mapan@hadoop101 datas]$ ./helloworld.sh </span><br><span class="line">helloworld</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<h2 id="3-3特殊变量"><a href="#3-3特殊变量" class="headerlink" title="3.3特殊变量"></a>3.3特殊变量</h2><p>特殊变量：$n<br>1．基本语法<br>$n    （功能描述：n为数字，$0代表该脚本名称，$1-$9代表第一到第九个参数，十以上的参数，十以上的参数需要用大括号包含，如${10}）<br>2．案例实操<br>（1）输出该脚本文件名称、输入参数1和输入参数2 的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch parameter.sh </span><br><span class="line">[mapan@hadoop101 datas]$ vim parameter.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$0</span>  <span class="variable">$1</span>   <span class="variable">$2</span>&quot;</span></span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 parameter.sh</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ ./parameter.sh cls  xz</span><br><span class="line">./parameter.sh  cls   xz</span><br></pre></td></tr></table></figure>
+<p>特殊变量：$#<br>1．基本语法<br>$#    （功能描述：获取所有输入参数个数，常用于循环）。<br>2．案例实操<br>（1）获取输入参数的个数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ vim parameter.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$0</span>  <span class="variable">$1</span>   <span class="variable">$2</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$#</span></span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 parameter.sh</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ ./parameter.sh cls  xz</span><br><span class="line">parameter.sh cls xz </span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<p> 特殊变量：$<em>、$@<br>1．基本语法<br>$</em>    （功能描述：这个变量代表命令行中所有的参数，$*把所有的参数看成一个整体）<br>$@    （功能描述：这个变量也代表命令行中所有的参数，不过$@把每个参数区分对待）<br>2．案例实操<br>（1）打印输入的所有参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ vim parameter.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$0</span>  <span class="variable">$1</span>   <span class="variable">$2</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$#</span></span><br><span class="line"><span class="built_in">echo</span> $*</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$@</span></span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ bash parameter.sh 1 2 3</span><br><span class="line">parameter.sh  1   2</span><br><span class="line">3</span><br><span class="line">1 2 3</span><br><span class="line">1 2 3</span><br></pre></td></tr></table></figure>
+<p>特殊变量：$？<br>1．基本语法<br><code>$？</code>（功能描述：最后一次执行的命令的返回状态。如果这个变量的值为0，证明上一个命令正确执行；如果这个变量的值为非0（具体是哪个数，由命令自己来决定），则证明上一个命令执行不正确了。）<br>2．案例实操<br>（1）判断helloworld.sh脚本是否正确执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ ./helloworld.sh </span><br><span class="line">hello world</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> $?</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-运算符"><a href="#4-运算符" class="headerlink" title="4_运算符"></a>4_运算符</h1><h2 id="4-1基本语法"><a href="#4-1基本语法" class="headerlink" title="4.1基本语法"></a>4.1基本语法</h2><p>（1）“$((运算式))”或“$[运算式]”</p>
+<p>（2）<code>expr  + , - , \*,  /,  % </code>   加，减，乘，除，取余</p>
+<p>注意：expr运算符间要有空格</p>
+<h2 id="4-2案例实操："><a href="#4-2案例实操：" class="headerlink" title="4.2案例实操："></a>4.2案例实操：</h2><p>（1）计算3+2的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ expr 2 + 3</span><br><span class="line"></span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>（2）计算3-2的值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ expr 3 - 2 </span><br><span class="line"></span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<p>（3）计算（2+3）X4的值</p>
+<p>（a）expr一步完成计算</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ expr `expr 2 + 3` \* 4</span><br><span class="line"></span><br><span class="line">20</span><br></pre></td></tr></table></figure>
+<p>（b）采用$[运算式]方式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]<span class="comment"># S=$[(2+3)*4]</span></span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]<span class="comment"># echo $S</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="5-条件判断"><a href="#5-条件判断" class="headerlink" title="5_条件判断"></a>5_条件判断</h1><h2 id="5-1基本语法"><a href="#5-1基本语法" class="headerlink" title="5.1基本语法"></a>5.1基本语法</h2><p><code>[ condition ]（注意condition前后要有空格）</code><br>注意：条件非空即为<code>true</code>，<code>[ mapan ]</code>返回<code>true</code>，<code>[]</code> 返回<code>false</code>。</p>
+<h2 id="5-2常用判断条件"><a href="#5-2常用判断条件" class="headerlink" title="5.2常用判断条件"></a>5.2常用判断条件</h2><p>（1）两个整数之间比较<br><code>=</code> 字符串比较<br><code>-lt</code> 小于（less than）           <code> -le</code> 小于等于（less equal）<br><code>-eq</code> 等于（equal）               <code> -gt</code> 大于（greater than）<br><code>-ge</code> 大于等于（greater equal）    <code>-ne</code> 不等于（Not equal）<br>（2）按照文件权限进行判断<br><code>-r</code> 有读的权限（read）           <code>-w</code> 有写的权限（write）<br><code>-x</code> 有执行的权限（execute）<br>（3）按照文件类型进行判断<br><code>-f</code> 文件存在并且是一个常规的文件（file）<br><code>-e</code> 文件存在（existence）        <code>-d</code> 文件存在并是一个目录（directory）</p>
+<h2 id="5-3案例实操"><a href="#5-3案例实操" class="headerlink" title="5.3案例实操"></a>5.3案例实操</h2><p>（1）23是否大于等于22</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ [ 23 -ge 22 ]</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> $?</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>（2）helloworld.sh是否具有写权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ [ -w helloworld.sh ]</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> $?</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>（3）/home/mapan/cls.txt目录中的文件是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ [ -e /home/mapan/cls.txt ]</span><br><span class="line">[mapan@hadoop101 datas]$ <span class="built_in">echo</span> $?</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<p>（4）多条件判断（&amp;&amp; 表示前一条命令执行成功时，才执行后一条命令，|| 表示上一条命令执行失败后，才执行下一条命令）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 ~]$ [ condition ] &amp;&amp; <span class="built_in">echo</span> OK || <span class="built_in">echo</span> notok</span><br><span class="line">OK</span><br><span class="line">[mapan@hadoop101 datas]$ [ condition ] &amp;&amp; [ ] || <span class="built_in">echo</span> notok</span><br><span class="line">notok</span><br></pre></td></tr></table></figure>
+<h1 id="6-流程控制"><a href="#6-流程控制" class="headerlink" title="6_流程控制"></a>6_流程控制</h1><h2 id="6-1if-判断"><a href="#6-1if-判断" class="headerlink" title="6.1if 判断"></a>6.1if 判断</h2><p>1．基本语法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">if [ 条件判断式 ];then </span><br><span class="line">  程序 </span><br><span class="line">fi </span><br><span class="line">或者 </span><br><span class="line">if [ 条件判断式 ] </span><br><span class="line">  then </span><br><span class="line">    程序 </span><br><span class="line">elif [ 条件判断式 ]</span><br><span class="line">	then</span><br><span class="line">		程序</span><br><span class="line">else</span><br><span class="line">	程序</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>注意事项：<br>（1）[ 条件判断式 ]，中括号和条件判断式之间必须有空格<br>（2）if后要有空格<br>2．案例实操<br>    （1）输入一个数字，如果是1，则输出banzhang zhen shuai，如果是2，则输出cls zhen mei，如果是其它，什么也不输出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch if.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim if.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$1</span> -eq <span class="string">&quot;1&quot;</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;banzhang zhen shuai&quot;</span></span><br><span class="line"><span class="keyword">elif</span> [ <span class="variable">$1</span> -eq <span class="string">&quot;2&quot;</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;cls zhen mei&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"> </span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 if.sh </span><br><span class="line">[mapan@hadoop101 datas]$ ./if.sh 1</span><br><span class="line">banzhang zhen shuai</span><br></pre></td></tr></table></figure>
+<h2 id="6-2case-语句"><a href="#6-2case-语句" class="headerlink" title="6.2case 语句"></a>6.2case 语句</h2><p>1．基本语法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">case $变量名 in </span><br><span class="line">  &quot;值1&quot;） </span><br><span class="line">    如果变量的值等于值1，则执行程序1 </span><br><span class="line">    ;; </span><br><span class="line">  &quot;值2&quot;） </span><br><span class="line">    如果变量的值等于值2，则执行程序2 </span><br><span class="line">    ;; </span><br><span class="line">  …省略其他分支… </span><br><span class="line">  *） </span><br><span class="line">    如果变量的值都不是以上的值，则执行此程序 </span><br><span class="line">    ;; </span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<p>注意事项：</p>
+<ol>
+<li>case行尾必须为单词“in”，每一个模式匹配必须以右括号“）”结束。</li>
+<li>双分号“;;”表示命令序列结束，相当于java中的break。</li>
+<li>最后的“*）”表示默认模式，相当于java中的default。<br>2．案例实操<br>（1）输入一个数字，如果是1，则输出banzhang，如果是2，则输出cls，如果是其它，输出renyao。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch case.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim case.sh</span><br><span class="line"> </span><br><span class="line">!/bin/bash</span><br><span class="line"> </span><br><span class="line">case $1 in</span><br><span class="line">&quot;1&quot;)</span><br><span class="line">        echo &quot;banzhang&quot;</span><br><span class="line">;;</span><br><span class="line"> </span><br><span class="line">&quot;2&quot;)</span><br><span class="line">        echo &quot;cls&quot;</span><br><span class="line">;;</span><br><span class="line">*)</span><br><span class="line">        echo &quot;renyao&quot;</span><br><span class="line">;;</span><br><span class="line">esac</span><br><span class="line"> </span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 case.sh</span><br><span class="line">[mapan@hadoop101 datas]$ ./case.sh 1</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<h2 id="6-3for-循环"><a href="#6-3for-循环" class="headerlink" title="6.3for 循环"></a>6.3for 循环</h2>1．基本语法1<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for (( 初始值;循环控制条件;变量变化 )) </span><br><span class="line">  do </span><br><span class="line">    程序 </span><br><span class="line">  done</span><br></pre></td></tr></table></figure>
+2．案例实操<br> （1）从1加到100<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch for1.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim for1.sh</span><br><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">s=0</span><br><span class="line">for((i=0;i&lt;=100;i++))</span><br><span class="line">do</span><br><span class="line">s=$[$s+$i]</span><br><span class="line">done</span><br><span class="line">echo $s</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 for1.sh </span><br><span class="line">[mapan@hadoop101 datas]$ ./for1.sh </span><br><span class="line">“5050”</span><br></pre></td></tr></table></figure>
+3．基本语法2<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">for 变量 in 值1 值2 值3… </span><br><span class="line">do </span><br><span class="line">程序 </span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+4．案例实操<br>（1）打印所有输入参数<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch for2.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim for2.sh</span><br><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">#打印数字</span><br><span class="line"></span><br><span class="line">for i in $*</span><br><span class="line">do</span><br><span class="line">echo &quot;ban zhang love $i &quot;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 for2.sh </span><br><span class="line">[mapan@hadoop101 datas]$ bash for2.sh cls xz bd</span><br><span class="line">ban zhang love cls</span><br><span class="line">ban zhang love xz</span><br><span class="line">ban zhang love bd</span><br></pre></td></tr></table></figure>
+（2）比较<code>$*</code>和<code>$@</code>区别<br>（a）<code>$*</code>和<code>$@</code>都表示传递给函数或脚本的所有参数，不被双引号<code>“”</code>包含时，都以<code>$1 $2 …$n</code>的形式输出所有参数。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch for.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim for.sh</span><br><span class="line"></span><br><span class="line">#!/bin/bash </span><br><span class="line"></span><br><span class="line">for i in $*</span><br><span class="line">do</span><br><span class="line">echo &quot;ban zhang love $i &quot;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for j in $@</span><br><span class="line">do      </span><br><span class="line">echo &quot;ban zhang love $j&quot;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ bash for.sh cls xz bd</span><br><span class="line">ban zhang love cls </span><br><span class="line">ban zhang love xz </span><br><span class="line">ban zhang love bd </span><br><span class="line">ban zhang love cls</span><br><span class="line">ban zhang love xz</span><br><span class="line">ban zhang love bd</span><br></pre></td></tr></table></figure>
+（b）当它们被双引号“”包含时，“$*”会将所有的参数作为一个整体，以<code>“$1 $2 …$n”</code>的形式输出所有参数；<code>“$@”</code>会将各个参数分开，以<code>“$1” “$2”…”$n”</code>的形式输出所有参数。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ vim for.sh</span><br><span class="line"> </span><br><span class="line"><span class="comment">#!/bin/bash </span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;$*&quot;</span> </span><br><span class="line"><span class="comment">#$*中的所有参数看成是一个整体，所以这个for循环只会循环一次 </span></span><br><span class="line">        <span class="keyword">do</span> </span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;ban zhang love <span class="variable">$i</span>&quot;</span></span><br><span class="line">        <span class="keyword">done</span> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$@</span>&quot;</span> </span><br><span class="line"><span class="comment">#$@中的每个参数都看成是独立的，所以“$@”中有几个参数，就会循环几次 </span></span><br><span class="line">        <span class="keyword">do</span> </span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;ban zhang love <span class="variable">$j</span>&quot;</span> </span><br><span class="line">		<span class="keyword">done</span></span><br><span class="line"> </span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 for.sh</span><br><span class="line">[mapan@hadoop101 datas]$ bash for.sh cls xz bd</span><br><span class="line">ban zhang love cls xz bd</span><br><span class="line">ban zhang love cls</span><br><span class="line">ban zhang love xz</span><br><span class="line">ban zhang love bd</span><br></pre></td></tr></table></figure>
+<h2 id="6-4while-循环"><a href="#6-4while-循环" class="headerlink" title="6.4while 循环"></a>6.4while 循环</h2> 1．基本语法<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> [ 条件判断式 ] </span><br><span class="line">  <span class="keyword">do</span> </span><br><span class="line">    程序</span><br><span class="line">  <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+2．案例实操<br>（1）从1加到100<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch while.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim while.sh</span><br><span class="line"> </span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">s=0</span><br><span class="line">i=1</span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$i</span> -le 100 ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        s=$[<span class="variable">$s</span>+<span class="variable">$i</span>]</span><br><span class="line">        i=$[<span class="variable">$i</span>+1]</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"> </span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$s</span></span><br><span class="line"> </span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 while.sh </span><br><span class="line">[mapan@hadoop101 datas]$ ./while.sh </span><br><span class="line">5050</span><br></pre></td></tr></table></figure>
+<h1 id="07-read指令"><a href="#07-read指令" class="headerlink" title="07_read指令"></a>07_read指令</h1><h2 id="7-1基本语法"><a href="#7-1基本语法" class="headerlink" title="7.1基本语法"></a>7.1基本语法</h2><code>read(选项)(参数)</code><br>选项：<br><code>-p</code>：指定读取值时的提示符；<br><code>-t</code>：指定读取值时等待的时间（秒）。<br>参数<br> 变量：指定读取值的变量名<h2 id="7-2案例实操"><a href="#7-2案例实操" class="headerlink" title="7.2案例实操"></a>7.2案例实操</h2>（1）提示7秒内，读取控制台输入的名称<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch read.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim read.sh</span><br><span class="line"> </span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"> </span><br><span class="line"><span class="built_in">read</span> -t 7 -p <span class="string">&quot;Enter your name in 7 seconds &quot;</span> NAME</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$NAME</span></span><br><span class="line"> </span><br><span class="line">[mapan@hadoop101 datas]$ ./read.sh </span><br><span class="line">Enter your name <span class="keyword">in</span> 7 seconds xiaoze</span><br><span class="line">xiaoze</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="08-函数"><a href="#08-函数" class="headerlink" title="08_函数"></a>08_函数</h1><h2 id="8-1系统函数"><a href="#8-1系统函数" class="headerlink" title="8.1系统函数"></a>8.1系统函数</h2><p>1．<code>basename</code>基本语法<br><code>basename [string / pathname] [suffix]  </code><br>（功能描述：basename命令会删掉所有的前缀包括最后一个（‘/’）字符，然后将字符串显示出来。<br>选项：<br><code>suffix</code>为后缀，如果<code>suffix</code>被指定了，<code>basename</code>会将<code>pathname</code>或<code>string</code>中的suffix去掉。<br>2．案例实操<br>（1）截取该/home/mapan/banzhang.txt路径的文件名称</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ basename /home/mapan/banzhang.txt </span><br><span class="line">banzhang.txt</span><br><span class="line">[mapan@hadoop101 datas]$ basename /home/mapan/banzhang.txt .txt</span><br><span class="line">banzhang</span><br></pre></td></tr></table></figure>
+<p>3.<code>dirname</code>基本语法<br><code>dirname 文件绝对路径  </code><br>（功能描述：从给定的包含绝对路径的文件名中去除文件名（非目录的部分），然后返回剩下的路径（目录的部分））<br>4．案例实操<br>（1）获取<code>banzhang.txt</code>文件的路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 ~]$ dirname /home/mapan/banzhang.txt </span><br><span class="line">/home/mapan</span><br></pre></td></tr></table></figure>
+<h2 id="8-2自定义函数"><a href="#8-2自定义函数" class="headerlink" title="8.2自定义函数"></a>8.2自定义函数</h2><p>1．基本语法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[ <span class="keyword">function</span> ] funname[()]</span><br><span class="line">&#123;</span><br><span class="line">	Action;</span><br><span class="line">	[<span class="built_in">return</span> int;]</span><br><span class="line">&#125;</span><br><span class="line">funname</span><br></pre></td></tr></table></figure>
+<p>2．经验技巧<br>（1）必须在调用函数地方之前，先声明函数，shell脚本是逐行运行。不会像其它语言一样先编译。<br>（2）函数返回值，只能通过$?系统变量获得，可以显示加：return返回，如果不加，将以最后一条命令运行结果，作为返回值。return后跟数值n(0-255)<br>3．案例实操<br>    （1）计算两个输入参数的和</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch fun.sh</span><br><span class="line">[mapan@hadoop101 datas]$ vim fun.sh</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">sum</span></span>()</span><br><span class="line">&#123;</span><br><span class="line">    s=0</span><br><span class="line">    s=$[ <span class="variable">$1</span> + <span class="variable">$2</span> ]</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$s</span>&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;Please input the number1: &quot;</span> n1;</span><br><span class="line"><span class="built_in">read</span> -p <span class="string">&quot;Please input the number2: &quot;</span> n2;</span><br><span class="line">sum <span class="variable">$n1</span> <span class="variable">$n2</span>;</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ chmod 777 fun.sh</span><br><span class="line">[mapan@hadoop101 datas]$ ./fun.sh </span><br><span class="line">Please input the number1: 2</span><br><span class="line">Please input the number2: 5</span><br><span class="line">7</span><br></pre></td></tr></table></figure>
+<h1 id="09-Shell工具"><a href="#09-Shell工具" class="headerlink" title="09_Shell工具"></a>09_Shell工具</h1><h2 id="9-1-cut"><a href="#9-1-cut" class="headerlink" title="9.1 cut"></a>9.1 cut</h2><p>cut的工作就是“剪”，具体的说就是在文件中负责剪切数据用的。cut 命令从文件的每一行剪切字节、字符和字段并将这些字节、字符和字段输出。</p>
+<p>1.基本用法</p>
+<p><code>cut [选项参数]  filename</code></p>
+<p>说明：默认分隔符是制表符</p>
+<p>2.选项参数说明</p>
+<table>
+<thead>
+<tr>
+<th>选项参数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-f</td>
+<td>列号，提取第几列</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>分隔符，按照指定分隔符分割列</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>指定具体的字符</td>
+</tr>
+</tbody></table>
+<p>3.案例实操</p>
+<p>（0）数据准备</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ touch cut.txt</span><br><span class="line"></span><br><span class="line">[mapan@hadoop101 datas]$ vim cut.txt</span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">guan zhen</span><br><span class="line"></span><br><span class="line">wo  wo</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line">le  le</span><br></pre></td></tr></table></figure>
+<p>（1）切割cut.txt第一列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ cut -d &quot; &quot; -f 1 cut.txt </span><br><span class="line"></span><br><span class="line">dong</span><br><span class="line"></span><br><span class="line">guan</span><br><span class="line"></span><br><span class="line">wo</span><br><span class="line"></span><br><span class="line">lai</span><br><span class="line"></span><br><span class="line">le</span><br></pre></td></tr></table></figure>
+<p>（2）切割cut.txt第二、三列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ cut -d &quot; &quot; -f 2,3 cut.txt </span><br><span class="line"></span><br><span class="line">shen</span><br><span class="line"></span><br><span class="line">zhen</span><br><span class="line"></span><br><span class="line"> wo</span><br><span class="line"></span><br><span class="line"> lai</span><br><span class="line"></span><br><span class="line"> le</span><br></pre></td></tr></table></figure>
+<p>（3）在cut.txt文件中切割出guan</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ cat cut.txt | grep &quot;guan&quot; | cut -d &quot; &quot; -f 1</span><br><span class="line"></span><br><span class="line">guan</span><br></pre></td></tr></table></figure>
+<p>（4）选取系统PATH变量值，第2个“：”开始后的所有路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ echo $PATH</span><br><span class="line"></span><br><span class="line">/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/mapan/bin</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">[mapan@hadoop102 datas]$ echo $PATH | cut -d: -f 2-</span><br><span class="line"></span><br><span class="line">/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/mapan/bin</span><br></pre></td></tr></table></figure>
+<p>（5）切割ifconfig 后打印的IP地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop101 datas]$ ifconfig eth0 | grep &quot;inet addr&quot; | cut -d: -f 2 | cut -d&quot; &quot; -f1</span><br><span class="line"></span><br><span class="line">192.168.1.102</span><br></pre></td></tr></table></figure>
+<h2 id="9-2-sed"><a href="#9-2-sed" class="headerlink" title="9.2 sed"></a>9.2 sed</h2><p>sed是一种流编辑器，它一次处理一行内容。处理时，把当前处理的行存储在临时缓冲区中，称为“模式空间”，接着用sed命令处理缓冲区中的内容，处理完成后，把缓冲区的内容送往屏幕。接着处理下一行，这样不断重复，直到文件末尾。文件内容并没有改变，除非你使用重定向存储输出。</p>
+<ol>
+<li>基本用法</li>
+</ol>
+<p><code>sed [选项参数]  ‘command’  filename</code></p>
+<ol>
+<li>选项参数说明</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>选项参数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-e</td>
+<td>直接在指令列模式上进行sed的动作编辑。</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>直接编辑文件</td>
+</tr>
+</tbody></table>
+<ol>
+<li>命令功能描述</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em>a</em></td>
+<td>新增，a的后面可以接字串，在下一行出现</td>
+</tr>
+<tr>
+<td>d</td>
+<td>删除</td>
+</tr>
+<tr>
+<td>s</td>
+<td>查找并替换</td>
+</tr>
+</tbody></table>
+<ol>
+<li>案例实操</li>
+</ol>
+<p>（0）数据准备</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ touch sed.txt</span><br><span class="line"></span><br><span class="line">[mapan@hadoop102 datas]$ vim sed.txt</span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">guan zhen</span><br><span class="line"></span><br><span class="line">wo  wo</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">le  le</span><br></pre></td></tr></table></figure>
+<p>（1）将“mei nv”这个单词插入到sed.txt第二行下，打印。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ sed &#x27;2a mei nv&#x27; sed.txt </span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">guan zhen</span><br><span class="line"></span><br><span class="line">mei nv</span><br><span class="line"></span><br><span class="line">wo  wo</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">le  le</span><br><span class="line"></span><br><span class="line">[mapan@hadoop102 datas]$ cat sed.txt </span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">guan zhen</span><br><span class="line"></span><br><span class="line">wo  wo</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">le  le</span><br></pre></td></tr></table></figure>
+<p>注意：文件并没有改变</p>
+<p>（2）删除sed.txt文件所有包含wo的行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ sed <span class="string">&#x27;/wo/d&#x27;</span> sed.txt</span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">guan zhen</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">le  le</span><br></pre></td></tr></table></figure>
+<p>（3）将sed.txt文件中wo替换为ni</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ sed <span class="string">&#x27;s/wo/ni/g&#x27;</span> sed.txt </span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">guan zhen</span><br><span class="line"></span><br><span class="line">ni  ni</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">le  le</span><br></pre></td></tr></table></figure>
+<p>注意：‘g’表示global，全部替换</p>
+<p>（4）将sed.txt文件中的第二行删除并将wo替换为ni</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ sed -e <span class="string">&#x27;2d&#x27;</span> -e <span class="string">&#x27;s/wo/ni/g&#x27;</span> sed.txt </span><br><span class="line"></span><br><span class="line">dong shen</span><br><span class="line"></span><br><span class="line">ni  ni</span><br><span class="line"></span><br><span class="line">lai  lai</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">le  le</span><br></pre></td></tr></table></figure>
+<h2 id="9-3-awk"><a href="#9-3-awk" class="headerlink" title="9.3 awk"></a>9.3 awk</h2><p>一个强大的文本分析工具，把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行分析处理。</p>
+<ol>
+<li>基本用法</li>
+</ol>
+<p><code>awk [选项参数] ‘pattern1&#123;action1&#125;  pattern2&#123;action2&#125;...’ filename</code></p>
+<p><code>pattern</code>：表示AWK在数据中查找的内容，就是匹配模式</p>
+<p><code>action</code>：在找到匹配内容时所执行的一系列命令</p>
+<ol>
+<li>选项参数说明</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>选项参数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-F</td>
+<td>指定输入文件折分隔符</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>赋值一个用户定义变量</td>
+</tr>
+</tbody></table>
+<ol>
+<li>案例实操</li>
+</ol>
+<p>（0）数据准备</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ sudo cp /etc/passwd ./</span><br></pre></td></tr></table></figure>
+<p>（1）搜索passwd文件以root关键字开头的所有行，并输出该行的第7列。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ awk -F: <span class="string">&#x27;/^root/&#123;print $7&#125;&#x27;</span> passwd </span><br><span class="line"></span><br><span class="line">/bin/bash</span><br></pre></td></tr></table></figure>
+<p>（2）搜索passwd文件以root关键字开头的所有行，并输出该行的第1列和第7列，中间以“，”号分割。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ awk -F: <span class="string">&#x27;/^root/&#123;print $1&quot;,&quot;$7&#125;&#x27;</span> passwd </span><br><span class="line"></span><br><span class="line">root,/bin/bash</span><br></pre></td></tr></table></figure>
+<p>注意：只有匹配了pattern的行才会执行action</p>
+<p>（3）只显示/etc/passwd的第一列和第七列，以逗号分割，且在所有行前面添加列名user，shell在最后一行添加”dahaige，/bin/zuishuai”。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ awk -F : <span class="string">&#x27;BEGIN&#123;print &quot;user, shell&quot;&#125; &#123;print $1&quot;,&quot;$7&#125; END&#123;print &quot;dahaige,/bin/zuishuai&quot;&#125;&#x27;</span> passwd</span><br><span class="line"></span><br><span class="line">user, shell</span><br><span class="line"></span><br><span class="line">root,/bin/bash</span><br><span class="line"></span><br><span class="line">bin,/sbin/nologin</span><br><span class="line"></span><br><span class="line">。。。</span><br><span class="line"></span><br><span class="line">mapan,/bin/bash</span><br><span class="line"></span><br><span class="line">dahaige,/bin/zuishuai</span><br></pre></td></tr></table></figure>
+<p>注意：BEGIN 在所有数据读取行之前执行；END 在所有数据执行之后执行。</p>
+<p>（4）将passwd文件中的用户id增加数值1并输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ awk -v i=1 -F: <span class="string">&#x27;&#123;print $3+i&#125;&#x27;</span> passwd</span><br><span class="line"></span><br><span class="line">1</span><br><span class="line"></span><br><span class="line">2</span><br><span class="line"></span><br><span class="line">3</span><br><span class="line"></span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<ol>
+<li>awk的内置变量</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FILENAME</td>
+<td>文件名</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已读的记录数</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>浏览记录的域的个数（切割后，列的个数）</td>
+</tr>
+</tbody></table>
+<ol>
+<li>案例实操</li>
+</ol>
+<p>（1）统计passwd文件名，每行的行号，每行的列数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ awk -F: <span class="string">&#x27;&#123;print &quot;filename:&quot;  FILENAME &quot;, linenumber:&quot; NR  &quot;,columns:&quot; NF&#125;&#x27;</span> passwd </span><br><span class="line"></span><br><span class="line">filename:passwd, linenumber:1,columns:7</span><br><span class="line"></span><br><span class="line">filename:passwd, linenumber:2,columns:7</span><br><span class="line"></span><br><span class="line">filename:passwd, linenumber:3,columns:7</span><br></pre></td></tr></table></figure>
+<p>  （2）切割IP</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ ifconfig eth0 | grep <span class="string">&quot;inet addr&quot;</span> | awk -F: <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> | awk -F <span class="string">&quot; &quot;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> </span><br><span class="line"></span><br><span class="line">192.168.1.102</span><br></pre></td></tr></table></figure>
+
+<p>（3）查询sed.txt中空行所在的行号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ awk <span class="string">&#x27;/^$/&#123;print NR&#125;&#x27;</span> sed.txt </span><br><span class="line"></span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<h2 id="9-4-sort"><a href="#9-4-sort" class="headerlink" title="9.4 sort"></a>9.4 sort</h2><p>sort命令是在Linux里非常有用，它将文件进行排序，并将排序结果标准输出。</p>
+<ol>
+<li>基本语法</li>
+</ol>
+<p>sort(选项)(参数)</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-n</td>
+<td>依照数值的大小排序</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>以相反的顺序来排序</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>设置排序时所用的分隔字符</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>指定需要排序的列</td>
+</tr>
+</tbody></table>
+<p>参数：指定待排序的文件列表</p>
+<ol start="2">
+<li>案例实操</li>
+</ol>
+<p>（0）数据准备</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ touch sort.sh</span><br><span class="line"></span><br><span class="line">[mapan@hadoop102 datas]$ vim sort.sh </span><br><span class="line"></span><br><span class="line">bb:40:5.4</span><br><span class="line"></span><br><span class="line">bd:20:4.2</span><br><span class="line"></span><br><span class="line">xz:50:2.3</span><br><span class="line"></span><br><span class="line">cls:10:3.5</span><br><span class="line"></span><br><span class="line">ss:30:1.6</span><br></pre></td></tr></table></figure>
+<p>（1）按照“：”分割后的第三列倒序排序。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[mapan@hadoop102 datas]$ sort -t : -nrk 3  sort.sh </span><br><span class="line"></span><br><span class="line">bb:40:5.4</span><br><span class="line"></span><br><span class="line">bd:20:4.2</span><br><span class="line"></span><br><span class="line">cls:10:3.5</span><br><span class="line"></span><br><span class="line">xz:50:2.3</span><br><span class="line"></span><br><span class="line">ss:30:1.6</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/e5aa.html" rel="prev" title="大数据时代怎么保护自己的隐私">
+                  <i class="fa fa-chevron-left"></i> 大数据时代怎么保护自己的隐私
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/56dc.html" rel="next" title="RDD的持久化机制">
+                  RDD的持久化机制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

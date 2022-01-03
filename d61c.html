@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="找了两道Hive有关的SQL练习题目，第一道是统计用户浏览量的数据。第二道是统计京东商铺浏览量的数据。 （一）统计用户浏览量我们有如下的用户访问数据    userId visitDate visitCount    u01 2017&#x2F;1&#x2F;21 5   u02 2017&#x2F;1&#x2F;23 6   u03 2017&#x2F;1&#x2F;22 8   u04 2017&#x2F;1&#x2F;20 3   u01 2017&#x2F;1&#x2F;23 6   u">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL的两道练习">
+<meta property="og:url" content="https://mapan.tech/cn/d61c.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="找了两道Hive有关的SQL练习题目，第一道是统计用户浏览量的数据。第二道是统计京东商铺浏览量的数据。 （一）统计用户浏览量我们有如下的用户访问数据    userId visitDate visitCount    u01 2017&#x2F;1&#x2F;21 5   u02 2017&#x2F;1&#x2F;23 6   u03 2017&#x2F;1&#x2F;22 8   u04 2017&#x2F;1&#x2F;20 3   u01 2017&#x2F;1&#x2F;23 6   u">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-07-05T05:30:48.000Z">
+<meta property="article:modified_time" content="2019-10-19T03:30:50.680Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/d61c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/d61c.html","path":"d61c.html","title":"SQL的两道练习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SQL的两道练习 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%BC%88%E4%B8%80%EF%BC%89%E7%BB%9F%E8%AE%A1%E7%94%A8%E6%88%B7%E6%B5%8F%E8%A7%88%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">（一）统计用户浏览量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%94%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">答：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%BC%88%E4%BA%8C%EF%BC%89%E7%BB%9F%E8%AE%A1%E7%BD%91%E5%BA%97%E8%AE%BF%E9%97%AE%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">（二）统计网店访问量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%94%EF%BC%9A-1"><span class="nav-number">2.1.</span> <span class="nav-text">答：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%EF%BC%89"><span class="nav-number">2.1.1.</span> <span class="nav-text">1）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%EF%BC%89"><span class="nav-number">2.1.2.</span> <span class="nav-text">2）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3"><span class="nav-number">2.1.3.</span> <span class="nav-text">3</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/d61c.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL的两道练习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-07-05 13:30:48" itemprop="dateCreated datePublished" datetime="2017-07-05T13:30:48+08:00">2017-07-05</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-10-19 11:30:50" itemprop="dateModified" datetime="2019-10-19T11:30:50+08:00">2019-10-19</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>找了两道Hive有关的SQL练习题目，第一道是统计用户浏览量的数据。第二道是统计京东商铺浏览量的数据。</p>
+<h1 id="（一）统计用户浏览量"><a href="#（一）统计用户浏览量" class="headerlink" title="（一）统计用户浏览量"></a>（一）统计用户浏览量</h1><p>我们有如下的用户访问数据</p>
+<table>
+<thead>
+<tr>
+<th align="center">userId</th>
+<th align="center">visitDate</th>
+<th align="center">visitCount</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u01</td>
+<td align="center">2017/1/21</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">u02</td>
+<td align="center">2017/1/23</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">u03</td>
+<td align="center">2017/1/22</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">u04</td>
+<td align="center">2017/1/20</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">u01</td>
+<td align="center">2017/1/23</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">u01</td>
+<td align="center">2017/2/21</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">u02</td>
+<td align="center">2017/1/23</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">u01</td>
+<td align="center">2017/2/22</td>
+<td align="center">4</td>
+</tr>
+</tbody></table>
+<p>要求使用SQL统计出每个用户的累积访问次数，如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th align="center">用户id</th>
+<th align="center">月份</th>
+<th align="center">小计</th>
+<th align="center">累积</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">u01</td>
+<td align="center">2017-01</td>
+<td align="center">11</td>
+<td align="center">11</td>
+</tr>
+<tr>
+<td align="center">u01</td>
+<td align="center">2017-02</td>
+<td align="center">12</td>
+<td align="center">23</td>
+</tr>
+<tr>
+<td align="center">u02</td>
+<td align="center">2017-01</td>
+<td align="center">12</td>
+<td align="center">12</td>
+</tr>
+<tr>
+<td align="center">u03</td>
+<td align="center">2017-01</td>
+<td align="center">8</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">u04</td>
+<td align="center">2017-01</td>
+<td align="center">3</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+<p><a href="./d61c/action.txt">原始数据</a>如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">u01     2017/1/21       5</span><br><span class="line">u02     2017/1/23       6</span><br><span class="line">u03     2017/1/22       8</span><br><span class="line">u04     2017/1/20       3</span><br><span class="line">u01     2017/1/23       6</span><br><span class="line">u01     2017/2/21       8</span><br><span class="line">u02     2017/1/23       6</span><br><span class="line">u01     2017/2/22       4</span><br></pre></td></tr></table></figure>
+<p>建表语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> action</span><br><span class="line">(userId string,</span><br><span class="line">visitDate string,</span><br><span class="line">visitCount <span class="type">int</span>) </span><br><span class="line"><span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> &quot;\t&quot;;</span><br></pre></td></tr></table></figure>
+<h2 id="答："><a href="#答：" class="headerlink" title="答："></a>答：</h2><p>一、首先转换月份格式，统计每个月、每个用户的访问量</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    userid id , </span><br><span class="line">    date_format(REGEXP_REPLACE(visitdate,<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;-&#x27;</span>),<span class="string">&#x27;yyyy-MM&#x27;</span>) mon , </span><br><span class="line">    <span class="built_in">sum</span>(visitcount) views</span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    action</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">    userid , visitdate;</span><br></pre></td></tr></table></figure>
+<p>执行结果:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">id	mon	views</span><br><span class="line">u01	2017-01	5</span><br><span class="line">u01	2017-01	6</span><br><span class="line">u01	2017-02	8</span><br><span class="line">u01	2017-02	4</span><br><span class="line">u02	2017-01	12</span><br><span class="line">u03	2017-01	8</span><br><span class="line">u04	2017-01	3</span><br></pre></td></tr></table></figure>
+<p>二、再按照月份和用户进行分组并统计访问量。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    id , </span><br><span class="line">    mon , </span><br><span class="line">    <span class="built_in">sum</span>(visitcount) views</span><br><span class="line"><span class="keyword">FROM</span>(<span class="keyword">SELECT</span> </span><br><span class="line">    userid id , </span><br><span class="line">    date_format(REGEXP_REPLACE(visitdate,<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;-&#x27;</span>),<span class="string">&#x27;yyyy-MM&#x27;</span>) mon , </span><br><span class="line">    visitcount</span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    action) t1</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> id ,mon;</span><br></pre></td></tr></table></figure>
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">id	mon	views</span><br><span class="line">u01	2017-01	11</span><br><span class="line">u01	2017-02	12</span><br><span class="line">u02	2017-01	12</span><br><span class="line">u03	2017-01	8</span><br><span class="line">u04	2017-01	3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>三、 对每个用户的数据进行累加，再次子查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">    userid,</span><br><span class="line">    mon,</span><br><span class="line">    views,</span><br><span class="line">    (<span class="built_in">sum</span>(views) <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> userid <span class="keyword">order</span> <span class="keyword">by</span> mon)) total</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    (<span class="keyword">SELECT</span> </span><br><span class="line">        userid , </span><br><span class="line">        mon , </span><br><span class="line">        <span class="built_in">sum</span>(visitcount) views</span><br><span class="line">    <span class="keyword">FROM</span>(<span class="keyword">SELECT</span> </span><br><span class="line">            userid , </span><br><span class="line">            date_format(REGEXP_REPLACE(visitdate,<span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;-&#x27;</span>),<span class="string">&#x27;yyyy-MM&#x27;</span>) mon , </span><br><span class="line">            visitcount</span><br><span class="line">        <span class="keyword">FROM</span> </span><br><span class="line">            action) t1</span><br><span class="line">        <span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">            userid ,mon)t2;</span><br></pre></td></tr></table></figure>
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">userid	mon	views	total</span><br><span class="line">u01	2017-01	11	11</span><br><span class="line">u01	2017-02	12	23</span><br><span class="line">u02	2017-01	12	12</span><br><span class="line">u03	2017-01	8	8</span><br><span class="line">u04	2017-01	3	3</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="（二）统计网店访问量"><a href="#（二）统计网店访问量" class="headerlink" title="（二）统计网店访问量"></a>（二）统计网店访问量</h1><p>有50W个京东店铺，每个顾客访问任何一个店铺的任何一个商品时都会产生一条访问日志，访问日志存储的表名为visit，访客的用户id为user_id，被访问的店铺名称为shop，请统计：<br><a href="./d61c/visit.txt">原始数据</a>如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">u1	a</span><br><span class="line">u2	b</span><br><span class="line">u1	b</span><br><span class="line">u1	a</span><br><span class="line">u3	c</span><br><span class="line">u4	b</span><br><span class="line">u1	a</span><br><span class="line">u2	c</span><br><span class="line">u5	b</span><br><span class="line">u4	b</span><br><span class="line">u6	c</span><br><span class="line">u2	c</span><br><span class="line">u1	b</span><br><span class="line">u2	a</span><br><span class="line">u2	a</span><br><span class="line">u3	a</span><br><span class="line">u5	a</span><br><span class="line">u5	a</span><br><span class="line">u5	a</span><br></pre></td></tr></table></figure>
+<p>建表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> visit(user_id string,shop string) </span><br><span class="line"><span class="type">row</span> format delimited fields terminated <span class="keyword">by</span> <span class="string">&#x27;\t&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>问：<br>1）每个店铺的UV（访客数）<br>2）每个店铺访问次数top3的访客信息。输出店铺名称、访客id、访问次数</p>
+<h2 id="答：-1"><a href="#答：-1" class="headerlink" title="答："></a>答：</h2><h3 id="1）"><a href="#1）" class="headerlink" title="1）"></a>1）</h3><p>一、使用GROUP BY对用户进行去重</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">        shop,</span><br><span class="line">        user_id</span><br><span class="line">    <span class="keyword">FROM</span></span><br><span class="line">        visit</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">        shop,</span><br><span class="line">        user_id</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">shop	user_id</span><br><span class="line">a	u1</span><br><span class="line">a	u2</span><br><span class="line">a	u3</span><br><span class="line">a	u5</span><br><span class="line">b	u1</span><br><span class="line">b	u2</span><br><span class="line">b	u4</span><br><span class="line">b	u5</span><br><span class="line">c	u2</span><br><span class="line">c	u3</span><br><span class="line">c	u6</span><br></pre></td></tr></table></figure>
+
+
+<p>二、对去重的结果进行用户数目统计</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    shop,</span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="operator">*</span>) uv</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    (<span class="keyword">SELECT</span></span><br><span class="line">        shop,</span><br><span class="line">        user_id</span><br><span class="line">    <span class="keyword">FROM</span></span><br><span class="line">        visit</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">        shop,</span><br><span class="line">        user_id) t1</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">    shop;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">shop	uv</span><br><span class="line">a	4</span><br><span class="line">b	4</span><br><span class="line">c	3</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2）"><a href="#2）" class="headerlink" title="2）"></a>2）</h3><p>一、计算每个人访问每个店铺的总次数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    shop,</span><br><span class="line">    user_id,</span><br><span class="line">    <span class="built_in">count</span>(<span class="operator">*</span>)</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    visit</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">    shop,</span><br><span class="line">    user_id;</span><br></pre></td></tr></table></figure>
+
+<p>二、针对同一店铺，对方问次数进行逆序排序，并计算rank值</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    shop,</span><br><span class="line">    user_id,</span><br><span class="line">    ct,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> shop <span class="keyword">order</span> <span class="keyword">by</span> ct <span class="keyword">desc</span> ) rk</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    (<span class="keyword">SELECT</span> </span><br><span class="line">        shop,</span><br><span class="line">        user_id,</span><br><span class="line">        <span class="built_in">count</span>(<span class="operator">*</span>) ct</span><br><span class="line">    <span class="keyword">FROM</span></span><br><span class="line">        visit</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">        shop,</span><br><span class="line">        user_id) t1;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>三、去店铺访问前三名的用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    shop,</span><br><span class="line">    user_id,</span><br><span class="line">    ct</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    (<span class="keyword">SELECT</span></span><br><span class="line">        shop,</span><br><span class="line">        user_id,</span><br><span class="line">        ct,</span><br><span class="line">        <span class="built_in">row_number</span>() <span class="keyword">over</span>(<span class="keyword">partition</span> <span class="keyword">by</span> shop <span class="keyword">order</span> <span class="keyword">by</span> ct <span class="keyword">desc</span> ) rk</span><br><span class="line">    <span class="keyword">FROM</span></span><br><span class="line">        (<span class="keyword">SELECT</span> </span><br><span class="line">            shop,</span><br><span class="line">            user_id,</span><br><span class="line">            <span class="built_in">count</span>(<span class="operator">*</span>) ct</span><br><span class="line">        <span class="keyword">FROM</span></span><br><span class="line">            visit</span><br><span class="line">        <span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">            shop,</span><br><span class="line">            user_id) t1)t2</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    rk <span class="operator">&lt;=</span> <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><p>Exer4：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> user_age</span><br><span class="line">(dt STRING, <span class="operator">/</span><span class="operator">/</span>日期</span><br><span class="line">user_id STRING, <span class="operator">/</span><span class="operator">/</span>用户</span><br><span class="line">age <span class="type">INT</span>) <span class="operator">/</span><span class="operator">/</span>年龄</span><br></pre></td></tr></table></figure>
+<p>1、所有用户的总数及平均年龄</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    user_id,</span><br><span class="line">    <span class="built_in">AVG</span>(age) age</span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    user_age</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">    user_id;t1</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    <span class="built_in">COUNT</span>(<span class="operator">*</span>) count1,</span><br><span class="line">    <span class="built_in">AVG</span>(aage) avg_total_age</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    (<span class="keyword">SELECT</span> </span><br><span class="line">    user_id,</span><br><span class="line">    <span class="built_in">AVG</span>(age) aage</span><br><span class="line"><span class="keyword">FROM</span> </span><br><span class="line">    user_age</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> </span><br><span class="line">    user_id)t1;t0</span><br></pre></td></tr></table></figure>
+
+<p>~~~~~~~~~~~结果~~~~~~~~~~~<br>count1  avg_total_age<br>3   27.0</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">2、活跃用户的总数及其平均年龄(2种方法)</span><br><span class="line">① 用lead或者tag,在用Datediff找相邻一天的，然后去重就得出结果，不具备扩展性，实现多天活跃比较复杂。</span><br><span class="line">② 等差数列</span><br><span class="line">2.1 给每个用户的日期,同一天去重rank</span><br><span class="line">```sql</span><br><span class="line">SELECT</span><br><span class="line">    user_id,</span><br><span class="line">    dt,</span><br><span class="line">    ROW_Number() OVER(PARTITION BY user_id ORDER BY dt) rk</span><br><span class="line">FROM </span><br><span class="line">    user_age</span><br><span class="line">GROUP BY</span><br><span class="line">    user_id,dt;t2</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2.2 用等差数列</span><br><span class="line">```sql</span><br><span class="line">SELECT</span><br><span class="line">    user_id,</span><br><span class="line">    DATE_SUB(dt,rk) diff</span><br><span class="line">FROM</span><br><span class="line">    t2;t3</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">2.3 求出差距</span><br><span class="line">```sql</span><br><span class="line">SELECT</span><br><span class="line">    user_id,</span><br><span class="line">    COUNT(diff) OVER(PARTITION BY user_id,diff) count_diff</span><br><span class="line">FROM</span><br><span class="line">    t3;t4</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">2.4 最大连续天数</span><br><span class="line">```sql</span><br><span class="line">SELECT</span><br><span class="line">    user_id</span><br><span class="line">FROM</span><br><span class="line">    t4</span><br><span class="line">WHERE</span><br><span class="line">    count_diff &gt;= 2</span><br><span class="line">GROUP BY</span><br><span class="line">    user_id;t5</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">2.5 去重并且得到age</span><br><span class="line">```sql</span><br><span class="line">SELECT</span><br><span class="line">    user_age.user_id,</span><br><span class="line">    user_age.age</span><br><span class="line">FROM</span><br><span class="line">    user_age,t5</span><br><span class="line">WHERE</span><br><span class="line">    user_age.user_id = t5.user_id;t6</span><br><span class="line"></span><br><span class="line">SELECT</span><br><span class="line">    COUNT(*) active_count,</span><br><span class="line">    AVG(age) active_avg_age</span><br><span class="line">FROM</span><br><span class="line">    t6; t7</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line">3、合并</span><br><span class="line"></span><br><span class="line">最终SQL：</span><br><span class="line">```sql</span><br><span class="line">SELECT</span><br><span class="line">    count_total,</span><br><span class="line">    avg_total_age,</span><br><span class="line">    active_count,</span><br><span class="line">    active_avg_age</span><br><span class="line">FROM</span><br><span class="line">(SELECT</span><br><span class="line">    COUNT(*) count_total,</span><br><span class="line">    AVG(aage) avg_total_age</span><br><span class="line">FROM</span><br><span class="line">    (SELECT </span><br><span class="line">    user_id,</span><br><span class="line">    AVG(age) aage</span><br><span class="line">FROM </span><br><span class="line">    user_age</span><br><span class="line">GROUP BY </span><br><span class="line">    user_id)t1)t0</span><br><span class="line">,</span><br><span class="line">(SELECT</span><br><span class="line">    COUNT(*) active_count,</span><br><span class="line">    AVG(age) active_avg_age</span><br><span class="line">FROM</span><br><span class="line">(SELECT</span><br><span class="line">    DISTINCT user_age.user_id,</span><br><span class="line">    user_age.age</span><br><span class="line">FROM</span><br><span class="line">    user_age,</span><br><span class="line">    (SELECT</span><br><span class="line">    user_id</span><br><span class="line">FROM</span><br><span class="line">    (SELECT</span><br><span class="line">    user_id,</span><br><span class="line">    COUNT(diff) OVER(PARTITION BY user_id,diff) count_diff</span><br><span class="line">FROM</span><br><span class="line">    (SELECT</span><br><span class="line">    user_id,</span><br><span class="line">    DATE_SUB(dt,rk) diff</span><br><span class="line">FROM</span><br><span class="line">    (SELECT</span><br><span class="line">    user_id,</span><br><span class="line">    dt,</span><br><span class="line">    ROW_Number() OVER(PARTITION BY user_id ORDER BY dt) rk</span><br><span class="line">FROM </span><br><span class="line">    user_age</span><br><span class="line">GROUP BY</span><br><span class="line">    user_id,dt)t2)t3)t4</span><br><span class="line">WHERE</span><br><span class="line">    count_diff &gt;= 2</span><br><span class="line">GROUP BY</span><br><span class="line">    user_id)t5</span><br><span class="line">WHERE</span><br><span class="line">    user_age.user_id = t5.user_id)t6)t7;</span><br><span class="line">```</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">~~~~~~~~~~~结果~~~~~~~~~~~</span><br><span class="line">count_total avg_total_age   active_count    active_avg_age</span><br><span class="line">3   27.0    1   19.0</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/51f3.html" rel="prev" title="Hadoop序列化">
+                  <i class="fa fa-chevron-left"></i> Hadoop序列化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/d3cd.html" rel="next" title="maven加速">
+                  maven加速 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

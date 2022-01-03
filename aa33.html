@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="在Freenom注册了几个免费域名，域名必须正常使用状态才可以免费使用，否则有可能被官方强制收回。所以就用Scala写了这个小项目，用来生成符合Hexo标准的Markdown文章，使用Hexo渲染层HTML后，把网站文件上传到Github并绑定域名，这样就算域名是正常使用了。 首先从网上找了一个词典的文件，可以看到这个词典文件每一行是一个词，有三列，分别是词语，拼音，编号。我们需要的仅仅是词，拼音">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文言文生成器">
+<meta property="og:url" content="https://mapan.tech/cn/aa33.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="在Freenom注册了几个免费域名，域名必须正常使用状态才可以免费使用，否则有可能被官方强制收回。所以就用Scala写了这个小项目，用来生成符合Hexo标准的Markdown文章，使用Hexo渲染层HTML后，把网站文件上传到Github并绑定域名，这样就算域名是正常使用了。 首先从网上找了一个词典的文件，可以看到这个词典文件每一行是一个词，有三列，分别是词语，拼音，编号。我们需要的仅仅是词，拼音">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/aa33/image-20200530120155177.png">
+<meta property="og:image" content="https://mapan.tech/cn/aa33/image-20200530122545640.png">
+<meta property="og:image" content="https://mapan.tech/cn/aa33/image-20200530123103874.png">
+<meta property="article:published_time" content="2020-05-30T03:56:03.000Z">
+<meta property="article:modified_time" content="2020-05-30T04:32:12.601Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/aa33/image-20200530120155177.png">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/aa33.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/aa33.html","path":"aa33.html","title":"文言文生成器"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>文言文生成器 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/aa33.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          文言文生成器
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2020-05-30 11:56:03 / 修改时间：12:32:12" itemprop="dateCreated datePublished" datetime="2020-05-30T11:56:03+08:00">2020-05-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/%E7%81%B5%E6%84%9F%E4%B8%80%E7%8E%B0/" itemprop="url" rel="index"><span itemprop="name">灵感一现</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在Freenom注册了几个免费域名，域名必须正常使用状态才可以免费使用，否则有可能被官方强制收回。所以就用Scala写了这个小项目，用来生成符合Hexo标准的Markdown文章，使用Hexo渲染层HTML后，把网站文件上传到Github并绑定域名，这样就算域名是正常使用了。</p>
+<p>首先从网上找了一个词典的文件，可以看到这个词典文件每一行是一个词，有三列，分别是词语，拼音，编号。我们需要的仅仅是词，拼音和编号可以抛弃不用。</p>
+<img src="/cn/aa33/image-20200530120155177.png" class="image-20200530120155177">
+
+<p>实际思路是，把每一行放在作为一个元素放在一个List中，然后单个元素按照’\t’分隔，取第一个元素，其他的丢弃。这样就组成了一个List词典，只需要随机取用即可。实现代码如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> stream = <span class="type">TitleMock</span>.getClass.getResourceAsStream(<span class="string">&quot;/1.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 剥离出词语组成一个List</span></span><br><span class="line"><span class="keyword">val</span> list: <span class="type">List</span>[<span class="type">String</span>] = <span class="type">Source</span>.fromInputStream(stream)(<span class="string">&quot;UTF8&quot;</span>).getLines.toList.map &#123;</span><br><span class="line">    f =&gt; &#123;</span><br><span class="line">        f.split(<span class="string">&quot;\t&quot;</span>).toList.head</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>既然是文言文那肯定离不开之乎者也这类的虚词，找了一些虚词放到数组中:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> array: <span class="type">Array</span>[<span class="type">String</span>] = <span class="type">Array</span>(<span class="string">&quot;而&quot;</span>, <span class="string">&quot;何&quot;</span>, <span class="string">&quot;乎&quot;</span>, <span class="string">&quot;乃&quot;</span>, <span class="string">&quot;其&quot;</span>, <span class="string">&quot;且&quot;</span>, <span class="string">&quot;然&quot;</span>, <span class="string">&quot;若&quot;</span>, <span class="string">&quot;所&quot;</span>, <span class="string">&quot;为&quot;</span>, <span class="string">&quot;焉&quot;</span>, <span class="string">&quot;也&quot;</span>, <span class="string">&quot;以&quot;</span>, <span class="string">&quot;矣&quot;</span>, <span class="string">&quot;于&quot;</span>, <span class="string">&quot;之&quot;</span>, <span class="string">&quot;则&quot;</span>, <span class="string">&quot;者&quot;</span>, <span class="string">&quot;与&quot;</span>, <span class="string">&quot;欤&quot;</span>, <span class="string">&quot;因&quot;</span>, <span class="string">&quot;兮&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>把实词和虚词拼接，组成句子，句子组成段落，段落组成文章。关键实现如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j &lt;- <span class="number">1</span> to para) &#123;</span><br><span class="line">    <span class="keyword">var</span> article: <span class="type">String</span> = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> (i &lt;- <span class="number">1</span> to <span class="number">100</span>) &#123;</span><br><span class="line"></span><br><span class="line">        article += list(math.abs(<span class="type">Random</span>.nextInt) % shiSize) + array(math.abs(<span class="type">Random</span>.nextInt) % xuSize)</span><br><span class="line">        <span class="keyword">if</span> (i != <span class="number">100</span> &amp;&amp; math.abs(<span class="type">Random</span>.nextInt) % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (math.abs(<span class="type">Random</span>.nextInt) % <span class="number">3</span> == <span class="number">0</span>)</span><br><span class="line">            article += <span class="string">&quot;，&quot;</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            article += <span class="string">&quot;。&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    article = prefix + article + suffix + <span class="string">&quot;\n\n&quot;</span></span><br><span class="line">    cont += article</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>生成文章的标题：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文言文虚词</span></span><br><span class="line"><span class="keyword">val</span> array: <span class="type">Array</span>[<span class="type">String</span>] = <span class="type">Array</span>(<span class="string">&quot;论&quot;</span>, <span class="string">&quot;行&quot;</span>, <span class="string">&quot;说&quot;</span>, <span class="string">&quot;颂&quot;</span>, <span class="string">&quot;学&quot;</span>, <span class="string">&quot;经&quot;</span>, <span class="string">&quot;序&quot;</span>, <span class="string">&quot;辞&quot;</span>, <span class="string">&quot;铭&quot;</span>, <span class="string">&quot;记&quot;</span>, <span class="string">&quot;赋&quot;</span>)</span><br><span class="line"><span class="comment">//虚词的数量</span></span><br><span class="line"><span class="keyword">val</span> xuSize = array.length</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> title: <span class="type">String</span> = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">while</span> (title.length == <span class="number">0</span> || title.length &gt;= <span class="number">3</span>) &#123;</span><br><span class="line">    title = list(math.abs(<span class="type">Random</span>.nextInt) % shiSize)</span><br><span class="line">&#125;</span><br><span class="line">title + array(math.abs(<span class="type">Random</span>.nextInt) % xuSize)</span><br></pre></td></tr></table></figure>
+
+<p>标题和文章都有了，那么拼接在一起写入一个文本文件中即可，引入Java的IO的三个类，java.io.{File, FileOutputStream, OutputStreamWriter},关键实现如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 随机出来一个近20年的时间点</span></span><br><span class="line"><span class="keyword">val</span> ran = <span class="type">Random</span>.nextInt()</span><br><span class="line"><span class="keyword">val</span> year = <span class="number">1980</span> + math.abs(ran % <span class="number">39</span>)</span><br><span class="line"><span class="keyword">val</span> month = <span class="number">1</span> + math.abs(ran % <span class="number">12</span>)</span><br><span class="line"><span class="keyword">val</span> day = <span class="number">1</span> + math.abs(ran % <span class="number">28</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> now = <span class="type">LocalDate</span>.of(year, month, day) + <span class="string">&quot; &quot;</span> + <span class="type">LocalTime</span>.now().toString.dropRight(<span class="number">4</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这是markdown文章的前缀</span></span><br><span class="line"><span class="keyword">val</span> pre = <span class="string">&quot;---\n&quot;</span> + <span class="string">&quot;title: &quot;</span> + title + <span class="string">&quot;\ndate: &quot;</span> + now + <span class="string">&quot;\ntags: \n&quot;</span> + <span class="string">&quot;---\n\n&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出文章路径output文件夹，如果没有就创建</span></span><br><span class="line"><span class="keyword">val</span> myPath: <span class="type">File</span> = <span class="keyword">new</span> <span class="type">File</span>(<span class="string">&quot;./output&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> (!myPath.exists())&#123;<span class="comment">//若此目录不存在，则创建之</span></span><br><span class="line">    myPath.mkdir()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> fos : <span class="type">FileOutputStream</span> = <span class="keyword">new</span> <span class="type">FileOutputStream</span>(<span class="string">s&quot;./<span class="subst">$myPath</span>/<span class="subst">$title</span>.md&quot;</span>)</span><br><span class="line"><span class="keyword">val</span> osw : <span class="type">OutputStreamWriter</span>  = <span class="keyword">new</span> <span class="type">OutputStreamWriter</span>(fos, <span class="string">&quot;UTF-8&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写入文章</span></span><br><span class="line">osw.write(pre + totalArticle)</span><br><span class="line">osw.close()</span><br><span class="line">fos.close()</span><br></pre></td></tr></table></figure>
+
+
+
+<p>具体生成文章效果：</p>
+<img src="/cn/aa33/image-20200530122545640.png" class="image-20200530122545640">
+
+<p>使用Hexo渲染后（具体实现查考Hexo官网），网站代码放到Github并开启gh-pages服务，预览文章 <a target="_blank" rel="noopener" href="https://impn.github.io/ClassicalChineseGenerator/">https://impn.github.io/ClassicalChineseGenerator/</a></p>
+<p>到此为止，一个完整的文言文网站已经生成。</p>
+<img src="/cn/aa33/image-20200530123103874.png" class="image-20200530123103874">
+
+<p>项目已经开源，完整代码放在Github，<a target="_blank" rel="noopener" href="https://github.com/impn/ClassicalChineseGenerator">项目地址</a> ，可以直接下载在Release页面下载Jar包使用。</p>
+<p>具体使用方法：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javr -jar ClassicalChineseGenerator-0.1.1.jar 10</span><br></pre></td></tr></table></figure>
+
+<p>后面的数值参数是生成10篇文章，如果不加参数默认是生成1篇。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/9af.html" rel="prev" title="Hive的一次踩坑[2]">
+                  <i class="fa fa-chevron-left"></i> Hive的一次踩坑[2]
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

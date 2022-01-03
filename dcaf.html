@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在数字电路设计的中，往往需要把数字信号经过开关扩流器件来驱动一些蜂鸣器、LED、继电器等需要较大电流的器件，用得最多的开关扩流器件要数三极 管。然而 在使用的过程中，如果电路设计不当，三极管无法工作在正常的开关状态，就达不到预期的目的，有时就是因为这些小小的错误而导致重新打板，导致浪费。本人在 这个方面就吃过亏，所以把自己使用三极管的一些经验以及一些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开关三极管的剖析">
+<meta property="og:url" content="https://mapan.tech/cn/dcaf.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在数字电路设计的中，往往需要把数字信号经过开关扩流器件来驱动一些蜂鸣器、LED、继电器等需要较大电流的器件，用得最多的开关扩流器件要数三极 管。然而 在使用的过程中，如果电路设计不当，三极管无法工作在正常的开关状态，就达不到预期的目的，有时就是因为这些小小的错误而导致重新打板，导致浪费。本人在 这个方面就吃过亏，所以把自己使用三极管的一些经验以及一些">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/dcaf/005vwoCygy1fl3zrcs294j30b408cjrn.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/dcaf/005vwoCygy1fl3zo0gp41j30of0bb40b.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/dcaf/005vwoCygy1fl3zsexf1qj30m009tmyn.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/dcaf/005vwoCygy1fl3zt3t9caj30oa0apwg4.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/dcaf/005vwoCygy1fl3ztj5htxj30oa0csq4y.jpg">
+<meta property="article:published_time" content="2015-07-18T09:18:00.000Z">
+<meta property="article:modified_time" content="2021-12-26T07:29:28.825Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/dcaf/005vwoCygy1fl3zrcs294j30b408cjrn.jpg">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/dcaf.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/dcaf.html","path":"dcaf.html","title":"开关三极管的剖析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>开关三极管的剖析 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/dcaf.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          开关三极管的剖析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-07-18 17:18:00" itemprop="dateCreated datePublished" datetime="2015-07-18T17:18:00+08:00">2015-07-18</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-12-26 15:29:28" itemprop="dateModified" datetime="2021-12-26T15:29:28+08:00">2021-12-26</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/%E7%94%B5%E5%AD%90/" itemprop="url" rel="index"><span itemprop="name">电子</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;在数字电路设计的中，往往需要把数字信号经过开关扩流器件来驱动一些蜂鸣器、LED、继电器等需要较大电流的器件，用得最多的开关扩流器件要数三极 管。然而 在使用的过程中，如果电路设计不当，三极管无法工作在正常的开关状态，就达不到预期的目的，有时就是因为这些小小的错误而导致重新打板，导致浪费。本人在 这个方面就吃过亏，所以把自己使用三极管的一些经验以及一些常见的误区给大家分享一下，在电路设计的过程中可以减少一些不必要的麻烦。</p>
+<img src="/cn/dcaf/005vwoCygy1fl3zrcs294j30b408cjrn.jpg" class="各种三极管">
+
+
+
+<p>下面来看几个三极管做开关的常用电路画法。几个例子都是蜂鸣器作为被驱动器件。</p>
+<img src="/cn/dcaf/005vwoCygy1fl3zo0gp41j30of0bb40b.jpg" class="图一">
+
+
+<p>图一的a 电路用的是NPN管，注意蜂鸣器接在三极管的集电极，驱动信号可以是常见的3.3V或者5VTTL，高电平开通，电阻按照经验法可以取4.7K。 例如a电路，开通时假设为高电平5V，基极电流Ib=(5V-0.7V)/4.7K=0.9mA，可以使三极管完全饱和。b 电路用的是PNP管，同样把 蜂鸣器接在三极管的集电极，不同的是驱动信号是5V的TTL电平。以上这两个都可以正常工作，只要PWM驱动信号工作在合适的频率，蜂鸣器（有源）都会发 出最大的声音。</p>
+<img src="/cn/dcaf/005vwoCygy1fl3zsexf1qj30m009tmyn.jpg" class="" title="图二">
+
+<p>图二的这两个电路相比图一来说，最大的区别在于被驱动器件接在三极管的发射极。同样看c电路，开通时假设为高电平5V，基极电流Ib=(5V- 0.7V- UL)/4.7K，其中UL为被驱动器件上的压降。可以看到，同样取基极电阻为4.7K，流过的基极电流会比图一a电路的要小，小多少要看UL是多少。如 果UL比较大，那么相应的Ib就小，很有可能导致三极管无法工作在饱和状态，使得被驱动器件无法动作。有人会说把基极电阻减小就可以了呀，可是被驱动器件 的压降是很难获知的，有些被驱动器件的压降是变动的，这样一来基极电阻就较难选择合适的值，阻值选择太大就会驱动失败，选择太小，损耗又变大。所以，在非 不得已的情况下，不建议选用图二的这两种电路。</p>
+<img src="/cn/dcaf/005vwoCygy1fl3zt3t9caj30oa0apwg4.jpg" class="" title="图三">
+
+<p>我们再来看图三这两个电路。驱动信号为3.3VTTL电平，而被驱动器件开通电压需要5V。在3.3V的MCU电路中，不小心的话很容易就设计出这 两种电 路，而这两种电路都是错误的。先分析e电路，这是典型的“发射极正偏，集电极反偏”的放大电路，或者叫射极输出器。当PWM信号为3.3V时，三极管发射 极电压为3.3V-0.7V = 2.6V，无法达到期望的5V。图三f电路也是一个很失败的电路，首先这个电路开通是没有问题的，当驱动信号为低电平 时，被驱动器件可以正常动作。然而这个电路是无法关断的，当驱动信号PWM为3.3V高电平的时候，Ube = 5V – 3.3V = 1.7V仍然可 以使三极管开通，于是无法关断。在这里，有人会说用过这个电路，没有问题啊，而且MCU的电压也是3.3V。我说你用的肯定是OD（开漏）驱动方式，而且 是真正的OD或者是5V容忍的OD，比如STM32的很多IO口都可以设置为5V容忍的OD驱动方式（但是有些是不行的）。当驱动信号为OD门驱动方式 时，输出高电平，信号就变成了高阻态，流过基极的电流为零，三极管可以有效关断，这个时候f电路依然有效。</p>
+<img src="/cn/dcaf/005vwoCygy1fl3ztj5htxj30oa0csq4y.jpg" class="" title="图四">
+
+<p>综合以上几种电路的情况分析，得到图四这两种个人认为是最优的驱动电路，与图一不同的是，图四在基极与发射极之间多加了一个100K的电阻，这个电 阻也是有 一定作用的，可以让三极管有一个已知的默认状态。当输入信号去除的时候，三极管还处于关断状态。在安全和稳定的方面考虑，多加的这个电阻还是很有必要的， 或者说可以让三极管工作在更好的开关状态。<br>三极管作为开关器件，虽然驱动电路很简单，要使电路工作更加稳定可靠，还是不能掉以轻心。为了不容易出错，个人建议是优先采用图四的电路，尽量不采用图二的电路，避免使用图三的工作状况。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/c6d9.html" rel="prev" title="汇编初识">
+                  <i class="fa fa-chevron-left"></i> 汇编初识
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/b1d.html" rel="next" title="基于51单片机的心形全彩灯">
+                  基于51单片机的心形全彩灯 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

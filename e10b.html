@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="Coding被腾讯收购后改名为腾讯开发者平台，在2020年1月又再次改名为新Coding，网站页面换了又换改了又改，而新浪图床也已经失效，图片全部挂掉。时过境迁，三年前的教程放到现在已经不适用，但是原理和思想都是一样的。有空我会更新下教程，把丢失的图片补充成最新的。 在大学时候自学过一丁点HTML的基础皮毛，对建站有那么一丁点的认识。作为自己业余爱好建立了本博客，简单的写下来搭建方法给搞技术的朋友">
+<meta property="og:type" content="article">
+<meta property="og:title" content="零基础免费搭建个人博客网站">
+<meta property="og:url" content="https://mapan.tech/cn/e10b.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="Coding被腾讯收购后改名为腾讯开发者平台，在2020年1月又再次改名为新Coding，网站页面换了又换改了又改，而新浪图床也已经失效，图片全部挂掉。时过境迁，三年前的教程放到现在已经不适用，但是原理和思想都是一样的。有空我会更新下教程，把丢失的图片补充成最新的。 在大学时候自学过一丁点HTML的基础皮毛，对建站有那么一丁点的认识。作为自己业余爱好建立了本博客，简单的写下来搭建方法给搞技术的朋友">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/timg.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324205036111.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324205237305.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324205340862.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324205417021.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324205429102.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324205835673.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324210127710.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324210439178.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324210612194.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324210712769.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324210827937.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200324210920019.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406203718826.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406203629220.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406204035609.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406204109848.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406204815728.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406204839024.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406204926522.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406205159688.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406205401320.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406205742403.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406205849977.png">
+<meta property="og:image" content="https://mapan.tech/cn/e10b/image-20200406211848046.png">
+<meta property="article:published_time" content="2017-12-03T01:26:53.000Z">
+<meta property="article:modified_time" content="2020-04-06T13:19:00.124Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/e10b/timg.jpg">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/e10b.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/e10b.html","path":"e10b.html","title":"零基础免费搭建个人博客网站"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>零基础免费搭建个人博客网站 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%BD%91%E7%AB%99%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">一、网站概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9C%80%E7%BB%88%E9%80%89%E6%8B%A9"><span class="nav-number">2.</span> <span class="nav-text">二、最终选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">三、准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E5%AE%89%E8%A3%85node-js-%E5%BF%85%E9%A1%BB"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 安装node.js(必须)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E5%AE%89%E8%A3%85Git-%E5%BF%85%E9%A1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 安装Git(必须)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-%E5%AE%89%E8%A3%85%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 安装编辑器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-%E6%B3%A8%E5%86%8CCoding-%E5%BF%85%E9%A1%BB"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 注册Coding(必须)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%89%E8%A3%85Hexo"><span class="nav-number">4.</span> <span class="nav-text">四、安装Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-%E5%88%9B%E5%BB%BA%E7%BD%91%E7%AB%99%E6%9C%AC%E5%9C%B0%E7%9B%AE%E5%BD%95"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 创建网站本地目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-%E5%88%87%E6%8D%A2NPM%E6%BA%90"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 切换NPM源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-%E5%AE%89%E8%A3%85Hexo"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 安装Hexo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-%E6%9C%AC%E5%9C%B0%E9%A2%84%E8%A7%88%E7%BD%91%E7%AB%99"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 本地预览网站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-5-Blog%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9A%84%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84-%E4%BA%86%E8%A7%A3"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 Blog文件夹的目录结构(了解)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E9%85%8D%E7%BD%AESSH%E9%83%A8%E7%BD%B2%E5%85%AC%E9%92%A5-%E4%BB%85%E9%9C%80%E4%B8%80%E6%AC%A1"><span class="nav-number">5.</span> <span class="nav-text">五、配置SSH部署公钥(仅需一次)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E9%85%8D%E7%BD%AE%E5%8D%9A%E5%AE%A2%E7%BD%91%E7%AB%99"><span class="nav-number">6.</span> <span class="nav-text">六、配置博客网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E9%85%8D%E7%BD%AEGit%E5%92%8CGit%E9%83%A8%E7%BD%B2%E6%8F%92%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">七、配置Git和Git部署插件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#7-1-%E9%85%8D%E7%BD%AEgit%E6%98%B5%E7%A7%B0%E5%92%8C%E9%82%AE%E7%AE%B1-%E4%BB%85%E9%9C%80%E4%B8%80%E6%AC%A1"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 配置git昵称和邮箱(仅需一次)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-2-%E5%AE%89%E8%A3%85git%E4%B8%8A%E4%BC%A0%E6%8F%92%E4%BB%B6-%E5%8F%AA%E9%9C%80%E4%B8%80%E6%AC%A1"><span class="nav-number">7.2.</span> <span class="nav-text">7.2 安装git上传插件(只需一次)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%BD%91%E7%AB%99PUSH%E5%88%B0Coding"><span class="nav-number">8.</span> <span class="nav-text">八、网站PUSH到Coding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E8%AE%BF%E9%97%AE%E7%BD%91%E7%AB%99"><span class="nav-number">9.</span> <span class="nav-text">九、访问网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%86%99%E6%96%87%E7%AB%A0%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">如何写文章？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E4%BC%98%E5%8C%96"><span class="nav-number">11.</span> <span class="nav-text">后续优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9B%B4%E6%94%B9%E4%B8%BB%E9%A2%98%EF%BC%9F"><span class="nav-number">11.1.</span> <span class="nav-text">如何更改主题？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%BB%91%E5%AE%9A%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%EF%BC%9F"><span class="nav-number">11.2.</span> <span class="nav-text">如何绑定自定义域名？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8E%8B%E7%BC%A9%E7%BD%91%E7%AB%99%E6%96%87%E4%BB%B6%EF%BC%8C%E5%8A%A0%E5%BF%AB%E8%AE%BF%E9%97%AE%E9%80%9F%E5%BA%A6%EF%BC%9F"><span class="nav-number">11.3.</span> <span class="nav-text">如何压缩网站文件，加快访问速度？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%9B%BE%E5%BA%8A%EF%BC%9F%E5%A6%82%E4%BD%95%E5%9C%A8%E6%96%87%E7%AB%A0%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%EF%BC%9F"><span class="nav-number">11.4.</span> <span class="nav-text">如何使用图床？如何在文章插入图片？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8D%87%E7%BA%A7%E4%B8%BAHTTPS%E8%AE%BF%E9%97%AE%EF%BC%9F"><span class="nav-number">11.5.</span> <span class="nav-text">如何升级为HTTPS访问？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FAQ-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">12.</span> <span class="nav-text">FAQ (常见问题)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E6%89%A7%E8%A1%8Chexo-d%E6%8A%A5%E9%94%99"><span class="nav-number">12.1.</span> <span class="nav-text">1.执行hexo d报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-npm-commnd-not-found"><span class="nav-number">12.2.</span> <span class="nav-text">2.npm commnd not found</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%99%A4%E4%BA%86Coding%EF%BC%8C%E6%9C%89%E5%88%AB%E7%9A%84%E6%89%98%E7%AE%A1%E6%9C%8D%E5%8A%A1%E5%95%86%E5%90%97%EF%BC%9F"><span class="nav-number">12.3.</span> <span class="nav-text">3.除了Coding，有别的托管服务商吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%9C%89%E6%B2%A1%E6%9C%89%E5%85%8D%E8%B4%B9%E7%9A%84%E9%A1%B6%E7%BA%A7%E5%9F%9F%E5%90%8D%EF%BC%9F"><span class="nav-number">12.4.</span> <span class="nav-text">4.有没有免费的顶级域名？</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/e10b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          零基础免费搭建个人博客网站
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-12-03 09:26:53" itemprop="dateCreated datePublished" datetime="2017-12-03T09:26:53+08:00">2017-12-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-04-06 21:19:00" itemprop="dateModified" datetime="2020-04-06T21:19:00+08:00">2020-04-06</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Coding被腾讯收购后改名为腾讯开发者平台，在2020年1月又再次改名为新Coding，网站页面换了又换改了又改，而新浪图床也已经失效，图片全部挂掉。时过境迁，三年前的教程放到现在已经不适用，但是原理和思想都是一样的。有空我会更新下教程，把丢失的图片补充成最新的。</p>
+<p>在大学时候自学过一丁点HTML的基础皮毛，对建站有那么一丁点的认识。作为自己业余爱好建立了本博客，简单的写下来搭建方法给搞技术的朋友们。</p>
+<h3 id="一、网站概念"><a href="#一、网站概念" class="headerlink" title="一、网站概念"></a>一、网站概念</h3><p>首先来科普下网站的概念:<br>笼统的讲，网站有两类：<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8A%A8%E6%80%81%E7%BD%91%E7%AB%99/2776858?fr=aladdin">动态网站</a>和<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%9D%99%E6%80%81%E7%BD%91%E7%AB%99/2776875?fr=aladdin">静态网站</a>。并不是动态网站会动，静态网站不会动，千万不要这样理解，是会被笑话的。<br>简单地说，程序是否在服务器端运行，是<strong>重要标志</strong>。<br>在服务器端运行的程序、网页、组件，属于动态网页，它们会随不同客户、不同时间，返回不同的网页，例如ASP、PHP、JSP、 CGI等。</p>
+<p>而静态网站只有固定的文件，是单向的，类似你用文件管理器浏览你硬盘里面的资料，这些资料并不会由于不同用户，不同时间浏览而对你显示不同的效果，无论你在何地、何时打开播放<code>1.MP3</code>，他就只会播放<code>1.MP3</code>。详细的解释可以点前面超链接了解区别。</p>
+<h3 id="二、最终选择"><a href="#二、最终选择" class="headerlink" title="二、最终选择"></a>二、最终选择</h3><p>既然标题说了是0元建站，那就该省的都省了(省了服务器费用，域名费用)，为了保证良好的访问速度和体验，我们选择静态网站。</p>
+<p>静态网站是需要有本地的网站渲染程序进行渲染我们的网站文件，不然纯手敲HTML+CSS+JS，那更新一篇文章可敲到何年何月了。<br>简单的说，我们搭建好环境后，我们只负责写文章内容，其他网页代码交给程序渲染生成。然后把这套网站代码上传服务器即可。<br>同类的静态博客程序有很多，前3名依次是Jekyll 、 Hexo 、 Hugo。三个我都有尝试过，最后选择了用户量第二的Hexo，个人感觉是三者中最简单快捷的。</p>
+<img src="/cn/e10b/timg.jpg" class="timg">
+<p>据说Hexo是一个台湾学生的毕业设计，所以比较符合国人的使用习惯，支持国产。原理：<code>hexo</code>渲染出网站文件，使用<code>git</code>工具上传到<code>Coding</code>服务器。</p>
+<h3 id="三、准备工作"><a href="#三、准备工作" class="headerlink" title="三、准备工作"></a>三、准备工作</h3><p>Windows 7 &amp;&amp; 10 环境下 需要安装：</p>
+<blockquote>
+<ul>
+<li>Node.js</li>
+<li>Git</li>
+<li>文本编辑器(推荐Sublime)</li>
+</ul>
+</blockquote>
+<p>需要注册的网站：Coding</p>
+<h4 id="3-1-安装node-js-必须"><a href="#3-1-安装node-js-必须" class="headerlink" title="3.1 安装node.js(必须)"></a>3.1 安装node.js(必须)</h4><p>下载: <a target="_blank" rel="noopener" href="https://nodejs.org/en/">官网下载</a> </p>
+<img src="/cn/e10b/image-20200324205036111.png" class="image-20200324205036111">
+<p>推荐安装LTS版本，下载安装，一路Next即可<br>最后点Finsh，安装完毕。<br>（PS: 如果安装失败，提示ERROR code：XXXX 巴拉巴拉等字样，请尝试用管理员权限安装。）</p>
+<h4 id="3-2-安装Git-必须"><a href="#3-2-安装Git-必须" class="headerlink" title="3.2 安装Git(必须)"></a>3.2 安装Git(必须)</h4><p>下载: <a target="_blank" rel="noopener" href="https://git-scm.com/download/win">官网下载</a> <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1bZI2Zk">百度云</a> 密码:2d4b</p>
+<img src="/cn/e10b/image-20200324205237305.png" class="image-20200324205237305">
+
+<img src="/cn/e10b/image-20200324205340862.png" class="image-20200324205340862">
+<p>同样一路Next</p>
+<img src="/cn/e10b/image-20200324205417021.png" class="image-20200324205417021">
+
+<img src="/cn/e10b/image-20200324205429102.png" class="image-20200324205429102">
+
+
+
+<p>最后点Finsh，安装完毕。</p>
+<h4 id="3-3-安装编辑器"><a href="#3-3-安装编辑器" class="headerlink" title="3.3 安装编辑器"></a>3.3 安装编辑器</h4><p>可以选择 Sublime Text3或者VScode或者Notepad++，推荐VScode</p>
+<p>SublimeText3下载: <a target="_blank" rel="noopener" href="https://www.sublimetext.com/">官网下载</a> <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1nuXulwl">百度云</a> 密码:uhzl<br>VScode下载: <a target="_blank" rel="noopener" href="https://code.visualstudio.com/">官网下载</a></p>
+<img src="/cn/e10b/image-20200324205835673.png" class="image-20200324205835673">
+
+<p>安装一路Next ，最后Finsh即可。</p>
+<h4 id="3-4-注册Coding-必须"><a href="#3-4-注册Coding-必须" class="headerlink" title="3.4 注册Coding(必须)"></a>3.4 注册Coding(必须)</h4><p>(PS：Coding已经被腾讯收购，变成了腾讯开发者平台，2020年1月改名为新Coding，真的命途多舛。其他托管服务商同样可以用，本文以Coding举例)</p>
+<p><a target="_blank" rel="noopener" href="https://coding.net/r/LTANRJ">Coding</a>提供了page服务，是我们用来放网站文件的免费**’服务器’**</p>
+<img src="/cn/e10b/image-20200324210127710.png" class="image-20200324210127710">
+
+<img src="/cn/e10b/image-20200324210439178.png" class="image-20200324210439178">
+
+<img src="/cn/e10b/image-20200324210612194.png" class="image-20200324210612194">
+
+<p>注册好之后，创建项目</p>
+<img src="/cn/e10b/image-20200324210712769.png" class="image-20200324210712769">
+
+<img src="/cn/e10b/image-20200324210827937.png" class="image-20200324210827937">
+
+<img src="/cn/e10b/image-20200324210920019.png" class="image-20200324210920019">
+
+<p>Ps: 同类的代码托管网站有Gitee、Github等。本文选择国内速度比较块快，功能完善的Coding。<br>其他托管网站也可使用，与Coding大同小异，这里不再赘述。</p>
+<h3 id="四、安装Hexo"><a href="#四、安装Hexo" class="headerlink" title="四、安装Hexo"></a>四、安装Hexo</h3><h4 id="4-1-创建网站本地目录"><a href="#4-1-创建网站本地目录" class="headerlink" title="4.1 创建网站本地目录"></a>4.1 创建网站本地目录</h4><p>在电脑上新建一个<code>Blog</code>文件夹，建议D盘根目录如 <code>D:/Blog</code>，这个文件夹是我们本地网站的目录。由于我在虚拟机下，只有C盘，所以我建在桌面。</p>
+<img src="/cn/e10b/image-20200406203718826.png" class="image-20200406203718826">
+
+<h4 id="4-2-切换NPM源"><a href="#4-2-切换NPM源" class="headerlink" title="4.2 切换NPM源"></a>4.2 切换NPM源</h4><p>NPM源由于服务器在国外，速度比较慢。为了避免安装中断，我们使用<a target="_blank" rel="noopener" href="http://npm.taobao.org/">淘宝NPM镜像</a>，输入以下命令安装cnpm，等待几分钟完成(我这里用了131s)。(仅需一次)<br><code>npm install -g cnpm --registry=https://registry.npm.taobao.org</code></p>
+<img src="/cn/e10b/image-20200406203629220.png" class="image-20200406203629220">
+<p>(如果此步骤提示找不到npm指令，请检查node.js是否安装成功,另外检查指令是npm！是npm！是npm！，不要输错了)</p>
+<h4 id="4-3-安装Hexo"><a href="#4-3-安装Hexo" class="headerlink" title="4.3 安装Hexo"></a>4.3 安装Hexo</h4><p>使用以下命令安装Hexo(仅需一次)<br><code>cnpm install -g hexo-cli</code></p>
+<img src="/cn/e10b/image-20200406204035609.png" class="image-20200406204035609">
+
+
+<p>使用<code>hexo -v</code>指令查看hexo的版本，如下图可以看出</p>
+<img src="/cn/e10b/image-20200406204109848.png" class="image-20200406204109848">
+
+<p>使用<code>hexo init</code>指令初始化hexo(仅需一次)</p>
+<img src="/cn/e10b/image-20200406204815728.png" class="image-20200406204815728">
+
+<h4 id="4-4-本地预览网站"><a href="#4-4-本地预览网站" class="headerlink" title="4.4 本地预览网站"></a>4.4 本地预览网站</h4><p>使用<code>hexo s</code>指令预览网站，可能Windows防火墙会弹出提示，这时候我们选择允许访问</p>
+<img src="/cn/e10b/image-20200406204839024.png" class="image-20200406204839024">
+
+<p>上图提示信息意思为hexo已经运行在<code>http://localhost:4000/</code>,你可使用<code>Ctrl + C</code>组合键来停止预览。现在不要动这个窗口(不要按CTRL+C，否则就退出了)，我们打开浏览器访问<code>http://localhost:4000/</code></p>
+<img src="/cn/e10b/image-20200406204926522.png" class="image-20200406204926522">
+<p>如上图，你现在已经成功一大半了。现在网站已经可以运行在我们电脑本地了，但是别人还不能访问，因为网站文件仅仅在我们自己电脑上。需要传到Coding上之后，别人才可以访问你的网站。</p>
+<h4 id="4-5-Blog文件夹的目录结构-了解"><a href="#4-5-Blog文件夹的目录结构-了解" class="headerlink" title="4.5 Blog文件夹的目录结构(了解)"></a>4.5 Blog文件夹的目录结构(了解)</h4><p>我们可以了解下Blog目录下的每个文件夹及文件的作用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── .deploy       #需要部署的文件</span><br><span class="line">├── node_modules  #Hexo插件</span><br><span class="line">├── public        #生成的静态网页文件</span><br><span class="line">├── scaffolds     #模板</span><br><span class="line">├── source        #博客正文和其他源文件, 404 favicon CNAME 等都应该放在这里</span><br><span class="line">|   ├── _drafts   #草稿</span><br><span class="line">|   └── _posts    #文章</span><br><span class="line">├── themes        #主题</span><br><span class="line">├── _config.yml   #全局配置文件</span><br><span class="line">└── package.json</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="五、配置SSH部署公钥-仅需一次"><a href="#五、配置SSH部署公钥-仅需一次" class="headerlink" title="五、配置SSH部署公钥(仅需一次)"></a>五、配置SSH部署公钥(仅需一次)</h3><p>本步骤的目的是<strong>确保只有你本人才能改动和编辑网站内容</strong>。<br>回到bash黑窗口，输入指令<code>ssh-keygen -t rsa -C &quot;your_email@example.com&quot;</code>(你的邮箱)，连续点击 Enter 键即可。(** 指令中的字母 C要大写、C要大写、C要大写 ，注意空格、注意空格、注意空格，重要的事情说三遍！**)<br>如下图</p>
+<img src="/cn/e10b/image-20200406205159688.png" class="image-20200406205159688">
+<p><a target="_blank" rel="noopener" href="https://coding.net/help/doc/account/ssh-key.html">官方参考</a></p>
+<p>配置的目的是为了保证只有自己可以改动和上传到仓库，防止别人更改你网站的内容。<br>找到我们刚刚生成的公钥<code>id_rsa.pub</code>,查看，并复制里面的内容</p>
+<p>输入<code>cat ~/.ssh/id_rsa.pub</code>回车</p>
+<img src="/cn/e10b/image-20200406205401320.png" class="image-20200406205401320">
+
+<p>回到Coding网站，把粘贴板上的内容粘贴到里面，如下图。</p>
+<img src="/cn/e10b/image-20200406205742403.png" class="image-20200406205742403">
+<p>点击添加，会验证Coding的密码，输入Coding的密码即可。</p>
+<img src="/cn/e10b/image-20200406205849977.png" class="image-20200406205849977">
+
+<p>这样就完成了公钥的配置。</p>
+<h3 id="六、配置博客网站"><a href="#六、配置博客网站" class="headerlink" title="六、配置博客网站"></a>六、配置博客网站</h3><p>打开Blog文件夹，如下图我们使用Sublime或者VScode 打开<code>_config.yml</code>文件，对博客进行配置。</p>
+
+
+<p>配置文件使用的语法<strong>大小写敏感</strong>，<strong>空格敏感</strong>。<strong>英文冒号后必须有空一个空格</strong> 使用<code>#</code>号注释<br>我们可以随意更改的有<code>tittle</code>网站标题，<code>subtitle</code>小标题， <code>description</code>网站描述。</p>
+
+<p>第10和11行<code>语言</code>和<code>时区</code>可以默认空着。如需填写可复制如下配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">language: zh-Hans</span><br><span class="line">timezone: Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<p>第15行<code>url:</code>这里填写我们第三步中提示的URL，即我们以后将使用的域名(域名就是网址)。</p>
+
+<p>其他项如不清楚含义或者格式，强烈建议不要修改。</p>
+<p>配置文件拉到最下面 (<strong>重要</strong>)，本部分修改的是上传的地址，是网站是否能成功上传到服务器的关键</p>
+
+<p>配置原文如下，coding部分替换成你自己的Coding地址。<br>当然也可以配置多个远程地址，自定义添加即可。如下图，记得替换仓库地址。不要忘记添加相应的SSH密钥到对应的平台。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">deploy:</span><br><span class="line">  - type: git</span><br><span class="line">    repo:</span><br><span class="line">      coding: git@git.dev.tencent.com:mapan/posts.git</span><br><span class="line">      #github: git@github.com:username/xxx.git</span><br><span class="line">      #gitee: git@gitee.com:username/posts.git </span><br><span class="line">    branch: master</span><br><span class="line">    message: xx更新了博客更新了博客 # 这里可以随便写，每次更新博客提交的显示的信息。</span><br></pre></td></tr></table></figure>
+<p>Coding地址从Coding网站的这里找到:</p>
+
+
+<h3 id="七、配置Git和Git部署插件"><a href="#七、配置Git和Git部署插件" class="headerlink" title="七、配置Git和Git部署插件"></a>七、配置Git和Git部署插件</h3><h4 id="7-1-配置git昵称和邮箱-仅需一次"><a href="#7-1-配置git昵称和邮箱-仅需一次" class="headerlink" title="7.1 配置git昵称和邮箱(仅需一次)"></a>7.1 配置git昵称和邮箱(仅需一次)</h4><p>继续回到bash黑色框框<br>使用命令<code>git config --global user.email &quot;you@email.com&quot;</code>配置Git邮箱，记得把邮箱替换成自己的<br>使用命令<code>git config --global user.name &quot;Kevin&quot;</code>配置Git用户名，记得把昵称替换成自己的</p>
+<img src="/cn/e10b/image-20200406211848046.png" class="image-20200406211848046">
+
+<h4 id="7-2-安装git上传插件-只需一次"><a href="#7-2-安装git上传插件-只需一次" class="headerlink" title="7.2 安装git上传插件(只需一次)"></a>7.2 安装git上传插件(只需一次)</h4><p>使用以下命令安装hexo-deployer-git工具<br><code>cnpm install hexo-deployer-git --save</code></p>
+<h3 id="八、网站PUSH到Coding"><a href="#八、网站PUSH到Coding" class="headerlink" title="八、网站PUSH到Coding"></a>八、网站PUSH到Coding</h3><p><code>hexo g</code>代表渲染网站文件，<code>hexo d</code>代表push网站文件到云端仓库，这两条指令可以单独依次执行。<br>（<code>hexo g &amp;&amp; hexo d</code>或者<code>hexo d -g</code>这两个是组合命令，作用相同，以后熟练可以使用。）</p>
+
+
+<p>然后会弹出一个让你确认的窗口，你输入<code>yes</code>后确定即可。</p>
+
+
+<h3 id="九、访问网站"><a href="#九、访问网站" class="headerlink" title="九、访问网站"></a>九、访问网站</h3><p>现在我们访问自己的域名 <a target="_blank" rel="noopener" href="https://mapann.coding.me/">https://mapann.coding.me</a>即可访问我们自己搭建的网站了。如果看到已经可以访问，那么恭喜！大功告成！</p>
+<hr>
+<h3 id="如何写文章？"><a href="#如何写文章？" class="headerlink" title="如何写文章？"></a>如何写文章？</h3><p>可以看我这篇文章 <a href="/cn/2b94.html" target="_blank">使用Hexo写文章</a></p>
+<h3 id="后续优化"><a href="#后续优化" class="headerlink" title="后续优化"></a>后续优化</h3><h4 id="如何更改主题？"><a href="#如何更改主题？" class="headerlink" title="如何更改主题？"></a>如何更改主题？</h4><p>(挖坑待填)<br>可以自定义和优化的有很多，比如不喜欢默认的主题，我们可以去<a target="_blank" rel="noopener" href="https://hexo.io/themes/">hexo官网</a><br>下载更漂亮的主题，如比较火的<a target="_blank" rel="noopener" href="http://theme-next.iissnan.com/">NexT主题</a>。</p>
+<h4 id="如何绑定自定义域名？"><a href="#如何绑定自定义域名？" class="headerlink" title="如何绑定自定义域名？"></a>如何绑定自定义域名？</h4><p>(挖坑待填)<br>可以绑定自己的域名。(域名就收费了，不在本文探讨范围内)</p>
+<h4 id="如何压缩网站文件，加快访问速度？"><a href="#如何压缩网站文件，加快访问速度？" class="headerlink" title="如何压缩网站文件，加快访问速度？"></a>如何压缩网站文件，加快访问速度？</h4><p>可以看我这篇文章 <a href="/cn/8f24.html" target="_blank">HEXO优化之GULP</a></p>
+<h4 id="如何使用图床？如何在文章插入图片？"><a href="#如何使用图床？如何在文章插入图片？" class="headerlink" title="如何使用图床？如何在文章插入图片？"></a>如何使用图床？如何在文章插入图片？</h4><p>可以看我这篇文章 <a href="/cn/c9c3.html" target="_blank">使Hexo文章图文并茂</a></p>
+<h4 id="如何升级为HTTPS访问？"><a href="#如何升级为HTTPS访问？" class="headerlink" title="如何升级为HTTPS访问？"></a>如何升级为HTTPS访问？</h4><p>现在Coding默认支持https，在Coding端打开即可，其他部署平台类似。</p>
+<p>快去写文章吧，网站只是载体和工具，内容才是主要的。等待你的友链！<br>如果你在按照教程走出现了问题，可以在下方评论区留言，或者进Q群讨论 613284009</p>
+
+
+<p><a target="_blank" rel="noopener" href="http://blog.csdn.net/jzooo/article/details/46781805">本文参考</a></p>
+<hr>
+<p>2017-12更新</p>
+<p>如果觉得有难度不容易上手，那么还可以有以下几个选择：<br><a target="_blank" rel="noopener" href="http://blog.csdn.net/">CSDN博客</a>: 集成好的功能，只需要注册即可使用，但并不是独立博客。<br><a target="_blank" rel="noopener" href="https://www.jianshu.com/">简书</a>:  一个比较文艺的地方，你同样可以用来写技术文章，同样注册即可使用，不是独立博客。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/">博客园</a>: 可定制化比较强，听名字就知道是做什么了。<br><a target="_blank" rel="noopener" href="https://cn.wordpress.org/">wordpress</a>、<a target="_blank" rel="noopener" href="http://typecho.org/">typecho</a>等其他动态博客程序 ：部署简单、需要购买虚拟主机或者VPS服务器。</p>
+<p>···</p>
+<p>其实说到底博客只是一个用来展示自己的地方，重要的还是自己有所学习，一个博客的内容才是最重要的。写本文的目的仅仅是为了帮助一些做技术但对网站前端不太懂，而且想少花钱搭建独博客的人。<br>做技术本身就要一股钻劲儿，要知道专业领域比搭网站复杂的多。</p>
+<hr>
+<p>2019-02更新<br>如今Coding已经被腾讯收购，变身为<a target="_blank" rel="noopener" href="https://dev.tencent.com/">腾讯开发者平台</a>,但是换汤不换药，仍然提供pages服务，而且不需要再页面底部添加<code>hosted by</code>的广告，据说还是Coding的原班人马在运营维护。另外Hexo的同类产品<a target="_blank" rel="noopener" href="https://gohugo.io/">Hugo</a>发展迅猛，官方宣传现在主题数目已经超过Hexo。我试用了Hugo，安装十分方便，渲染速度快，当然也有缺点，现阶段Hugo在国内使用的人还是相对较少，所以中文文档和资料少，遇到问题一般要去搜索英文论坛之类。国外火爆的另一个缺点是网站默认引用许多国外的CDN资源，众所周知的大陆网络的情况，国外的CDN资源加载速度比较慢甚至不能访问，需要自己去优化，把国外资源本地化或者换成国内的CDN。</p>
+<hr>
+<blockquote>
+<h3 id="FAQ-常见问题"><a href="#FAQ-常见问题" class="headerlink" title="FAQ (常见问题)"></a><em>FAQ</em> (常见问题)</h3></blockquote>
+<h4 id="1-执行hexo-d报错"><a href="#1-执行hexo-d报错" class="headerlink" title="1.执行hexo d报错"></a>1.执行<code>hexo d</code>报错</h4>
+<p>原因: <code>_config.yml</code> 文件内容格式错误，其实上图已经提示的非常清楚了。其中错误是在第9行，第9个字符<code>keywords:</code>附近出现，而且非常贴心的使用箭头指出了位置。<br>我们看一下出错原因，看下图。</p>
+
+<p>英文冒号之后，是需要加一个空格的。为什么推荐使用sublime这个编辑器呢？原因就在这里，这个默认的语法高亮很贴心，当你语法出错的时候，颜色就不变的不同。<br>解决方法：<strong>英文冒号</strong> 后添加一个空格。</p>
+<h4 id="2-npm-commnd-not-found"><a href="#2-npm-commnd-not-found" class="headerlink" title="2.npm commnd not found"></a>2.npm commnd not found</h4><p>首先排查npm是否安装成功，在git bash里分别输入<code>npm -v</code> 和<code>node -v</code></p>
+
+<p>如果出现<code>bash: node: command not found </code>说明node安装失败，请尝试使用管理员权限重新安装。</p>
+<p>如果出现正确的版本号，说明npm和node安装成功了。请继续往下看</p>
+
+<p>原因：仔细看下，是npm！不是nmp！复制粘贴不比手敲要快准确率要高啊？<br>建议直接鼠标复制，粘贴操作，减少错误概率。<br>解决方法： nmp更正为npm<br>类似的 <strong>少个空格</strong>，<strong>大小写错</strong>，<strong>多个空格</strong>之类的低级错误，请先与示例图片对比检查。</p>
+<h4 id="3-除了Coding，有别的托管服务商吗？"><a href="#3-除了Coding，有别的托管服务商吗？" class="headerlink" title="3.除了Coding，有别的托管服务商吗？"></a>3.除了Coding，有别的托管服务商吗？</h4><p>有，除了Coding（腾讯开发者平台），还有<a target="_blank" rel="noopener" href="https://gitee.com/">Gitee</a>，<a target="_blank" rel="noopener" href="https://github.com/">Github</a>，<a target="_blank" rel="noopener" href="https://about.gitlab.com/">Gitlab</a>，<a target="_blank" rel="noopener" href="https://bitbucket.org/">Bitbucket</a>等等。</p>
+<h4 id="4-有没有免费的顶级域名？"><a href="#4-有没有免费的顶级域名？" class="headerlink" title="4.有没有免费的顶级域名？"></a>4.有没有免费的顶级域名？</h4><p>有，<a target="_blank" rel="noopener" href="http://www.freenom.com/en/index.html">freenom</a>这个网站提供最长一年的顶级域名注册,一年到期还可以手动续。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/2148.html" rel="prev" title="Git学习笔记">
+                  <i class="fa fa-chevron-left"></i> Git学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/58c8.html" rel="next" title="再谈电子DIY">
+                  再谈电子DIY <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

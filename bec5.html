@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="什么是SQLSQL, 全称为Structured Query Language（结构化查询语言)。 要讲SQL就绕不开database(数据库), 平时所说的数据库，一般就是指的 Relational database(关系型数据库). 大家知道数据库是用来存储大量数据的一种软件，那么SQL呢是用来操作数据里的数据，具体来说SQL可以做数据查询，数据更新，写入数据等等。 如果把数据库比作盘子，那数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL相关">
+<meta property="og:url" content="https://mapan.tech/cn/bec5.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="什么是SQLSQL, 全称为Structured Query Language（结构化查询语言)。 要讲SQL就绕不开database(数据库), 平时所说的数据库，一般就是指的 Relational database(关系型数据库). 大家知道数据库是用来存储大量数据的一种软件，那么SQL呢是用来操作数据里的数据，具体来说SQL可以做数据查询，数据更新，写入数据等等。 如果把数据库比作盘子，那数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/bec5/timg.jpg">
+<meta property="article:published_time" content="2017-10-03T11:34:16.000Z">
+<meta property="article:modified_time" content="2019-10-20T11:44:46.153Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/bec5/timg.jpg">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/bec5.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/bec5.html","path":"bec5.html","title":"SQL相关"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SQL相关 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSQL"><span class="nav-number">1.</span> <span class="nav-text">什么是SQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%88Relational-databases"><span class="nav-number">2.</span> <span class="nav-text">关系型数据库（Relational databases)</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/bec5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL相关
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-10-03 19:34:16" itemprop="dateCreated datePublished" datetime="2017-10-03T19:34:16+08:00">2017-10-03</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-10-20 19:44:46" itemprop="dateModified" datetime="2019-10-20T19:44:46+08:00">2019-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="什么是SQL"><a href="#什么是SQL" class="headerlink" title="什么是SQL"></a>什么是SQL</h1><p>SQL, 全称为Structured Query Language（结构化查询语言)。 要讲SQL就绕不开database(数据库), 平时所说的数据库，一般就是指的 Relational database(关系型数据库).</p>
+<p>大家知道数据库是用来存储大量数据的一种软件，那么SQL呢是用来操作数据里的数据，具体来说SQL可以做数据查询，数据更新，写入数据等等。</p>
+<p>如果把数据库比作盘子，那数据就是盘子里的菜，SQL则是你的筷子。</p>
+<img src="/cn/bec5/timg.jpg" class="timg">
+
+<p>因为SQL和数据库是天生的一对，又相对简单，目前世界上大部分网站和APP背后的数据都是建立在SQL数据库基础之上。</p>
+<h1 id="关系型数据库（Relational-databases"><a href="#关系型数据库（Relational-databases" class="headerlink" title="关系型数据库（Relational databases)"></a>关系型数据库（Relational databases)</h1><p>在学习SQL语法之前有必要解释一下什么是关系型数据库（Relational databases)？数据库由若干张<code>表</code>(Table)组成，这里说的数据Table很像Excel里的表; 正如Excel里的表格，Table也是由 <code>行(rows)</code>和<code>列(columns)</code>组成</p>
+<p>一个Table存储一个类别的数据，每一行是一条数据，每一列是这种数据的一个属性； Table就像一个二维的表格，<code>列(columns)</code>是有限固定的，<code>行(rows)</code>是无限不固定的</p>
+<p>举个例子, 比如我们数据库里有一张<code>表(Table)</code>. 是用来存储世界上所有的狗，每一<code>行(rows)</code>是一条狗的信息。那么你会在这个狗Table里存储 哪些狗的属性<code>列(columns)</code>呢？比如 编号，名字，体重，身高，品种，年龄，毛发颜色。</p>
+<p>SELECT 语句, 通常又称为 查询 （queries), 正如其名, SELECT 可以用来从数据库中取出数据. 一条 SELECT 语句或者叫一个查询, 可以描述我们要从什么表取数据， 要取哪些数据，在返回之前怎么对结果做一些转化计算等等. 我们接下来会说明 SELECT 的语法，看 SELECT 是怎么来实现上述的取数据任务的。</p>
+<p>你可以把一个表(Table)想象成一个类别的事物，比如 狗 (Dogs), 表里的每一行就是 一条狗，每一列代表了狗的一种属性，比如： 颜色，长度等等）</p>
+<p>现在有了这么一张表，最常见的一种查询就是取出表中的 一个或某几个属性列（注意：是所有数据的某几个属性列）</p>
+<p>Select 查询某些属性列（specific columns）的语法<br>SELECT column（列名）, another_column, …<br>FROM mytable（表名）;<br>查询的结果是一个二维的表格，由行（rows）和列（columns）组成, 看起来像是复制了一遍原有的表（Table）,只不过列是我们选定的，而不是所有的列.</p>
+<p>如果我们想取出所有列的数据, 当然可以把所有列名写上，不过更简单的方式用星号 (*) 来代表所有列.如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Select</span> 查询所有列</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> mytable（表名）;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> table. </span><br></pre></td></tr></table></figure>
+<p>这条语句经常用来在不清楚table(表）中有什么数据时，能取出所有的数据瞜一眼。</p>
+<p>如果数据表里有100万行数据？真实世界中确实存在，世界上肯定有100万条狗那么多. 如果数据量这么大 之前的SQL语句很可能运行时会崩溃（想象一下你一次性下载1T的电影）</p>
+<p>真实情况下，我们很少直接查所有行，即使查询出来也看不完。为了更精确的查询出特定数据，我们需要学习一个新的SQL语法：SELECT查询的 WHERE 子句. 一个查询的 WHERE子句用来描述哪些行应该进入结果，具体就是通过 condition条件 限定这些行的属性满足某些具体条件。比如：WHERE 体重大于 10KG的狗。你可以把 WHERE想象成一个 筛子，每一个特定的筛子都可以筛下某些豆子。</p>
+<p>条件查询语法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">column</span>, another_column, …</span><br><span class="line"><span class="keyword">FROM</span> mytable</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">condition</span></span><br><span class="line">    <span class="keyword">AND</span><span class="operator">/</span><span class="keyword">OR</span> another_condition</span><br><span class="line">    <span class="keyword">AND</span><span class="operator">/</span><span class="keyword">OR</span> …;</span><br></pre></td></tr></table></figure>
+<p>注：这里的 condition 都是描述属性列的，具体会在下面的表格体现。<br>可以用 AND or OR 这两个关键字来组装多个条件（表示并且，或者） (ie. num_wheels &gt;= 4 AND doors &lt;= 2 这个组合表示 num_wheels属性 大于等于 4 并且 doors 属性小于等于 2). 下面的具体语法规则，可以用来筛选数字属性列（包括 整数，浮点数） :</p>
+<table>
+<thead>
+<tr>
+<th>Operator（关键字）</th>
+<th>Condition（意思）</th>
+<th>SQL Example(例子）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>=, !=, &lt; &lt;=, &gt;, &gt;=</td>
+<td>Standard numerical operators 基础的 大于，等于等比较</td>
+<td>col_name != 4</td>
+</tr>
+<tr>
+<td>BETWEEN … AND …</td>
+<td>Number is within range of two values (inclusive) 在两个数之间</td>
+<td>col_name BETWEEN 1.5 AND10.5</td>
+</tr>
+<tr>
+<td>NOT BETWEEN … AND …</td>
+<td>Number is not within range of two values (inclusive) 不在两个数之间</td>
+<td>col_name NOT BETWEEN 1 AND10</td>
+</tr>
+<tr>
+<td>IN (…)</td>
+<td>Number exists in a list 在一个列表</td>
+<td>col_name IN (2, 4, 6)</td>
+</tr>
+<tr>
+<td>NOT IN (…)</td>
+<td>Number does not exist in a list 不在一个列表</td>
+<td>col_name NOT IN (1, 3, 5)</td>
+</tr>
+</tbody></table>
+<p>越是精确的条件筛选，会让结果更容易理解，同时因为条件在返回之前筛掉不必要的结果，SQL的运行速度也会快很多（想象一下你只是想看下最近有哪些大片上映，你没必要下载整个电影看一遍）.</p>
+<p>如果属性是字符串, 我们会用到字符串相关的一些操作符号，其中 LIKE（模糊查询） 和 %（通配符） 是新增的两个. 下面这个表格对字符串操作符有详细的描述:</p>
+<table>
+<thead>
+<tr>
+<th>Operator（操作符）</th>
+<th>Condition（解释）</th>
+<th>Example（例子）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>=</td>
+<td>Case sensitive exact string comparison (<em>notice the single equals</em>)完全等于</td>
+<td>col_name = “abc”</td>
+</tr>
+<tr>
+<td>!= or &lt;&gt;</td>
+<td>Case sensitive exact string inequality comparison 不等于</td>
+<td>col_name != “abcd”</td>
+</tr>
+<tr>
+<td>LIKE</td>
+<td>Case insensitive exact string comparison 没有用通配符等价于 =</td>
+<td>col_name LIKE “ABC”</td>
+</tr>
+<tr>
+<td>NOT LIKE</td>
+<td>Case insensitive exact string inequality comparison 没有用通配符等价于 !=</td>
+<td>col_name NOT LIKE”ABCD”</td>
+</tr>
+<tr>
+<td>%</td>
+<td>Used anywhere in a string to match a sequence of zero or more characters (only with LIKE or NOT LIKE) 通配符，代表匹配0个以上的字符</td>
+<td>col_name LIKE “%AT%” (matches “AT”, “ATTIC”, “CAT” or even “BATS”) “%AT%” 代表AT 前后可以有任意字符</td>
+</tr>
+<tr>
+<td>_</td>
+<td>Used anywhere in a string to match a single character (only with LIKE or NOT LIKE) 和% 相似，代表1个字符</td>
+<td>col_name LIKE “AN_” (matches “AND”, but not “AN”)</td>
+</tr>
+<tr>
+<td>IN (…)</td>
+<td>String exists in a list 在列表</td>
+<td>col_name IN (“A”, “B”, “C”)</td>
+</tr>
+<tr>
+<td>NOT IN (…)</td>
+<td>String does not exist in a list 不在列表</td>
+<td>col_name NOT IN (“D”, “E”, “F”)</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/b33e.html" rel="prev" title="Markdown语法和MD编辑器">
+                  <i class="fa fa-chevron-left"></i> Markdown语法和MD编辑器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/ea01.html" rel="next" title="巧妙绕过加密PPT密码">
+                  巧妙绕过加密PPT密码 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="过年想在家玩minecraft，公网多人游戏，理论上完全可行，自己琢磨了一下，记录如何配置内网穿透   VPS搭建minecraft服务器。 内网穿透，VPS做TCP端口转发。   第一个方案，服务器端架设成功了，但是不可以加mods和插件。另外由于服务器配置太低，运行一段时间就会崩溃。以失败告终。第二个方案，花点时间琢磨了一下，发现可行。下文为配置方法 实现功能和原理minecraft公网联机，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Frp内网穿透实现minecraft远程联机">
+<meta property="og:url" content="https://mapan.tech/cn/6b1f.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="过年想在家玩minecraft，公网多人游戏，理论上完全可行，自己琢磨了一下，记录如何配置内网穿透   VPS搭建minecraft服务器。 内网穿透，VPS做TCP端口转发。   第一个方案，服务器端架设成功了，但是不可以加mods和插件。另外由于服务器配置太低，运行一段时间就会崩溃。以失败告终。第二个方案，花点时间琢磨了一下，发现可行。下文为配置方法 实现功能和原理minecraft公网联机，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-10T02:06:42.000Z">
+<meta property="article:modified_time" content="2019-10-20T11:46:04.562Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/6b1f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/6b1f.html","path":"6b1f.html","title":"Frp内网穿透实现minecraft远程联机"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Frp内网穿透实现minecraft远程联机 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8A%9F%E8%83%BD%E5%92%8C%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">实现功能和原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%89%8D%E5%87%86%E5%A4%87"><span class="nav-number">2.</span> <span class="nav-text">配置前准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%9F%9F%E5%90%8D%E5%88%B0%E5%85%AC%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84IP"><span class="nav-number">3.</span> <span class="nav-text">解析域名到公网服务器的IP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Frp"><span class="nav-number">4.</span> <span class="nav-text">安装Frp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF"><span class="nav-number">4.1.</span> <span class="nav-text">公网服务器端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEfrps-ini"><span class="nav-number">4.1.1.</span> <span class="nav-text">配置frps.ini</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%91%E7%94%B5%E8%84%91%E7%AB%AF"><span class="nav-number">4.2.</span> <span class="nav-text">内网电脑端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEfrpc-ini"><span class="nav-number">4.2.1.</span> <span class="nav-text">配置frpc.ini</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/6b1f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Frp内网穿透实现minecraft远程联机
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-10 10:06:42" itemprop="dateCreated datePublished" datetime="2019-01-10T10:06:42+08:00">2019-01-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-10-20 19:46:04" itemprop="dateModified" datetime="2019-10-20T19:46:04+08:00">2019-10-20</time>
+      </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>过年想在家玩minecraft，公网多人游戏，理论上完全可行，自己琢磨了一下，记录如何配置内网穿透</p>
+<blockquote>
+<ol>
+<li>VPS搭建minecraft服务器。</li>
+<li>内网穿透，VPS做TCP端口转发。</li>
+</ol>
+</blockquote>
+<p>第一个方案，服务器端架设成功了，但是不可以加mods和插件。另外由于服务器配置太低，运行一段时间就会崩溃。以失败告终。<br>第二个方案，花点时间琢磨了一下，发现可行。下文为配置方法</p>
+<h2 id="实现功能和原理"><a href="#实现功能和原理" class="headerlink" title="实现功能和原理"></a>实现功能和原理</h2><p>minecraft公网联机，公网服务器安装Frps，来实现转发服务。内网主机安装Frpc，来实现穿透。</p>
+<h2 id="配置前准备"><a href="#配置前准备" class="headerlink" title="配置前准备"></a>配置前准备</h2><blockquote>
+<p>公网服务器一台 ,假设我的服务器IP是155.155.155.156<br>内网电脑一台<br>域名一个 ，假设我的域名是baidu.com</p>
+</blockquote>
+<h2 id="解析域名到公网服务器的IP"><a href="#解析域名到公网服务器的IP" class="headerlink" title="解析域名到公网服务器的IP"></a>解析域名到公网服务器的IP</h2><p>添加一条A记录，主机记录自定义，我写的是router</p>
+
+
+<h2 id="安装Frp"><a href="#安装Frp" class="headerlink" title="安装Frp"></a>安装Frp</h2><p><a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">项目地址</a></p>
+<h3 id="公网服务器端"><a href="#公网服务器端" class="headerlink" title="公网服务器端"></a>公网服务器端</h3><p>找到与自己服务器和本地主机对应版本，下载即可。<br>我的VPS是搬瓦工的低配，如下</p>
+
+<p>安装的是CentOS6_32位系统，所以就下载Linux32位的软件 frp_x.x.x_linux_386.tar.gz<br>下载并解压后得到一个文件夹，里面有七个文件，对于公网服务器来说只有frps和frps.ini是我们必需的。</p>
+<h4 id="配置frps-ini"><a href="#配置frps-ini" class="headerlink" title="配置frps.ini"></a>配置frps.ini</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#frps.ini</span><br><span class="line">[common]</span><br><span class="line">bind_port = 7000</span><br><span class="line">bind_udp_port = 7001</span><br><span class="line">vhost_http_port = 80</span><br><span class="line">vhost_https_port = 10443</span><br></pre></td></tr></table></figure>
+<p>3，4两行是必须配置的，端口可以自定义，5，6两行是其他的服务，可以照抄或者不予理会。<br>使用下面命令运行<br><code>./frps -c ./frps.ini</code><br>我相信你可以通过Screen插件让此服务保持后台运行，此服务建议一直运行。</p>
+<h3 id="内网电脑端"><a href="#内网电脑端" class="headerlink" title="内网电脑端"></a>内网电脑端</h3><p>打开minecraft游戏，开启局域网联机，生成一个端口号，记下来。</p>
+<p>找到与自己电脑对应的版本，下载即可。我本地电脑win_x64系统，所以下载frp_0.22.0_windows_amd64.zip。<br>和之前一样解压得到7个文件，只有frpc.exe和frpc.ini是我们必需的。</p>
+<h4 id="配置frpc-ini"><a href="#配置frpc-ini" class="headerlink" title="配置frpc.ini"></a>配置frpc.ini</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line"></span><br><span class="line"># x.x.x.x为公网服务器IP地址，只需设置一次</span><br><span class="line">server_addr = x.x.x.x</span><br><span class="line"></span><br><span class="line"># server_port填写上面配置的bind_port值，只需设置一次</span><br><span class="line">server_port = 7000</span><br><span class="line"></span><br><span class="line">[range:test_tcp]</span><br><span class="line">type = tcp</span><br><span class="line"># local_ip填写我们电脑的局域网ip，每次开启游戏需要修改。</span><br><span class="line">local_ip = 127.0.0.1</span><br><span class="line"></span><br><span class="line"># local_port填写刚才记下的minecraft生成的端口号，每次开启游戏需要修改。</span><br><span class="line">local_port = 10240</span><br><span class="line"></span><br><span class="line">#这里自定义，建议填写五位数的端口号，不超过65535，小伙伴开启游戏时候填这个。只需设置一次</span><br><span class="line">remote_port = 25600</span><br></pre></td></tr></table></figure>
+<p>双击frpc.exe,弹出一个黑框，把这个黑框最小化后台。</p>
+
+
+<p>在远方的小伙伴，开启游戏，选择多人游戏，直接连接，输入router.baidu.com:25600，加入服务器玩耍吧。</p>
+
+<p>【注】：router为设置的主机记录，baidu.com为自己的域名，25600为上面设置的remote_port端口号。</p>
+<hr>
+<p>以后每次开游戏，先打开游戏生成端口号，然后修改frpc.ini，打开frpc.exe并后台，小伙伴联机即可。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/bfb1.html" rel="prev" title="SparkSQL基本操作">
+                  <i class="fa fa-chevron-left"></i> SparkSQL基本操作
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/d552.html" rel="next" title="初识Flink">
+                  初识Flink <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

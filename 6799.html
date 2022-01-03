@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="Flink运行时的组件Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作：作业管理器（JobManager）、资源管理器（ResourceManager）、任务管理器（TaskManager），以及分发器（Dispatcher）。因为Flink是用Java和Scala实现的，所以所有组件都会运行在Java虚拟机上。每个组件的职责如下： 作业管理器（JobManager">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink运行架构">
+<meta property="og:url" content="https://mapan.tech/cn/6799.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="Flink运行时的组件Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作：作业管理器（JobManager）、资源管理器（ResourceManager）、任务管理器（TaskManager），以及分发器（Dispatcher）。因为Flink是用Java和Scala实现的，所以所有组件都会运行在Java虚拟机上。每个组件的职责如下： 作业管理器（JobManager">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image001.png">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image002.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image003.png">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image004.png">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image005.jpg">
+<meta property="og:image" content="https://img-blog.csdn.net/20170824162738505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="https://img-blog.csdn.net/20170824162117401?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image008.png">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image009.png">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image010.jpg">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image011.png">
+<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image012.jpg">
+<meta property="article:published_time" content="2019-06-18T12:57:34.000Z">
+<meta property="article:modified_time" content="2019-10-20T13:01:10.104Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/6799/clip_image001.png">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/6799.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/6799.html","path":"6799.html","title":"Flink运行架构"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Flink运行架构 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Flink%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">Flink运行时的组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%88JobManager%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">作业管理器（JobManager）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%88ResourceManager%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">资源管理器（ResourceManager）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86%E5%99%A8%EF%BC%88TaskManager%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">任务管理器（TaskManager）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%8F%91%E5%99%A8%EF%BC%88Dispatcher%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">分发器（Dispatcher）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%90%E4%BA%A4%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">任务提交流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">任务调度原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TaskManger%E4%B8%8ESlots"><span class="nav-number">3.1.</span> <span class="nav-text">TaskManger与Slots</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%B5%81%EF%BC%88DataFlow%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">程序与数据流（DataFlow）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E5%9B%BE%EF%BC%88ExecutionGraph%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">执行图（ExecutionGraph）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E5%BA%A6%EF%BC%88Parallelism%EF%BC%89"><span class="nav-number">3.4.</span> <span class="nav-text">并行度（Parallelism）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E4%BC%BC%E4%BA%8Espark%E4%B8%AD%E7%9A%84%E7%AA%84%E4%BE%9D%E8%B5%96"><span class="nav-number">3.4.1.</span> <span class="nav-text">类似于spark中的窄依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E4%BC%BC%E4%BA%8Espark%E4%B8%AD%E7%9A%84%E5%AE%BD%E4%BE%9D%E8%B5%96"><span class="nav-number">3.4.2.</span> <span class="nav-text">类似于spark中的宽依赖</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E9%93%BE%EF%BC%88Operator-Chains%EF%BC%89"><span class="nav-number">3.5.</span> <span class="nav-text">任务链（Operator Chains）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/6799.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Flink运行架构
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-18 20:57:34" itemprop="dateCreated datePublished" datetime="2019-06-18T20:57:34+08:00">2019-06-18</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2019-10-20 21:01:10" itemprop="dateModified" datetime="2019-10-20T21:01:10+08:00">2019-10-20</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/Flink/" itemprop="url" rel="index"><span itemprop="name">Flink</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Flink运行时的组件"><a href="#Flink运行时的组件" class="headerlink" title="Flink运行时的组件"></a>Flink运行时的组件</h2><p>Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作：作业管理器（JobManager）、资源管理器（ResourceManager）、任务管理器（TaskManager），以及分发器（Dispatcher）。因为Flink是用Java和Scala实现的，所以所有组件都会运行在Java虚拟机上。每个组件的职责如下：</p>
+<h3 id="作业管理器（JobManager）"><a href="#作业管理器（JobManager）" class="headerlink" title="作业管理器（JobManager）"></a>作业管理器（JobManager）</h3><p>控制一个应用程序执行的主进程，也就是说，每个应用程序都会被一个不同的JobManager所控制执行。JobManager会先接收到要执行的应用程序，这个应用程序会包括：作业图（JobGraph）、逻辑数据流图（logical dataflow graph）和打包了所有的类、库和其它资源的JAR包。JobManager会把JobGraph转换成一个物理层面的数据流图，这个图被叫做“执行图”（ExecutionGraph），包含了所有可以并发执行的任务。JobManager会向资源管理器（ResourceManager）请求执行任务必要的资源，也就是任务管理器（TaskManager）上的插槽（slot）。一旦它获取到了足够的资源，就会将执行图分发到真正运行它们的TaskManager上。而在运行过程中，JobManager会负责所有需要中央协调的操作，比如说检查点（checkpoints）的协调。</p>
+<h3 id="资源管理器（ResourceManager）"><a href="#资源管理器（ResourceManager）" class="headerlink" title="资源管理器（ResourceManager）"></a>资源管理器（ResourceManager）</h3><p>主要负责管理任务管理器（TaskManager）的插槽（slot），TaskManger插槽是Flink中定义的处理资源单元。Flink为不同的环境和资源管理工具提供了不同资源管理器，比如YARN、Mesos、K8s，以及standalone部署。当JobManager申请插槽资源时，ResourceManager会将有空闲插槽的TaskManager分配给JobManager。如果ResourceManager没有足够的插槽来满足JobManager的请求，它还可以向资源提供平台发起会话，以提供启动TaskManager进程的容器。另外，ResourceManager还负责终止空闲的TaskManager，释放计算资源。</p>
+<h3 id="任务管理器（TaskManager）"><a href="#任务管理器（TaskManager）" class="headerlink" title="任务管理器（TaskManager）"></a>任务管理器（TaskManager）</h3><p>Flink中的工作进程。通常在Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能够执行的任务数量。启动之后，TaskManager会向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给JobManager调用。JobManager就可以向插槽分配任务（tasks）来执行了。在执行过程中，一个TaskManager可以跟其它运行同一应用程序的TaskManager交换数据。</p>
+<h3 id="分发器（Dispatcher）"><a href="#分发器（Dispatcher）" class="headerlink" title="分发器（Dispatcher）"></a>分发器（Dispatcher）</h3><p>可以跨作业运行，它为应用提交提供了REST接口。当一个应用被提交执行时，分发器就会启动并将应用移交给一个JobManager。由于是REST接口，所以Dispatcher可以作为集群的一个HTTP接入点，这样就能够不受防火墙阻挡。Dispatcher也会启动一个Web UI，用来方便地展示和监控作业执行的信息。Dispatcher在架构中可能并不是必需的，这取决于应用提交运行的方式。</p>
+<h2 id="任务提交流程"><a href="#任务提交流程" class="headerlink" title="任务提交流程"></a>任务提交流程</h2><p>我们来看看当一个应用提交执行时，Flink的各个组件是如何交互协作的：</p>
+<img src="/cn/6799/clip_image001.png" class="img">
+
+<p>图 任务提交和组件交互流程</p>
+<p>上图是从一个较为高层级的视角，来看应用中各组件的交互协作。如果部署的集群环境不同（例如YARN，Mesos，Kubernetes，standalone等），其中一些步骤可以被省略，或是有些组件会运行在同一个JVM进程中。</p>
+<p>具体地，如果我们将Flink集群部署到YARN上，那么就会有如下的提交流程：</p>
+<img src="/cn/6799/clip_image002.jpg" class="img">
+
+<p>图 Yarn模式任务提交流程</p>
+<p>Flink任务提交后，Client向HDFS上传Flink的Jar包和配置，之后向Yarn ResourceManager提交任务，ResourceManager分配Container资源并通知对应的NodeManager启动ApplicationMaster，ApplicationMaster启动后加载Flink的Jar包和配置构建环境，然后启动JobManager，之后ApplicationMaster向ResourceManager申请资源启动TaskManager，ResourceManager分配Container资源后，由ApplicationMaster通知资源所在节点的NodeManager启动TaskManager，NodeManager加载Flink的Jar包和配置构建环境并启动TaskManager，TaskManager启动后向JobManager发送心跳包，并等待JobManager向其分配任务。</p>
+<h2 id="任务调度原理"><a href="#任务调度原理" class="headerlink" title="任务调度原理"></a>任务调度原理</h2><img src="/cn/6799/clip_image003.png" class="img">
+
+<p>图 任务调度原理</p>
+<p>客户端不是运行时和程序执行的一部分，但它用于准备并发送dataflow(JobGraph)给Master(JobManager)，然后，客户端断开连接或者维持连接以等待接收计算结果。</p>
+<p>当 Flink 集群启动后，首先会启动一个 JobManger 和一个或多个的 TaskManager。由 Client 提交任务给 JobManager，JobManager 再调度任务到各个 TaskManager 去执行，然后 TaskManager 将心跳和统计信息汇报给 JobManager。TaskManager 之间以流的形式进行数据的传输。上述三者均为独立的 JVM 进程。</p>
+<p><strong>Client</strong> 为提交 Job 的客户端，可以是运行在任何机器上（与 JobManager 环境连通即可）。提交 Job 后，Client 可以结束进程（Streaming的任务），也可以不结束并等待结果返回。</p>
+<p><strong>JobManager</strong> 主要负责调度 Job 并协调 Task 做 checkpoint，职责上很像 Storm 的 Nimbus。从 Client 处接收到 Job 和 JAR 包等资源后，会生成优化后的执行计划，并以 Task 的单元调度到各个 TaskManager 去执行。</p>
+<p><strong>TaskManager</strong> 在启动的时候就设置好了槽位数（Slot），每个 slot 能启动一个 Task，Task 为线程。从 JobManager 处接收需要部署的 Task，部署启动后，与自己的上游建立 Netty 连接，接收数据并处理。</p>
+<h3 id="TaskManger与Slots"><a href="#TaskManger与Slots" class="headerlink" title="TaskManger与Slots"></a>TaskManger与Slots</h3><p>Flink中每一个worker(TaskManager)都是一个<strong>JVM进程</strong>，它可能会在<strong>独立的线程</strong>上执行一个或多个subtask。为了控制一个worker能接收多少个task，worker通过task slot来进行控制（一个worker至少有一个task slot）。</p>
+<p>每个task slot表示TaskManager拥有资源的<strong>一个固定大小的子集</strong>。假如一个TaskManager有三个slot，那么它会将其管理的内存分成三份给各个slot。资源slot化意味着一个subtask将不需要跟来自其他job的subtask竞争被管理的内存，取而代之的是它将拥有一定数量的内存储备。需要注意的是，这里不会涉及到CPU的隔离，slot目前仅仅用来隔离task的受管理的内存。</p>
+<p>通过调整task slot的数量，允许用户定义subtask之间如何互相隔离。如果一个TaskManager一个slot，那将意味着每个task group运行在独立的JVM中（该JVM可能是通过一个特定的容器启动的），而一个TaskManager多个slot意味着更多的subtask可以共享同一个JVM。而在同一个JVM进程中的task将共享TCP连接（基于多路复用）和心跳消息。它们也可能共享数据集和数据结构，因此这减少了每个task的负载。</p>
+<img src="/cn/6799/clip_image004.png" class="img">
+
+<p>图 TaskManager与Slot</p>
+<img src="/cn/6799/clip_image005.jpg" class="img">
+
+<p>图 子任务共享Slot</p>
+<p>默认情况下，Flink允许子任务共享slot，即使它们是不同任务的子任务（前提是它们来自同一个job）。 这样的结果是，一个slot可以保存作业的整个管道。</p>
+<p><strong>Task Slot是静态的概念，是指TaskManager具有的并发执行能力</strong>，可以通过参数taskmanager.numberOfTaskSlots进行配置；而<strong>并行度parallelism是动态概念，即TaskManager运行程序时实际使用的并发能力</strong>，可以通过参数parallelism.default进行配置。</p>
+<p>也就是说，假设一共有3个TaskManager，每一个TaskManager中的分配3个TaskSlot，也就是每个TaskManager可以接收3个task，一共9个TaskSlot，如果我们设置parallelism.default=1，即运行程序默认的并行度为1，9个TaskSlot只用了1个，有8个空闲，因此，设置合适的并行度才能提高效率。</p>
+<img src="https://img-blog.csdn.net/20170824162738505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" class="说明:" title="&#x2F;6799&#x2F;clip_image006.jpg">
+
+<img src="https://img-blog.csdn.net/20170824162117401?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" class="说明:" title="&#x2F;6799&#x2F;clip_image007.jpg">
+
+<h3 id="程序与数据流（DataFlow）"><a href="#程序与数据流（DataFlow）" class="headerlink" title="程序与数据流（DataFlow）"></a><strong>程序与数据流（DataFlow）</strong></h3><img src="/cn/6799/clip_image008.png" class="img">
+
+<p>所有的Flink程序都是由三部分组成的：  <strong>Source</strong> 、<strong>Transformation</strong>和<strong>Sink</strong>。</p>
+<p>Source负责读取数据源，Transformation利用各种算子进行处理加工，Sink负责输出。</p>
+<p>在运行时，Flink上运行的程序会被映射成“逻辑数据流”（dataflows），它包含了这三部分。<strong>每一个dataflow以一个或多个sources开始以一个或多个sinks结束</strong>。dataflow类似于任意的有向无环图（DAG）。在大部分情况下，程序中的转换运算（transformations）跟dataflow中的算子（operator）是一一对应的关系，但有时候，一个transformation可能对应多个operator。</p>
+<img src="/cn/6799/clip_image009.png" class="img">
+
+<p>图 程序与数据流</p>
+<h3 id="执行图（ExecutionGraph）"><a href="#执行图（ExecutionGraph）" class="headerlink" title="执行图（ExecutionGraph）"></a><strong>执行图（ExecutionGraph）</strong></h3><p>由Flink程序直接映射成的数据流图是StreamGraph，也被称为逻辑流图，因为它们表示的是计算逻辑的高级视图。为了执行一个流处理程序，Flink需要将逻辑流图转换为物理数据流图（也叫执行图），详细说明程序的执行方式。</p>
+<p>Flink 中的执行图可以分成四层：StreamGraph -&gt; JobGraph -&gt; ExecutionGraph -&gt; 物理执行图。</p>
+<p><strong>StreamGraph</strong>：是根据用户通过 Stream API 编写的代码生成的最初的图。用来表示程序的拓扑结构。</p>
+<p><strong>JobGraph</strong>：StreamGraph经过优化后生成了 JobGraph，提交给 JobManager 的数据结构。主要的优化为，将多个符合条件的节点 chain 在一起作为一个节点，这样可以减少数据在节点之间流动所需要的序列化/反序列化/传输消耗。</p>
+<p><strong>ExecutionGraph</strong>：JobManager 根据 JobGraph 生成ExecutionGraph。ExecutionGraph是JobGraph的并行化版本，是调度层最核心的数据结构。</p>
+<p><strong>物理执行图</strong>：JobManager 根据 ExecutionGraph 对 Job 进行调度后，在各个TaskManager 上部署 Task 后形成的“图”，并不是一个具体的数据结构。</p>
+<img src="/cn/6799/clip_image010.jpg" class="img">
+
+<h3 id="并行度（Parallelism）"><a href="#并行度（Parallelism）" class="headerlink" title="并行度（Parallelism）"></a><strong>并行度（Parallelism）</strong></h3><p>Flink程序的执行具有<strong>并行、分布式</strong>的特性。</p>
+<p>在执行过程中，一个流（stream）包含一个或多个分区（stream partition），而每一个算子（operator）可以包含一个或多个子任务（operator subtask），这些子任务在不同的线程、不同的物理机或不同的容器中彼此互不依赖地执行。</p>
+<p><strong>一个特定算子的子任务（subtask）的个数被称之为其并行度（parallelism）</strong>。一般情况下，一个流程序的并行度，可以认为就是其所有算子中最大的并行度。一个程序中，不同的算子可能具有不同的并行度。</p>
+<img src="/cn/6799/clip_image011.png" class="img">
+
+<p>图 并行数据流</p>
+<p>Stream在算子之间传输数据的形式可以是one-to-one(forwarding)的模式也可以是redistributing的模式，具体是哪一种形式，取决于算子的种类。</p>
+<p><strong>One-to-one</strong>：stream(比如在source和map operator之间)维护着分区以及元素的顺序。那意味着map 算子的子任务看到的元素的个数以及顺序跟source 算子的子任务生产的元素的个数、顺序相同，map、fliter、flatMap等算子都是one-to-one的对应关系。</p>
+<h4 id="类似于spark中的窄依赖"><a href="#类似于spark中的窄依赖" class="headerlink" title="类似于spark中的窄依赖"></a>类似于spark中的<strong>窄依赖</strong></h4><p><strong>Redistributing</strong>：stream(map()跟keyBy/window之间或者keyBy/window跟sink之间)的分区会发生改变。每一个算子的子任务依据所选择的transformation发送数据到不同的目标任务。例如，keyBy() 基于hashCode重分区、broadcast和rebalance会随机重新分区，这些算子都会引起redistribute过程，而redistribute过程就类似于Spark中的shuffle过程。</p>
+<h4 id="类似于spark中的宽依赖"><a href="#类似于spark中的宽依赖" class="headerlink" title="类似于spark中的宽依赖"></a>类似于spark中的<strong>宽依赖</strong></h4><h3 id="任务链（Operator-Chains）"><a href="#任务链（Operator-Chains）" class="headerlink" title="任务链（Operator Chains）"></a><strong>任务链（Operator Chains）</strong></h3><p><strong>相同并行度的one to one操作</strong>，Flink这样相连的算子链接在一起形成一个task，原来的算子成为里面的一部分。将算子链接成task是非常有效的优化：它能减少线程之间的切换和基于缓存区的数据交换，在减少时延的同时提升吞吐量。链接的行为可以在编程API中进行指定。</p>
+<img src="/cn/6799/clip_image012.jpg" class="img">
+
+<p>图 task与operator chains</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/d552.html" rel="prev" title="初识Flink">
+                  <i class="fa fa-chevron-left"></i> 初识Flink
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/788d.html" rel="next" title="数据仓库相关概念">
+                  数据仓库相关概念 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

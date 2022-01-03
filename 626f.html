@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<meta name="description" content="平常工作中写HiveSQL比较多，对于一些常见的Hive问题和优化做一下总结： 1. MapJoin如果不指定Mapjoin或者不符合MapJoin的条件，那么Hive解析器会将Join操作转换成Common Join, 即在Reduce阶段完成Join，容易发生数据倾斜。这时可以使用MapJoin把小表全部加载到内存中在Map端进行Join，避免Reduce处理。 2. 行列过滤列处理：在SEL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive优化">
+<meta property="og:url" content="https://mapan.tech/cn/626f.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="平常工作中写HiveSQL比较多，对于一些常见的Hive问题和优化做一下总结： 1. MapJoin如果不指定Mapjoin或者不符合MapJoin的条件，那么Hive解析器会将Join操作转换成Common Join, 即在Reduce阶段完成Join，容易发生数据倾斜。这时可以使用MapJoin把小表全部加载到内存中在Map端进行Join，避免Reduce处理。 2. 行列过滤列处理：在SEL">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-25T12:07:49.000Z">
+<meta property="article:modified_time" content="2020-03-29T02:07:28.248Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/626f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/626f.html","path":"626f.html","title":"Hive优化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hive优化 | 马攀的个人站</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-MapJoin"><span class="nav-number">1.</span> <span class="nav-text">1. MapJoin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%A1%8C%E5%88%97%E8%BF%87%E6%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">2. 行列过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B0%BD%E9%87%8F%E5%8E%9F%E5%AD%90%E5%8C%96%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">3. 尽量原子化操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%87%87%E7%94%A8%E5%88%86%E5%8C%BA%E6%8A%80%E6%9C%AF"><span class="nav-number">4.</span> <span class="nav-text">4. 采用分区技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%90%88%E7%90%86%E8%AE%BE%E7%BD%AEMap%E6%95%B0%E9%87%8F%E5%92%8CReduce%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">5. 合理设置Map数量和Reduce数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Map%E7%9A%84%E6%95%B0%E9%87%8F"><span class="nav-number">5.1.</span> <span class="nav-text">Map的数量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reduce%E7%9A%84%E6%95%B0%E9%87%8F"><span class="nav-number">5.2.</span> <span class="nav-text">Reduce的数量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%B3%A8%E6%84%8FJoin%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">6. 注意Join的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%B0%8F%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86"><span class="nav-number">7.</span> <span class="nav-text">7. 小文件处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E6%B3%A8%E6%84%8F%E6%95%B0%E6%8D%AE%E5%80%BE%E6%96%9C"><span class="nav-number">8.</span> <span class="nav-text">8. 注意数据倾斜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-%E5%90%88%E7%90%86%E4%BD%BF%E7%94%A8multi-insert%EF%BC%8Cunion-all"><span class="nav-number">9.</span> <span class="nav-text">9. 合理使用multi insert，union all</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Group%E4%BC%98%E5%8C%96"><span class="nav-number">10.</span> <span class="nav-text">10.Group优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-%E4%BD%BF%E7%94%A8%E5%8E%8B%E7%BC%A9"><span class="nav-number">11.</span> <span class="nav-text">11. 使用压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-%E5%BC%80%E5%90%AFJVM%E9%87%8D%E7%94%A8"><span class="nav-number">12.</span> <span class="nav-text">12. 开启JVM重用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA"><span class="nav-number">13.</span> <span class="nav-text">13.使用动态分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-%E4%BD%BF%E7%94%A8%E5%88%97%E5%BC%8F%E5%AD%98%E5%82%A8"><span class="nav-number">14.</span> <span class="nav-text">14.使用列式存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15-%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="nav-number">15.</span> <span class="nav-text">15.使用索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#16-%E5%88%A9%E7%94%A8%E5%A5%BDEXPLAIN"><span class="nav-number">16.</span> <span class="nav-text">16.利用好EXPLAIN</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/626f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive优化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-03-25 20:07:49" itemprop="dateCreated datePublished" datetime="2020-03-25T20:07:49+08:00">2020-03-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2020-03-29 10:07:28" itemprop="dateModified" datetime="2020-03-29T10:07:28+08:00">2020-03-29</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据仓库</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>平常工作中写HiveSQL比较多，对于一些常见的Hive问题和优化做一下总结：</p>
+<h3 id="1-MapJoin"><a href="#1-MapJoin" class="headerlink" title="1. MapJoin"></a>1. MapJoin</h3><p>如果不指定<code>Mapjoin</code>或者不符合<code>MapJoin</code>的条件，那么Hive解析器会将<code>Join</code>操作转换成<code>Common Join</code>, 即在<code>Reduce</code>阶段完成<code>Join</code>，容易发生数据倾斜。这时可以使用MapJoin把小表全部加载到内存中在<code>Map</code>端进行<code>Join</code>，避免<code>Reduce</code>处理。</p>
+<h3 id="2-行列过滤"><a href="#2-行列过滤" class="headerlink" title="2. 行列过滤"></a>2. 行列过滤</h3><p>列处理：在SELECT中，只拿需要处理的列。如非必要，尽量避免SELECT *；</p>
+<p>行处理：尽早的过滤数据，减少每个阶段的数据量，对于分区表尽量使用分区过滤。</p>
+<h3 id="3-尽量原子化操作"><a href="#3-尽量原子化操作" class="headerlink" title="3. 尽量原子化操作"></a>3. 尽量原子化操作</h3><p>尽量避免一个SQL包含复杂的逻辑，可以创建临时表来完成复杂的逻辑。</p>
+<h3 id="4-采用分区技术"><a href="#4-采用分区技术" class="headerlink" title="4. 采用分区技术"></a>4. 采用分区技术</h3><p>可以把数据根据数据量按照天或者按照周、月来分区。</p>
+<h3 id="5-合理设置Map数量和Reduce数"><a href="#5-合理设置Map数量和Reduce数" class="headerlink" title="5. 合理设置Map数量和Reduce数"></a>5. 合理设置Map数量和Reduce数</h3><p>Hive中的SQL查询会生成执行计划，执行计划以MapReduce的方式执行，那么结合数据和集群的大小，Map和Reduce的数量就会影响到SQL的执行效率，除了要控制Hive生成的Job的数量，也要控制map和reduce的数量。</p>
+<h4 id="Map的数量"><a href="#Map的数量" class="headerlink" title="Map的数量"></a>Map的数量</h4><p>通常情况下，作业会通过input的目录产生一个或者多个map任务。<br>主要决定因素有：input的文件总个数，input的文件大小，集群设置的文件块大小。<br>Hive中默认的<code>hive.input.format</code>是<code>org.apache.hadoop.hive.ql.io.CombineHivelnputFormat</code>，对于<code>combineHiveInputFormat</code>，它的输入的map数量由三个配置决定：<br><code>mapred.min.split.size.per.node</code> 一个节点上split的至少的大小<br><code>mapred.min.split.size.per.rack</code> 一个交换机下split 至少的大小<br><code>mapred.max.split.size</code> 一个split 最大的大小<br>主要思路是把输入目录下的大文件分成多个map的输入，并合并小文件，做为一个map的输入<br>具体的原理是下述三步：</p>
+<p>a) 根据输入目录下的每个文件，如果其长度超过<code>mapred.max.split.size</code>，以Block 为单位分成多个Split（一个Split是一个map的输入），每个split的长度都大于<code>mapred.max.split.size</code>，因为以Block为单位，因此也会大于·<code>BlockSize</code>，此文件剩下的长度如果大于<code>mapred.min.split.size.per.node</code>，则生成一个Split，否则先暂时保留；</p>
+<p>b) 现在剩下的都是一些长度较短的碎片，把每个rack 下碎片合并，只要长度超过<br><code>mapred.max.split.size</code>就合并成一-个 split，最后如果剩下的碎片比<code>mapred.min.split.size.per.rack</code> 大，就合并成一个split，否则暂时保留；</p>
+<p>c) 把不同rack下的碎片合并，只要长度超过<code>mapred.max.split.size</code>就合并成一个 split，剩下的碎片无论长度，合并成一个split。</p>
+<h4 id="Reduce的数量"><a href="#Reduce的数量" class="headerlink" title="Reduce的数量"></a>Reduce的数量</h4><p>reduce数量由以下三个参数决定：</p>
+<ul>
+<li><code>mapred.reduce.tasks</code>（强制指定reduce的任务数量）</li>
+<li><code>hive.exec.reducers.bytes.per.reducer</code>（每个reduce任务处理的数据量，默认为1000^3=1G）</li>
+<li><code>hive.exec.reducers.max</code>（每个任务最大的reduce数，默认为999）<br>计算reducer 数的公式:<br><code>N=min(hive.exec.reducers.max，总输入数据量/hive.exec.reducers.bytes.per.reducer)</code></li>
+</ul>
+<h3 id="6-注意Join的使用"><a href="#6-注意Join的使用" class="headerlink" title="6. 注意Join的使用"></a>6. 注意Join的使用</h3><p>把重复关联键少的表放在join前面，可以提高join效率。网上所谓的<code>hive会将join前面的表放在内存中，把小表放在前面能减少内存资源消耗</code>这种说法在现在看来其实是有异议的。用1条记录的表和3亿条记录的表做join，无论小表是放在join的前面还是join的后面，执行的时间几乎都是相同的，原因是因为Hive在早期某个版本中，底层对此进行了优化。</p>
+<h3 id="7-小文件处理"><a href="#7-小文件处理" class="headerlink" title="7. 小文件处理"></a>7. 小文件处理</h3><p><code>HiveInputFormat</code>没有对小文件的合并功能<br>可以使用<code>Combinefileinputformat</code>，将多个小文件打包作为一个整体的inputsplit，减少map任务数<br><code>set mapred.max.split.size=256000000</code>;<br><code>set mapred.min.split.size.per.node= 256000000</code>；<br><code>set mapred.min.split.size.per.rack=256000000</code>;<br><code>set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHivelnputFormat</code>;</p>
+<p>设置hive参数，额外启动-一个MR Job打包小文件:<br><code>hive.merge.mapredfiles=false</code> 是否合并Reduce 输出文件，默认为False<br><code>hive.merge.size.per.task = 256*1000*1000</code> 合并文件的大小</p>
+<h3 id="8-注意数据倾斜"><a href="#8-注意数据倾斜" class="headerlink" title="8. 注意数据倾斜"></a>8. 注意数据倾斜</h3><p>a) 通过 <code>hive.groupby.skewindata=true</code>控制生成两个MR Job，第一个 MR Job Map的输出结果随机分配到reduce做次预汇总，减少某些key值条数过多某些key条数过小造成的数据倾斜问题；</p>
+<p>b) 通过<code>hive.map.aggr = true</code>（默认为true）在Map端做combiner，假如map各条数据基本上不一样，聚合没什么意义，做combiner反而画蛇添足，hive里也考虑的比较周到通过参数<br><code>hive.groupby.mapaggr.checkinterval = 100000</code>（默认）</p>
+<p><code>hive.map.aggr.hash.min.reduction=0.5</code>（默认），预先取100000条数据聚合，如果聚合后的条数/100000&gt;0.5，则不再聚合。</p>
+<h3 id="9-合理使用multi-insert，union-all"><a href="#9-合理使用multi-insert，union-all" class="headerlink" title="9. 合理使用multi insert，union all"></a>9. 合理使用multi insert，union all</h3><p><code>multi insert</code>适合基于同一个源表按照不同逻辑不同粒度处理插入不同表的场景，做到只需要扫描源表一次，job个数不变，减少源表扫描次数；</p>
+<p>union all用好，可减少表的扫描次数，减少job 的个数，通常预先按不同逻辑不同条件生成的查询<code>union all</code>后，再统一<code>Group by</code>计算，不同表的<code>union all</code>相当于<code>multiple inputs</code>，同一个表的<code>union all</code>，相当map一次输出多条。</p>
+<h3 id="10-Group优化"><a href="#10-Group优化" class="headerlink" title="10.Group优化"></a>10.Group优化</h3><p>对于Group操作，首先在map端聚合，最后在reduce端做聚合，以下是相关的参数:<br><code>hive.map.aggr=true </code>是否在Map端进行聚合，默认为True,<br><code>hive.groupby.mapaggr.checkinterval= 100000 </code>在Map端进行聚合操作的条目数目。</p>
+<h3 id="11-使用压缩"><a href="#11-使用压缩" class="headerlink" title="11. 使用压缩"></a>11. 使用压缩</h3><p>设置map端输出，中间结果压缩。不完全解决数据倾斜问题，但是减少了IO读写和网络传输，能提高很多效率。</p>
+<p><code>set hive.exec.compress.intermediate = true;</code></p>
+<p>对于中间数据压缩，选择一个低CPU开销的Codec要比选择一个压缩率高的Codec要重要的多。</p>
+<p><code>SnappyCodec</code>是一个比较好的中间文件Codec，因为其很好的结合了低CPU开销和好的压缩执行效率。</p>
+<h3 id="12-开启JVM重用"><a href="#12-开启JVM重用" class="headerlink" title="12. 开启JVM重用"></a>12. 开启JVM重用</h3><p>JVM重用是Hadoop调优参数的内容，对hive的性能具有非常大的影响，特别是对于很难避免小文件的场景或者Task特别多的场景，这类场景大多数执行时间都很短。Hadoop默认配置是使用JVM来执行map和reduce任务的，这时Jvm的启动过程可能会造成相当大的开销，尤其是执行的job包含有成千上万个task任务的情况。</p>
+<p>JVM重用可以使得JVM实例在同一个JOB中重新使用N次，N的值可以在<code>Hadoop的mapre-site.xml</code>文件中进行设置<br><code>mapred.job.reuse.jvm.num.tasks</code><br>也可在hive的执行设置：<br><code>set  mapred.job.reuse.jvm.num.tasks=10</code>;</p>
+<p> JVM重用的一个缺点是，开启JVM重用将会一直占用使用到的task插槽，以便进行重用，直到任务完成后才能释放。如果某个不平衡的job中有几个<code>reduce task</code> 执行的时间要比其他<code>reduce task</code>消耗的时间多得多的话，那么保留的插槽就会一直空闲着却无法被其他的job使用，直到所有的task都结束了才会释放。</p>
+<h3 id="13-使用动态分区"><a href="#13-使用动态分区" class="headerlink" title="13.使用动态分区"></a>13.使用动态分区</h3><p>在Hive中，有时候会希望根据输入的Key，把结果自动输出到不同的目录中，这可以通过动态分区来实现，就是把每一个 key当作一个 分区。<br>如果要启动动态分区，则需要进行下面的设置首先需要在hive语句中设置允许动态分区<br><code>set hive.exec.dynamic.partition=true</code>；<br><code>set hive.exec.dynamic.partition.mode=nonstrict</code>；<br>在动态分区有可能很大的情况下，还需要其他的调整<br><code>hive.exec.dynamic.partitions.pernode</code> 参数指的是每个节点上能够生成的最大分区，这个在最坏情况下应该是跟最大分区一样的值<br><code>hive.exec.dynamic.partitions.partitions</code> 参数指的是总共的最大的动态分区数<code>hive.exec.max.createdfiles</code>参数指的是能够创建的最多文件数（分区一多，文件必然就多了）<br>最后要注意的是select语句中要把distribute的key也select出来。</p>
+<h3 id="14-使用列式存储"><a href="#14-使用列式存储" class="headerlink" title="14.使用列式存储"></a>14.使用列式存储</h3><p>根据数据的特点来进行技术选型：如果数据结构是比较扁平的，那么用<code> ORC</code> 比较合适，如果嵌套较多，就用 <code>Parquet</code>。<br>列存储主要有两个好处：数据压缩和查询性能提升，在节省了存储的同时还提升了查询性能，这个的收益是非常可观的。</p>
+<h3 id="15-使用索引"><a href="#15-使用索引" class="headerlink" title="15.使用索引"></a>15.使用索引</h3><p>索引可以避免全表扫描和资源浪费<br>索引可以加快含有Group By语句的查询的计算速度<br><code>hive.optimize.index.filter=true</code>; 使用自动索引<br><code>hive.optimie.index.groupby=true</code>;使用聚合索引优化GROUP BY操作</p>
+<h3 id="16-利用好EXPLAIN"><a href="#16-利用好EXPLAIN" class="headerlink" title="16.利用好EXPLAIN"></a>16.利用好EXPLAIN</h3><p>Explain命令对于优化查询语句很重要，针对某些查询语句，我们可以通过它查看各个执行计划，针对耗时的地方，采取优化。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/a77d.html" rel="prev" title="二分查找">
+                  <i class="fa fa-chevron-left"></i> 二分查找
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/f16a.html" rel="next" title="记录一次Hive中遇到的问题">
+                  记录一次Hive中遇到的问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  Since 2015 
+  <!--span itemprop="copyrightYear">2022</span-->
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
