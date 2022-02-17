@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
@@ -19,8 +18,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
-<meta name="description" content="探讨Java中的变量取值范围，通过Java自带的函数直接求出其最大值和最小值。 12345678910111213141516171819202122232425262728public class floattest&amp;#123;    public static void main(String[] args) &amp;#123;        byte b1 &#x3D; Byte.MAX_VALUE;">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+
+  <meta name="description" content="探讨Java中的变量取值范围，通过Java自带的函数直接求出其最大值和最小值。 12345678910111213141516171819202122232425262728public class floattest&amp;#123;    public static void main(String[] args) &amp;#123;        byte b1 &#x3D; Byte.MAX_VALUE;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java变量取值范围探讨">
 <meta property="og:url" content="https://mapan.tech/cn/8f58.html">
@@ -47,6 +47,7 @@
 
 
 
+<link rel="dns-prefetch" href="https://comment.mapan.tech">
   <noscript>
     <link rel="stylesheet" href="/cn/css/noscript.css">
   </noscript>
@@ -88,7 +89,7 @@
   <ul class="main-menu menu">
         <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
         <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
-        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th-list fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
         <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
         <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
       <li class="menu-item menu-item-search">
@@ -158,7 +159,7 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-categories">
-          <a href="/cn/categories.html">
+          <a href="/cn/categories/">
         <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
@@ -224,13 +225,13 @@
 
       <time title="创建时间：2015-04-10 21:18:04" itemprop="dateCreated datePublished" datetime="2015-04-10T21:18:04+08:00">2015-04-10</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2019-04-15 19:49:24" itemprop="dateModified" datetime="2019-04-15T19:49:24+08:00">2019-04-15</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-04-15 19:49:24" itemprop="dateModified" datetime="2019-04-15T19:49:24+08:00">2019-04-15</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -242,6 +243,28 @@
     </span>
 
   
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/cn/8f58.html#waline-comments" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" id="/cn/8f58.html" data-xid="/cn/8f58.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span id="/cn/8f58.html" class="post-meta-item leancloud_visitors" data-flag-title="Java变量取值范围探讨" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
 </div>
 
         </div>
@@ -252,7 +275,7 @@
     
     <div class="post-body" itemprop="articleBody">
         <p>探讨Java中的变量取值范围，通过Java自带的函数直接求出其最大值和最小值。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">floattest</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span> b1 = Byte.MAX_VALUE;</span><br><span class="line">        <span class="keyword">byte</span> b2 = Byte.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;byte的取值范围是：&quot;</span>+b2+<span class="string">&quot; ~ &quot;</span>+b1);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">short</span> s1 = Short.MAX_VALUE;</span><br><span class="line">        <span class="keyword">short</span> s2 = Short.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;short的取值范围是：&quot;</span>+s2+<span class="string">&quot; ~ &quot;</span>+s1);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i1 = Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">int</span> i2 = Integer.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;int的取值范围是：&quot;</span>+i2+<span class="string">&quot; ~ &quot;</span>+i1);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> l1 = Long.MAX_VALUE;</span><br><span class="line">        <span class="keyword">long</span> l2 = Long.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;long的取值范围是：&quot;</span>+l2+<span class="string">&quot; ~ &quot;</span>+l1);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">float</span> f1 = Float.MAX_VALUE;</span><br><span class="line">        <span class="keyword">float</span> f2 = Float.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;float的取值范围是：&quot;</span>+f2+<span class="string">&quot; ~ &quot;</span>+f1);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">double</span> d1 = Double.MAX_VALUE;</span><br><span class="line">        <span class="keyword">double</span> d2 = Double.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;double的取值范围是：&quot;</span>+d2+<span class="string">&quot; ~ &quot;</span>+d1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">floattest</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">byte</span> <span class="variable">b1</span> <span class="operator">=</span> Byte.MAX_VALUE;</span><br><span class="line">        <span class="type">byte</span> <span class="variable">b2</span> <span class="operator">=</span> Byte.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;byte的取值范围是：&quot;</span>+b2+<span class="string">&quot; ~ &quot;</span>+b1);</span><br><span class="line"></span><br><span class="line">        <span class="type">short</span> <span class="variable">s1</span> <span class="operator">=</span> Short.MAX_VALUE;</span><br><span class="line">        <span class="type">short</span> <span class="variable">s2</span> <span class="operator">=</span> Short.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;short的取值范围是：&quot;</span>+s2+<span class="string">&quot; ~ &quot;</span>+s1);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">i1</span> <span class="operator">=</span> Integer.MAX_VALUE;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i2</span> <span class="operator">=</span> Integer.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;int的取值范围是：&quot;</span>+i2+<span class="string">&quot; ~ &quot;</span>+i1);</span><br><span class="line"></span><br><span class="line">        <span class="type">long</span> <span class="variable">l1</span> <span class="operator">=</span> Long.MAX_VALUE;</span><br><span class="line">        <span class="type">long</span> <span class="variable">l2</span> <span class="operator">=</span> Long.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;long的取值范围是：&quot;</span>+l2+<span class="string">&quot; ~ &quot;</span>+l1);</span><br><span class="line"></span><br><span class="line">        <span class="type">float</span> <span class="variable">f1</span> <span class="operator">=</span> Float.MAX_VALUE;</span><br><span class="line">        <span class="type">float</span> <span class="variable">f2</span> <span class="operator">=</span> Float.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;float的取值范围是：&quot;</span>+f2+<span class="string">&quot; ~ &quot;</span>+f1);</span><br><span class="line"></span><br><span class="line">        <span class="type">double</span> <span class="variable">d1</span> <span class="operator">=</span> Double.MAX_VALUE;</span><br><span class="line">        <span class="type">double</span> <span class="variable">d2</span> <span class="operator">=</span> Double.MIN_VALUE;</span><br><span class="line">        System.out.println(<span class="string">&quot;double的取值范围是：&quot;</span>+d2+<span class="string">&quot; ~ &quot;</span>+d1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>程序输出结果如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">byte的取值范围是：-128 ~ 127</span><br><span class="line">short的取值范围是：-32768 ~ 32767</span><br><span class="line">int的取值范围是：-2147483648 ~ 2147483647</span><br><span class="line">long的取值范围是：-9223372036854775808 ~ 9223372036854775807</span><br><span class="line">float的取值范围是：1.4E-45 ~ 3.4028235E38</span><br><span class="line">double的取值范围是：4.9E-324 ~ 1.7976931348623157E308</span><br></pre></td></tr></table></figure>
@@ -287,6 +310,7 @@
 
 
 
+    <div class="comments" id="waline-comments"></div>
 </div>
   </main>
 
@@ -295,8 +319,8 @@
 
 
 <div class="copyright">
-  Since 2015 
-  <!--span itemprop="copyrightYear">2022</span-->
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -323,6 +347,15 @@
 
 
 
-
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mm","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","el":"#waline-comments","path":"/cn/8f58.html"}</script>
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() => 
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => {
+    new Waline(CONFIG.waline);
+  });
+});
+</script>
 </body>
 </html>
