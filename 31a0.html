@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
 
-  <meta name="description" content="51单片机的串口，是个全双工的串口，发送数据的同时，还可以接收数据。当串行发送完毕后，将在标志位 TI 置 1，同样，当收到了数据后，也会在 RI 置 1。  无论 RI 或 TI 出现了 1，只要串口中断处于开放状态，单片机都会进入串口中断处理程序。在中断程序中，要区分出来究竟是发送引起的中断，还是接收引起的中断，然后分别进行处理。 常用的方法有：    接收数据时，使用“中断方式”，清除 RI">
+  <meta name="description" content="最近在使用Python开发一个serverless的云函数，在自己电脑上运行的好好的，部署到云服务上就和本地运行结果不一致。琢磨了一下是时区不同导致的运行环境不一致。 我是用的是腾讯云的SCF云函数，云服务默认运行环境的时区是UTC，本地环境的运行时区是UTC+8，在我开发的例子的当中需要当前日期作为参数。只需要在代码中加入时区设置即可保持开发环境和运行环境一致。 12345import os,t">
 <meta property="og:type" content="article">
-<meta property="og:title" content="51单片机与PC通信方法总结">
-<meta property="og:url" content="https://mapan.tech/cn/d48d.html">
+<meta property="og:title" content="Python时区设置">
+<meta property="og:url" content="https://mapan.tech/cn/31a0.html">
 <meta property="og:site_name" content="马攀的个人站">
-<meta property="og:description" content="51单片机的串口，是个全双工的串口，发送数据的同时，还可以接收数据。当串行发送完毕后，将在标志位 TI 置 1，同样，当收到了数据后，也会在 RI 置 1。  无论 RI 或 TI 出现了 1，只要串口中断处于开放状态，单片机都会进入串口中断处理程序。在中断程序中，要区分出来究竟是发送引起的中断，还是接收引起的中断，然后分别进行处理。 常用的方法有：    接收数据时，使用“中断方式”，清除 RI">
+<meta property="og:description" content="最近在使用Python开发一个serverless的云函数，在自己电脑上运行的好好的，部署到云服务上就和本地运行结果不一致。琢磨了一下是时区不同导致的运行环境不一致。 我是用的是腾讯云的SCF云函数，云服务默认运行环境的时区是UTC，本地环境的运行时区是UTC+8，在我开发的例子的当中需要当前日期作为参数。只需要在代码中加入时区设置即可保持开发环境和运行环境一致。 12345import os,t">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2016-02-02T02:44:00.000Z">
-<meta property="article:modified_time" content="2019-10-20T12:32:24.879Z">
+<meta property="article:published_time" content="2022-02-19T07:43:46.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:51:01.440Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/d48d.html">
+<link rel="canonical" href="https://mapan.tech/cn/31a0.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/d48d.html","path":"d48d.html","title":"51单片机与PC通信方法总结"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/31a0.html","path":"31a0.html","title":"Python时区设置"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>51单片机与PC通信方法总结 | 马攀的个人站</title>
+<title>Python时区设置 | 马攀的个人站</title>
   
 
 
@@ -199,7 +199,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/d48d.html">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/31a0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/cn/images/avatar.gif">
@@ -212,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          51单片机与PC通信方法总结
+          Python时区设置
         </h1>
 
         <div class="post-meta-container">
@@ -222,24 +222,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2016-02-02 10:44:00" itemprop="dateCreated datePublished" datetime="2016-02-02T10:44:00+08:00">2016-02-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2019-10-20 20:32:24" itemprop="dateModified" datetime="2019-10-20T20:32:24+08:00">2019-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/cn/categories/%E7%94%B5%E5%AD%90/" itemprop="url" rel="index"><span itemprop="name">电子</span></a>
-        </span>
+      <time title="创建时间：2022-02-19 15:43:46 / 修改时间：15:51:01" itemprop="dateCreated datePublished" datetime="2022-02-19T15:43:46+08:00">2022-02-19</time>
     </span>
 
   
@@ -251,13 +236,13 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/d48d.html#waline-comments" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" id="/cn/d48d.html" data-xid="/cn/d48d.html" itemprop="commentCount"></span>
+    <a title="waline" href="/cn/31a0.html#waline-comments" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" id="/cn/31a0.html" data-xid="/cn/31a0.html" itemprop="commentCount"></span>
     </a>
   </span>
   
   
-    <span id="/cn/d48d.html" class="post-meta-item leancloud_visitors" data-flag-title="51单片机与PC通信方法总结" title="阅读次数">
+    <span id="/cn/31a0.html" class="post-meta-item leancloud_visitors" data-flag-title="Python时区设置" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -274,10 +259,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>51单片机的串口，是个全双工的串口，发送数据的同时，还可以接收数据。<br>当串行发送完毕后，将在标志位 TI 置 1，同样，当收到了数据后，也会在 RI 置 1。</p>
-<p> 无论 RI 或 TI 出现了 1，只要串口中断处于开放状态，单片机都会进入串口中断处理程序。<br>在中断程序中，要区分出来究竟是发送引起的中断，还是接收引起的中断，然后分别进行处理。</p>
-<p>常用的方法有：<br>    接收数据时，使用“中断方式”，清除 RI 后，用一个变量通知主函数，收到新数据。<br>    发送数据时，也用“中断方式”，清除 TI 后，用另一个变量通知主函数，数据发送完毕。<br>    这样一来，收、发两者基本一致，编写程序也很规范、易懂。<br>    更重要的是，主函数中，不用在那儿死等发送完毕，可以有更多的时间查看其它的标志。<br>PC与单片机串口通信的程序，要求如下：<br>    1、如果在电脑上发送以$开始的字符串，则将整个字符串原样返回（字符串长度不是固定的）。<br>    2、如果接收到1，则将P00置高电平，接收到0，P10置低电平。（用来控制一个LED）<br>单片机是STC89C52RC/晶振11.0592/波特率要求是9600或4800。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include &amp;amp;lt;reg52.h&amp;amp;gt;</span><br><span class="line">sbit LED = P0^0;</span><br><span class="line">unsigned char UART_buff;</span><br><span class="line">bit New_rec = 0, Send_ed = 1, Money = 0;</span><br><span class="line">void main ()</span><br><span class="line">&#123;</span><br><span class="line">    SCON = 0x50; //串口方式1, 10位UART（一个起始位“0”八个数据位一个停止位“1”）, 允许接收.</span><br><span class="line">    TMOD = 0x20; //T1方式2</span><br><span class="line">    TH1 = 0xFD; //装入自动重加载的处置，9600bps@11.0592MHz</span><br><span class="line">    TL1 = 0xFD; //装入初值</span><br><span class="line">    TR1 = 1; //启动定时器</span><br><span class="line">    T1ES = 1; //开串口中断，但不开定时器中断，不允许定时器中断</span><br><span class="line">    EA = 1;</span><br><span class="line">    while(Money == 0); //等着交费，呵呵，等着接收$.</span><br><span class="line">    while(1)</span><br><span class="line">    &#123;</span><br><span class="line">    if ((New_rec == 1) &amp;amp;amp;&amp;amp;amp; (Send_ed == 1))</span><br><span class="line">        &#123;               </span><br><span class="line">            SBUF = UART_buff; //那就发送.</span><br><span class="line">            New_rec = 0;</span><br><span class="line">            Send_ed = 0;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//----------------------------------------------</span><br><span class="line">void ser_int() interrupt 4</span><br><span class="line">&#123;</span><br><span class="line">    if(RI == 1) //如果收到.</span><br><span class="line">    &#123;</span><br><span class="line">        RI = 0; //清除标志.</span><br><span class="line">        New_rec = 1;</span><br><span class="line">        UART_buff = SBUF; //接收.</span><br><span class="line">        if(UART_buff == &#x27;1&#x27;)</span><br><span class="line">            LED = 1;</span><br><span class="line">        if(UART_buff == &#x27;0&#x27;)</span><br><span class="line">            LED = 0;</span><br><span class="line">        if(UART_buff == &#x27;$&#x27;)</span><br><span class="line">            Money = 1;</span><br><span class="line">    &#125;</span><br><span class="line">    else //如果送毕.</span><br><span class="line">    &#123;</span><br><span class="line">        TI = 0; //清除标志.</span><br><span class="line">        Send_ed = 1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>最近在使用Python开发一个serverless的云函数，在自己电脑上运行的好好的，部署到云服务上就和本地运行结果不一致。琢磨了一下是时区不同导致的运行环境不一致。</p>
+<p>我是用的是腾讯云的SCF云函数，云服务默认运行环境的时区是UTC，本地环境的运行时区是UTC+8，在我开发的例子的当中需要当前日期作为参数。只需要在代码中加入时区设置即可保持开发环境和运行环境一致。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os,time</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main_handler</span>(<span class="params">event, context</span>):</span><br><span class="line"><span class="comment"># 设置时区为上海</span></span><br><span class="line">    os.environ[<span class="string">&#x27;TZ&#x27;</span>] = <span class="string">&#x27;Asia/Shanghai&#x27;</span></span><br><span class="line">    time.tzset()</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -291,14 +276,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/d091.html" rel="prev" title="基于51单片机的万年历『2』">
-                  <i class="fa fa-chevron-left"></i> 基于51单片机的万年历『2』
+                <a href="/cn/a89.html" rel="prev" title="新的开始">
+                  <i class="fa fa-chevron-left"></i> 新的开始
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/694e.html" rel="next" title="按键的研究">
-                  按键的研究 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -347,7 +329,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mp","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","copyright":false,"el":"#waline-comments","path":"/cn/d48d.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mp","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","copyright":false,"el":"#waline-comments","path":"/cn/31a0.html"}</script>
 <script>
 document.addEventListener('page:loaded', () => {
   NexT.utils.loadComments(CONFIG.waline.el).then(() => 
