@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
 
-  <meta name="description" content="2021年末，换了一台Macbook Pro 14寸的电脑。把之前的博客迁移到新电脑上，博客一年多没更新了，等周末把去年的笔记整理过来。更换了博客的主题，由于之前的EVEN主题不支持arm架构的系统，所以换到了更为流行的NEXT。同时也更换了评论系统，在21年10月，Valine评论被大规模XSS注入，导致网站被遮蔽罩盖住，所以换到Waline评论。之前的评论花了点功夫已经迁移过来了。 新的开始，">
+  <meta name="description" content="在Spark on hive中，创建表有三种方式  CREATE TABLE USING DATA_SOURCE CREATE TABLE USING HIVE FORMAT CREATE TABLE LIKE  方式1创建的是 data source 表，方式2 创建的是hive serde 表，方式3创建的表和like的表保持一致。 那么data source 表和 hive serde 表在">
 <meta property="og:type" content="article">
-<meta property="og:title" content="新的开始">
-<meta property="og:url" content="https://mapan.tech/cn/a89.html">
+<meta property="og:title" content="踩坑Hive的动态写入">
+<meta property="og:url" content="https://mapan.tech/cn/5c9d.html">
 <meta property="og:site_name" content="马攀的个人站">
-<meta property="og:description" content="2021年末，换了一台Macbook Pro 14寸的电脑。把之前的博客迁移到新电脑上，博客一年多没更新了，等周末把去年的笔记整理过来。更换了博客的主题，由于之前的EVEN主题不支持arm架构的系统，所以换到了更为流行的NEXT。同时也更换了评论系统，在21年10月，Valine评论被大规模XSS注入，导致网站被遮蔽罩盖住，所以换到Waline评论。之前的评论花了点功夫已经迁移过来了。 新的开始，">
+<meta property="og:description" content="在Spark on hive中，创建表有三种方式  CREATE TABLE USING DATA_SOURCE CREATE TABLE USING HIVE FORMAT CREATE TABLE LIKE  方式1创建的是 data source 表，方式2 创建的是hive serde 表，方式3创建的表和like的表保持一致。 那么data source 表和 hive serde 表在">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-02-17T15:09:07.000Z">
-<meta property="article:modified_time" content="2022-02-17T16:31:05.224Z">
+<meta property="article:published_time" content="2021-10-22T02:28:21.000Z">
+<meta property="article:modified_time" content="2022-04-20T07:04:59.224Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/a89.html">
+<link rel="canonical" href="https://mapan.tech/cn/5c9d.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/a89.html","path":"a89.html","title":"新的开始"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/5c9d.html","path":"5c9d.html","title":"踩坑Hive的动态写入"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>新的开始 | 马攀的个人站</title>
+<title>踩坑Hive的动态写入 | 马攀的个人站</title>
   
 
 
@@ -135,7 +135,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#hive-serde-%E8%A1%A8"><span class="nav-number">1.</span> <span class="nav-text">hive serde 表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-source-%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">data source 表</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -199,7 +200,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/a89.html">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/5c9d.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/cn/images/avatar.gif">
@@ -212,7 +213,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          新的开始
+          踩坑Hive的动态写入
         </h1>
 
         <div class="post-meta-container">
@@ -223,14 +224,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-02-17 23:09:07" itemprop="dateCreated datePublished" datetime="2022-02-17T23:09:07+08:00">2022-02-17</time>
+      <time title="创建时间：2021-10-22 10:28:21" itemprop="dateCreated datePublished" datetime="2021-10-22T10:28:21+08:00">2021-10-22</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-02-18 00:31:05" itemprop="dateModified" datetime="2022-02-18T00:31:05+08:00">2022-02-18</time>
+      <time title="修改时间：2022-04-20 15:04:59" itemprop="dateModified" datetime="2022-04-20T15:04:59+08:00">2022-04-20</time>
     </span>
 
   
@@ -242,13 +243,13 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/a89.html#waline-comments" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" id="/cn/a89.html" data-xid="/cn/a89.html" itemprop="commentCount"></span>
+    <a title="waline" href="/cn/5c9d.html#waline-comments" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" id="/cn/5c9d.html" data-xid="/cn/5c9d.html" itemprop="commentCount"></span>
     </a>
   </span>
   
   
-    <span id="/cn/a89.html" class="post-meta-item leancloud_visitors" data-flag-title="新的开始" title="阅读次数">
+    <span id="/cn/5c9d.html" class="post-meta-item leancloud_visitors" data-flag-title="踩坑Hive的动态写入" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -265,8 +266,42 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>2021年末，换了一台Macbook Pro 14寸的电脑。把之前的博客迁移到新电脑上，博客一年多没更新了，等周末把去年的笔记整理过来。更换了博客的主题，由于之前的EVEN主题不支持arm架构的系统，所以换到了更为流行的NEXT。同时也更换了评论系统，在21年10月，Valine评论被大规模XSS注入，导致网站被遮蔽罩盖住，所以换到Waline评论。之前的评论花了点功夫已经迁移过来了。</p>
-<p>新的开始，希望一切都好，我，回来了。</p>
+        <p>在Spark on hive中，创建表有三种方式</p>
+<ul>
+<li>CREATE TABLE USING DATA_SOURCE</li>
+<li>CREATE TABLE USING HIVE FORMAT</li>
+<li>CREATE TABLE LIKE</li>
+</ul>
+<p>方式1创建的是 data source 表，方式2 创建的是hive serde 表，方式3创建的表和like的表保持一致。</p>
+<p>那么data source 表和 hive serde 表在使用上有什么区别呢？</p>
+<h3 id="hive-serde-表"><a href="#hive-serde-表" class="headerlink" title="hive serde 表"></a>hive serde 表</h3><p> hive serde表，开启动态分区，使用动态写入时候，必须要开启下面的参数：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition<span class="operator">=</span><span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+<p>严格模式要求至少有一个静态分区，如果我们写入的表只有一个分区字段，是需要开启非严格模式的：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> hive.exec.dynamic.partition.mode<span class="operator">=</span>nonstrict;</span><br></pre></td></tr></table></figure>
+
+<p>如果不开启动态分区，直接动态写入是会报错的。</p>
+<h3 id="data-source-表"><a href="#data-source-表" class="headerlink" title="data source 表"></a>data source 表</h3><p>data source 表和 hive serve，开启动态分区的参数有一些区别：</p>
+<p>默认情况下是static模式，使用如下参数开启动态分区：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> spark.sql.sources.partitionOverwriteMode<span class="operator">=</span><span class="keyword">DYNAMIC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果不开启动态分区，使用动态写入不会报错，而且被写入的表，所有分区都会先被<strong>全部删除</strong>！然后<strong>动态</strong>写入查询的内容。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> spark.sql.sources.partitionOverwriteMode<span class="operator">=</span><span class="keyword">static</span>;</span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> pama.text_002 <span class="keyword">partition</span>(dt)</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pama.text_001</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<p>举个例子，上面语句执行完毕后，pama.text_002表中所有的分区会被删除，然后把pama.text_001的内容写入pama.text_002。然而这是一个深坑。</p>
+<p>所谓动态分区，即不指定分区的详细信息，分区信息由<strong>查询内容</strong>决定。</p>
+<p>如果我开启了静态分区模式，在使用动态语句插入时候，为什么还会被<strong>动态</strong>执行且不报异常？</p>
+<p>这是一个bug还是一个feature？</p>
+<table>
+<thead>
+<tr>
+<th><code>spark.sql.sources.partitionOverwriteMode</code></th>
+<th>STATIC</th>
+<th>When INSERT OVERWRITE a partitioned data source table, we currently support 2 modes: static and dynamic. In static mode, Spark deletes all the partitions that match the partition specification(e.g. PARTITION(a=1,b)) in the INSERT statement, before overwriting. In dynamic mode, Spark doesn’t delete partitions ahead, and only overwrite those partitions that have data written into it at runtime. By default we use static mode to keep the same behavior of Spark prior to 2.3. Note that this config doesn’t affect Hive serde tables, as they are always overwritten with dynamic mode. This can also be set as an output option for a data source using key partitionOverwriteMode (which takes precedence over this setting), e.g. dataframe.write.option(“partitionOverwriteMode”, “dynamic”).save(path).</th>
+</tr>
+</thead>
+</table>
+<p>参考：<a target="_blank" rel="noopener" href="https://spark.apache.org/docs/3.2.0/configuration.html#dynamic-allocation">https://spark.apache.org/docs/3.2.0/configuration.html#dynamic-allocation</a></p>
 
     </div>
 
@@ -280,13 +315,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/1d91.html" rel="prev" title="Docker常用命令">
-                  <i class="fa fa-chevron-left"></i> Docker常用命令
+                <a href="/cn/91d3.html" rel="prev" title="Java的Double类型乘法精确度">
+                  <i class="fa fa-chevron-left"></i> Java的Double类型乘法精确度
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/31a0.html" rel="next" title="Python时区设置">
-                  Python时区设置 <i class="fa fa-chevron-right"></i>
+                <a href="/cn/a302.html" rel="next" title="Hive分区表设置分区文件数">
+                  Hive分区表设置分区文件数 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -336,7 +371,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mp","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","copyright":false,"el":"#waline-comments","path":"/cn/a89.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mp","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","copyright":false,"el":"#waline-comments","path":"/cn/5c9d.html"}</script>
 <script>
 document.addEventListener('page:loaded', () => {
   NexT.utils.loadComments(CONFIG.waline.el).then(() => 
