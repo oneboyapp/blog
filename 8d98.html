@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/cn/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+
+  <meta name="description" content="在数据处理中，有时候会遇到数据倾斜问题，导致任务运行时间过长，尝试调整一些Spark参数，但是效果不一定明显。那么就可能需要从业务逻辑上进行优化。  那么如何判断是否有数据倾斜？  可以通过Spark后台的历史运行日志来看。 我们找到实际运行时间最长的Job   点进看详细的运行信息 如图：   这个Stage运行时长16min，一共有2001个task，其中duration代表了实际运行时间。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据倾斜调优尝试">
+<meta property="og:url" content="https://mapan.tech/cn/8d98.html">
+<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:description" content="在数据处理中，有时候会遇到数据倾斜问题，导致任务运行时间过长，尝试调整一些Spark参数，但是效果不一定明显。那么就可能需要从业务逻辑上进行优化。  那么如何判断是否有数据倾斜？  可以通过Spark后台的历史运行日志来看。 我们找到实际运行时间最长的Job   点进看详细的运行信息 如图：   这个Stage运行时长16min，一共有2001个task，其中duration代表了实际运行时间。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://mapan.tech/cn/8d98/image-20210830144529872.png">
+<meta property="og:image" content="https://mapan.tech/cn/8d98/image-20210830142519309.png">
+<meta property="og:image" content="https://mapan.tech/cn/8d98/image-20210915152438683.png">
+<meta property="og:image" content="https://mapan.tech/cn/8d98/image-20220307101318915.png">
+<meta property="article:published_time" content="2021-08-30T07:22:04.000Z">
+<meta property="article:modified_time" content="2022-04-20T08:27:13.298Z">
+<meta property="article:author" content="Pan">
+<meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mapan.tech/cn/8d98/image-20210830144529872.png">
+
+
+<link rel="canonical" href="https://mapan.tech/cn/8d98.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/8d98.html","path":"8d98.html","title":"数据倾斜调优尝试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>数据倾斜调优尝试 | 马攀的个人站</title>
+  
+
+
+
+
+<link rel="dns-prefetch" href="https://comment.mapan.tech">
+  <noscript>
+    <link rel="stylesheet" href="/cn/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/cn/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">马攀的个人站</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Pan</p>
+  <div class="site-description" itemprop="description">专注于大数据方向，分享技术心得体会</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/cn/categories.html">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/8d98.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="name" content="Pan">
+      <meta itemprop="description" content="专注于大数据方向，分享技术心得体会">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="马攀的个人站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据倾斜调优尝试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-30 15:22:04" itemprop="dateCreated datePublished" datetime="2021-08-30T15:22:04+08:00">2021-08-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-04-20 16:27:13" itemprop="dateModified" datetime="2022-04-20T16:27:13+08:00">2022-04-20</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/cn/8d98.html#waline-comments" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" id="/cn/8d98.html" data-xid="/cn/8d98.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span id="/cn/8d98.html" class="post-meta-item leancloud_visitors" data-flag-title="数据倾斜调优尝试" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在数据处理中，有时候会遇到数据倾斜问题，导致任务运行时间过长，尝试调整一些Spark参数，但是效果不一定明显。那么就可能需要从业务逻辑上进行优化。</p>
+<ol>
+<li>那么如何判断是否有数据倾斜？</li>
+</ol>
+<p>可以通过Spark后台的历史运行日志来看。</p>
+<p>我们找到实际运行时间最长的Job</p>
+<img src="/cn/8d98/image-20210830144529872.png" class="" title="image-20210830144529872.png">
+
+<p>点进看详细的运行信息</p>
+<p>如图：</p>
+<img src="/cn/8d98/image-20210830142519309.png" class="image-20210830142519309">
+
+<p>这个Stage运行时长16min，一共有2001个task，其中duration代表了实际运行时间。</p>
+<p>这个task重点可以看Duration和Shuffle Read Size</p>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="left">Min</th>
+<th align="left">25th percentile</th>
+<th align="left">Median</th>
+<th align="left">75th percentile</th>
+<th align="center">Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Duration</td>
+<td align="left">0 ms</td>
+<td align="left">0.2 s</td>
+<td align="left">0.8 s</td>
+<td align="left">1 s</td>
+<td align="center">2.3 h</td>
+</tr>
+<tr>
+<td align="left">GC Time</td>
+<td align="left">0 ms</td>
+<td align="left">0 ms</td>
+<td align="left">0 ms</td>
+<td align="left">0.2 s</td>
+<td align="center">2.3 min</td>
+</tr>
+<tr>
+<td align="left">Shuffle Read Size / Records</td>
+<td align="left">0.0 B / 0</td>
+<td align="left">7.8 KB / 85</td>
+<td align="left">42.2 KB / 161</td>
+<td align="left">241.3 KB / 599</td>
+<td align="center">357.3 MB / 1555208</td>
+</tr>
+<tr>
+<td align="left">Shuffle Write Size / Records</td>
+<td align="left">0.0 B / 0</td>
+<td align="left">59.0 B / 1</td>
+<td align="left">59.0 B / 1</td>
+<td align="left">59.0 B / 1</td>
+<td align="center">59.0 B / 1</td>
+</tr>
+</tbody></table>
+<p>解读：按照Metric的量进行排序，数据在5个采样点（0%，25%，50%，75%，100%）的分布情况。</p>
+<p>我们可以认为这个stage就发生了数据倾斜。</p>
+<ol start="2">
+<li>如何优化数据倾斜？</li>
+</ol>
+<p>首先需要判断发生倾斜的部分在哪一段，这样才可以更好的应对。<br>还是这个job，在Sprak运行后台找到Duration最长的stage</p>
+<img src="/cn/8d98/image-20210915152438683.png" class="image-20210915152438683">
+
+<p>根据describe中的代码片段找到具体这段代码：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> fmx_spf <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">      f.<span class="operator">*</span></span><br><span class="line">    , s.adj_direction</span><br><span class="line">    , s.adj_rate</span><br><span class="line">    , <span class="keyword">CASE</span> <span class="keyword">WHEN</span> s.adj_direction <span class="operator">=</span> <span class="string">&#x27;INCREASE&#x27;</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="operator">+</span> <span class="built_in">CAST</span>(s.adj_rate <span class="keyword">AS</span> <span class="type">DECIMAL</span>(<span class="number">8</span>, <span class="number">2</span>))<span class="operator">/</span><span class="number">100</span></span><br><span class="line">           <span class="keyword">WHEN</span> s.adj_direction <span class="operator">=</span> <span class="string">&#x27;DECREASE&#x27;</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="operator">-</span> <span class="built_in">CAST</span>(s.adj_rate <span class="keyword">AS</span> <span class="type">DECIMAL</span>(<span class="number">8</span>, <span class="number">2</span>))<span class="operator">/</span><span class="number">100</span></span><br><span class="line">           <span class="keyword">ELSE</span> <span class="number">1</span></span><br><span class="line">      <span class="keyword">END</span> <span class="keyword">AS</span> spf_rate</span><br><span class="line">    , s.adj_tiers</span><br><span class="line">    , sox_rule_match(json_split(s.adj_rules)</span><br><span class="line">                   , CONCAT_WS(<span class="string">&#x27;,&#x27;</span>, list_ids)</span><br><span class="line">                   , site_group</span><br><span class="line">                   , numeric1</span><br><span class="line">                   , coupon_cd</span><br><span class="line">                   , <span class="built_in">CAST</span>(item_price_amt <span class="keyword">AS</span> string)</span><br><span class="line">                   , CONCAT(site_id, <span class="string">&#x27;-&#x27;</span>, meta_categ_id)</span><br><span class="line">                   , customer_status</span><br><span class="line">                   , cmpgn_id</span><br><span class="line">                   , ebay_plus_type_desc</span><br><span class="line">                   , item_cndtn_id</span><br><span class="line">                   , item_cndtn_name</span><br><span class="line">                   , own_invtry_ind</span><br><span class="line">                   , pl_flag</span><br><span class="line">    ) <span class="keyword">AS</span> matched_spf_rule_str</span><br><span class="line"><span class="keyword">FROM</span> prs_w.fmx_vrtcl_comm_dedup f</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> spf_temp s</span><br><span class="line">  <span class="keyword">ON</span> f.epn_pblshr_id <span class="operator">=</span> s.publisher_id</span><br><span class="line"> <span class="keyword">AND</span> f.roi_click_event_dt <span class="operator">&gt;=</span> s.start_date <span class="keyword">AND</span> f.roi_click_event_dt <span class="operator">&lt;</span> <span class="built_in">coalesce</span>(s.end_date, <span class="string">&#x27;2099-12-31 00:00:00&#x27;</span>) </span><br><span class="line"> <span class="keyword">AND</span> sox_rule_match(json_split(s.adj_rules)</span><br><span class="line">                 , CONCAT_WS(<span class="string">&#x27;,&#x27;</span>,list_ids)</span><br><span class="line">                 , site_group</span><br><span class="line">                 , numeric1</span><br><span class="line">                 , coupon_cd</span><br><span class="line">                 , <span class="built_in">CAST</span>(item_price_amt <span class="keyword">AS</span> string)</span><br><span class="line">                 , CONCAT(site_id, <span class="string">&#x27;-&#x27;</span>, meta_categ_id)</span><br><span class="line">                 , customer_status</span><br><span class="line">                 , cmpgn_id</span><br><span class="line">                 , ebay_plus_type_desc</span><br><span class="line">                 , item_cndtn_id</span><br><span class="line">                 , item_cndtn_name</span><br><span class="line">                 , own_invtry_ind</span><br><span class="line">                 , pl_flag</span><br><span class="line">     ) <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">CACHE <span class="keyword">TABLE</span> fmx_spf;</span><br></pre></td></tr></table></figure>
+
+<p>如果是join，就看关联条件epn_pblshr_id和roi_click_event_dt。</p>
+<p>熟悉业务的话，很容易猜到，发生倾斜的部分是epn_pblshr_id</p>
+<p>进行一下验证：</p>
+<p>其中表<code>prs_w.famx_gmb_numeric_snapshot</code> 是这段SQL的主表</p>
+<p>对其进行按照publisher_id分组看看数据分布：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">      epn_pblshr_id</span><br><span class="line">    , <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> cnt</span><br><span class="line"><span class="keyword">from</span> prs_w.famx_gmb_numeric_snapshot</span><br><span class="line"><span class="keyword">where</span> trans_dt <span class="keyword">between</span> <span class="string">&#x27;2021-08-01&#x27;</span> <span class="keyword">and</span> <span class="string">&#x27;2021-08-31&#x27;</span></span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> cnt <span class="keyword">desc</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果（部分）：</p>
+<table>
+<thead>
+<tr>
+<th>no</th>
+<th>epn_pblshr_id</th>
+<th>cnt</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>5575376664</td>
+<td>1554352</td>
+</tr>
+<tr>
+<td>2</td>
+<td>5575532731</td>
+<td>1292900</td>
+</tr>
+<tr>
+<td>3</td>
+<td>5575133559</td>
+<td>1087001</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5574735181</td>
+<td>839112</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5575403537</td>
+<td>595610</td>
+</tr>
+<tr>
+<td>6</td>
+<td>5574651234</td>
+<td>510958</td>
+</tr>
+<tr>
+<td>7</td>
+<td>5574630565</td>
+<td>426040</td>
+</tr>
+<tr>
+<td>8</td>
+<td>5575403800</td>
+<td>405502</td>
+</tr>
+<tr>
+<td>9</td>
+<td>5574631662</td>
+<td>357304</td>
+</tr>
+<tr>
+<td>10</td>
+<td>5574858753</td>
+<td>353657</td>
+</tr>
+<tr>
+<td>11</td>
+<td>5575407436</td>
+<td>341465</td>
+</tr>
+<tr>
+<td>12</td>
+<td>5575578768</td>
+<td>324448</td>
+</tr>
+<tr>
+<td>13</td>
+<td>5574672411</td>
+<td>301772</td>
+</tr>
+<tr>
+<td>14</td>
+<td>5575086808</td>
+<td>270397</td>
+</tr>
+<tr>
+<td>15</td>
+<td>5574635388</td>
+<td>222064</td>
+</tr>
+<tr>
+<td>16</td>
+<td>5575402240</td>
+<td>201475</td>
+</tr>
+<tr>
+<td>17</td>
+<td>5575322144</td>
+<td>197538</td>
+</tr>
+<tr>
+<td>18</td>
+<td>5575383302</td>
+<td>196567</td>
+</tr>
+<tr>
+<td>19</td>
+<td>5575420559</td>
+<td>186998</td>
+</tr>
+<tr>
+<td>20</td>
+<td>5575400987</td>
+<td>173364</td>
+</tr>
+<tr>
+<td>21</td>
+<td>5574933636</td>
+<td>152722</td>
+</tr>
+<tr>
+<td>22</td>
+<td>5575635657</td>
+<td>139925</td>
+</tr>
+<tr>
+<td>23</td>
+<td>5575082068</td>
+<td>110783</td>
+</tr>
+<tr>
+<td>24</td>
+<td>5575115467</td>
+<td>98180</td>
+</tr>
+<tr>
+<td>25</td>
+<td>5575418208</td>
+<td>97703</td>
+</tr>
+</tbody></table>
+<p>其中超过10w的只有23个Publisher，超过1w的有124个。</p>
+<p>在<code>trans_dt between &#39;2021-08-01&#39; and &#39;2021-08-31&#39;</code>日期范围内一共有8746个publisher。</p>
+<p>8月交易数量14740150条，其中：</p>
+<p>超过10w交易量的前23个publisher有10241954条，占比69.4%</p>
+<p>超过1w交易量的前124个publisher有13422869条，占比91.0%</p>
+<p>换句话说，这前一百多个publisher占据了绝大多数的数据量。</p>
+<ol start="3">
+<li>尝试</li>
+</ol>
+<img src="/cn/8d98/image-20220307101318915.png" class="image-20220307101318915">
+
+<p>如上图，1和2是倾斜的数据，3，4，5，6是正常的数据，按照这个原理可以对这些数据进行分别处理。</p>
+<p>为了把这些数据量大的publisher给分散到不同的task中处理，可以对倾斜的key进行特殊处理</p>
+<p>SQL的逻辑是<strong>事实表</strong>左关联<strong>合同表</strong>，取出每条交易符合合同的佣金比率等指标。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- PART 1: 准备</span></span><br><span class="line"><span class="comment">-- 取出交易量大于20000的publisher.</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> epn_skewed_pblshr_list <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">     epn_pblshr_id</span><br><span class="line"><span class="keyword">FROM</span> prs_w.famx_gmb_numeric_snapshot</span><br><span class="line"><span class="keyword">WHERE</span> trans_dt <span class="keyword">BETWEEN</span> <span class="string">&#x27;$&#123;DATA_START_DT&#125;&#x27;</span> <span class="keyword">AND</span> <span class="string">&#x27;$&#123;DATA_END_DT&#125;&#x27;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(<span class="number">1</span>) <span class="operator">&gt;</span> <span class="number">20000</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line">CACHE <span class="keyword">TABLE</span> epn_skewed_pblshr_list;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 生成一个0-98的列,下面方便进行笛卡尔积扩容.</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> number_list <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"><span class="number">0</span><span class="operator">+</span>idx <span class="keyword">AS</span> num</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> SPLIT(SPACE(<span class="number">98</span>), <span class="string">&#x27; &#x27;</span>)  <span class="keyword">AS</span> x) t</span><br><span class="line"><span class="keyword">LATERAL</span> <span class="keyword">VIEW</span> POSEXPLODE(x) pe <span class="keyword">AS</span> idx, ele</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- PART 2: 处理右表</span></span><br><span class="line"><span class="comment">-- 合同表做两部分处理：</span></span><br><span class="line"><span class="comment">-- 倾斜部分(交易量很大的publisher)进行笛卡尔积 -- 扩容99倍，这部分数据，每一个publisher的id前都加上0-98的前缀</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> spf_temp_skewed <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">      CONCAT(t3.num, <span class="string">&#x27;_&#x27;</span>, t1.publisher_id) <span class="keyword">AS</span> publisher_id</span><br><span class="line">    , t1.start_date</span><br><span class="line">    , t1.end_date</span><br><span class="line">    , t1.adj_direction</span><br><span class="line">    , t1.adj_rate</span><br><span class="line">    , t1.adj_rules</span><br><span class="line">    , t1.adj_tiers</span><br><span class="line"><span class="keyword">FROM</span> prs_w.epn_pblshr_payout_adj_rules_w t1</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> epn_skewed_pblshr_list t2</span><br><span class="line"><span class="keyword">ON</span> t1.publisher_id <span class="operator">=</span> t2.epn_pblshr_id</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> number_list t3</span><br><span class="line"><span class="keyword">ON</span> <span class="number">1</span> <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">WHERE</span> mtdt_dt <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="built_in">MAX</span>(mtdt_dt) <span class="keyword">FROM</span> prs_w.epn_pblshr_payout_adj_rules_w)</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 非倾斜部分(交易量&lt;20000 的publisher) --为了保持id一致，这部分打上99的前缀</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> spf_temp_unskewed <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">      CONCAT(<span class="number">99</span>, <span class="string">&#x27;_&#x27;</span>, t1.publisher_id) <span class="keyword">AS</span> publisher_id</span><br><span class="line">    , t1.start_date</span><br><span class="line">    , t1.end_date</span><br><span class="line">    , t1.adj_direction</span><br><span class="line">    , t1.adj_rate</span><br><span class="line">    , t1.adj_rules</span><br><span class="line">    , t1.adj_tiers</span><br><span class="line"><span class="keyword">FROM</span> prs_w.epn_pblshr_payout_adj_rules_w t1</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> epn_skewed_pblshr_list t2</span><br><span class="line"><span class="keyword">ON</span> t1.publisher_id <span class="operator">=</span> t2.epn_pblshr_id</span><br><span class="line"><span class="keyword">WHERE</span> t1.mtdt_dt <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="built_in">MAX</span>(mtdt_dt) <span class="keyword">FROM</span> prs_w.epn_pblshr_payout_adj_rules_w)</span><br><span class="line"><span class="keyword">AND</span> t2.epn_pblshr_id <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 这两部分union到一起，之所以不用nuion all，是因为这两部分不会重复,所以不需要再进行去重</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> spf_temp <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">      publisher_id</span><br><span class="line">    , start_date</span><br><span class="line">    , end_date</span><br><span class="line">    , adj_direction</span><br><span class="line">    , adj_rate</span><br><span class="line">    , adj_rules</span><br><span class="line">    , adj_tiers</span><br><span class="line"><span class="keyword">FROM</span> spf_temp_skewed</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">      publisher_id</span><br><span class="line">    , start_date</span><br><span class="line">    , end_date</span><br><span class="line">    , adj_direction</span><br><span class="line">    , adj_rate</span><br><span class="line">    , adj_rules</span><br><span class="line">    , adj_tiers</span><br><span class="line"><span class="keyword">FROM</span> spf_temp_unskewed</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- PART 3: 处理左表</span></span><br><span class="line"><span class="comment">-- 交易明细表部分</span></span><br><span class="line"><span class="comment">-- 左关联倾斜publishr的list，如果关联上则说明是倾斜的交易，打上一个随机(0-98)的前缀,如果没有关联上则打99的前缀</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE TEMPORARY <span class="keyword">VIEW</span> famx_gmb_numeric_snapshot_v <span class="keyword">AS</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">      f.click_event_dt</span><br><span class="line">    , f.item_id</span><br><span class="line">    , f.ck_trans_id</span><br><span class="line">    , <span class="keyword">CASE</span> <span class="keyword">WHEN</span> k.epn_pblshr_id <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">THEN</span> CONCAT(<span class="built_in">CAST</span>(RAND(<span class="number">1</span>)<span class="operator">*</span><span class="number">99</span> <span class="keyword">AS</span> <span class="type">INT</span>), <span class="string">&#x27;_&#x27;</span>, f.epn_pblshr_id) <span class="keyword">ELSE</span> CONCAT(<span class="number">99</span>, <span class="string">&#x27;_&#x27;</span>, f.epn_pblshr_id) <span class="keyword">END</span> <span class="keyword">AS</span> epn_pblshr_id</span><br><span class="line">    , f.sap_categ_id</span><br><span class="line">    , f.gmb_usd_amt</span><br><span class="line">    , f.site_id</span><br><span class="line">    , f.meta_categ_id</span><br><span class="line">    , f.meta_categ_name</span><br><span class="line">    , f.vertical_name</span><br><span class="line">    , f.gmb_lc_amt</span><br><span class="line">    , f.gmb_plan_rate_amt</span><br><span class="line">    , f.item_price_amt</span><br><span class="line">    , f.refund_ind</span><br><span class="line">    , f.site_group</span><br><span class="line">    , f.cntry_desc</span><br><span class="line">    , f.created_time</span><br><span class="line">    , f.roi_click_event_dt</span><br><span class="line">    , f.customer_status</span><br><span class="line">    , f.list_ids</span><br><span class="line">    , f.coupon_cd</span><br><span class="line">    , f.coupon_usd_amt</span><br><span class="line">    , f.subsidy_ind</span><br><span class="line">    , f.charity_ind</span><br><span class="line">    , f.numeric1</span><br><span class="line">    , f.own_prchs_ind</span><br><span class="line">    , f.item_cndtn_id</span><br><span class="line">    , f.item_cndtn_name</span><br><span class="line">    , f.own_invtry_ind</span><br><span class="line">    , f.gmb_non_vat_usd_amt</span><br><span class="line">    , f.vat_gmb_amt</span><br><span class="line">    , f.pl_flag</span><br><span class="line">    , f.trans_dt</span><br><span class="line"><span class="keyword">FROM</span> prs_w.famx_gmb_numeric_snapshot f</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> epn_skewed_pblshr_list k</span><br><span class="line"><span class="keyword">ON</span> f.epn_pblshr_id <span class="operator">=</span> k.epn_pblshr_id</span><br><span class="line"><span class="keyword">WHERE</span> f.trans_dt <span class="keyword">BETWEEN</span> <span class="string">&#x27;$&#123;DATA_START_DT&#125;&#x27;</span> <span class="keyword">AND</span> <span class="string">&#x27;$&#123;DATA_END_DT&#125;&#x27;</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<p>这样处理之后<code>famx_gmb_numeric_snapshot_v</code> 的数据量没有变多，但是publisher_id分布的均匀了，而需要左关联的合同表<code>spf_temp</code> 这交易量超过20000条的这些publisher，合同记录被扩大了99倍。</p>
+<p>以空间换时间，<code>join</code>和<code>group by</code>的性能会得到一定的提升。</p>
+<p>（最后经过验证，这样操作并不影响数据的准确性。）</p>
+<ol start="4">
+<li>优化后的结果</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">Metric</th>
+<th align="left">Min</th>
+<th align="left">25th percentile</th>
+<th align="left">Median</th>
+<th align="left">75th percentile</th>
+<th align="left">Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Duration</td>
+<td align="left">27 s</td>
+<td align="left">34 s</td>
+<td align="left">38 s</td>
+<td align="left">42 s</td>
+<td align="left">1.1 min</td>
+</tr>
+<tr>
+<td align="left">GC Time</td>
+<td align="left">0.4 s</td>
+<td align="left">1 s</td>
+<td align="left">2 s</td>
+<td align="left">2 s</td>
+<td align="left">7 s</td>
+</tr>
+<tr>
+<td align="left">Input Size / Records</td>
+<td align="left">832.2 KB / 7110</td>
+<td align="left">856.0 KB / 7308</td>
+<td align="left">862.4 KB / 7365</td>
+<td align="left">868.9 KB / 7425</td>
+<td align="left">892.3 KB / 7650</td>
+</tr>
+<tr>
+<td align="left">Shuffle Write Size / Records</td>
+<td align="left">58.0 B / 1</td>
+<td align="left">59.0 B / 1</td>
+<td align="left">59.0 B / 1</td>
+<td align="left">59.0 B / 1</td>
+<td align="left">59.0 B / 1</td>
+</tr>
+</tbody></table>
+<ol start="4">
+<li><p>缺点</p>
+<ol>
+<li><p>代码会变的复杂，不利于阅读和理解，建议加上清晰的注释。</p>
+</li>
+<li><p>后续维护麻烦，如果有新的feature开发，修改的地方会变多。</p>
+</li>
+</ol>
+</li>
+<li><p>总结</p>
+</li>
+</ol>
+<p>实际上，在进行笛卡尔积扩容，打随机前缀等操作也会产生一定的性能损耗，如果<strong>节省的时间</strong>和<strong>消耗的时间</strong>差不多的话，就没有必要做这个优化。如果这个优化减少的时间远大于消耗的时间，则可以考虑做这个优化。</p>
+<p>优化需要根据集群性能，业务逻辑，数据量，多方面来综合考量。</p>
+<p>从Spark3.0开始，原生支持倾斜join了，由于公司的Spark还未升级到Spark 3版本，上述优化是非常有效的。</p>
+<p><a target="_blank" rel="noopener" href="https://spark.apache.org/docs/3.1.2/sql-performance-tuning.html#optimizing-skew-join">https://spark.apache.org/docs/3.1.2/sql-performance-tuning.html#optimizing-skew-join</a></p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>默认值</th>
+<th>开始适用的版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spark.sql.adaptive.skewJoin.enabled</td>
+<td>true</td>
+<td>3.0.0</td>
+</tr>
+<tr>
+<td>spark.sql.adaptive.skewJoin.skewedPartitionFactor</td>
+<td>10</td>
+<td>3.0.0</td>
+</tr>
+<tr>
+<td>spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes</td>
+<td>256MB</td>
+<td>3.0.0</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cn/aa33.html" rel="prev" title="文言文生成器">
+                  <i class="fa fa-chevron-left"></i> 文言文生成器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cn/91d3.html" rel="next" title="Java的Double类型乘法精确度">
+                  Java的Double类型乘法精确度 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline-comments"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pan</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/cn/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mp","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","copyright":false,"el":"#waline-comments","path":"/cn/8d98.html"}</script>
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() => 
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => {
+    new Waline(CONFIG.waline);
+  });
+});
+</script>
+</body>
+</html>
