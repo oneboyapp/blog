@@ -256,19 +256,11 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/e5aa.html#waline-comments" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" id="/cn/e5aa.html" data-xid="/cn/e5aa.html" itemprop="commentCount"></span>
+    <a title="waline" href="/cn/e5aa.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/cn/e5aa.html" itemprop="commentCount"></span>
     </a>
   </span>
   
-  
-    <span id="/cn/e5aa.html" class="post-meta-item leancloud_visitors" data-flag-title="大数据时代怎么保护自己的隐私" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
   
 </div>
 
@@ -321,7 +313,7 @@
 
 
 
-    <div class="comments" id="waline-comments"></div>
+    <div class="comments" id="waline"></div>
 </div>
   </main>
 
@@ -358,15 +350,17 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","placeholder":"说点什么吧...","avatar":"mp","pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"meta":["nick","mail","link"],"libUrl":"/cn/js/Waline.min.js","copyright":false,"el":"#waline-comments","path":"/cn/e5aa.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/e5aa.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
-  NexT.utils.loadComments(CONFIG.waline.el).then(() => 
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
     NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
-  ).then(() => {
-    new Waline(CONFIG.waline);
-  });
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
 });
 </script>
+
 </body>
 </html>
