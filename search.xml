@@ -7066,4 +7066,19 @@ CUBE8光立方
         <category>数据仓库</category>
       </categories>
   </entry>
+  <entry>
+    <title>Hive时间戳的踩坑</title>
+    <url>/cn/2a2e.html</url>
+    <content><![CDATA[<p>公司的数据处理是用的Spark on Hive, 在处理时间戳的时候，又踩了坑。在一个过滤条件中，带毫秒的时间戳没有得到期待的结果。</p>
+<p>比如下面的SQL中，按照理解49ms早于118毫秒的，所以SQL执行结果是 <code>True</code>,但实际结果却是<code>False</code></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line"><span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.49&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>) <span class="operator">&lt;=</span> <span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.118&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>若想要得到期待的结果，需要转换成13位的，带毫秒的时间戳，再进行转换。</p>
+<p>可以使用如下的方式（其中ts2ms为自定义UDF函数）：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">ts2ms(<span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.49&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>), <span class="string">&#x27;yyyy-MM-dd HH:mm:ss.SSS&#x27;</span>) <span class="operator">&lt;=</span></span><br><span class="line">ts2ms(<span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.118&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>), <span class="string">&#x27;yyyy-MM-dd HH:mm:ss.SSS&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
 </search>
