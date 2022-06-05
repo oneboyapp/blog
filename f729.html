@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
 
-  <meta name="description" content="公司的数据处理是用的Spark on Hive, 在处理时间戳的时候，又踩了坑。在一个过滤条件中，带毫秒的时间戳没有得到期待的结果。 比如下面的SQL中，按照理解49ms早于118毫秒的，所以SQL执行结果是 True,但实际结果却是False 123select cast(&amp;#x27;2022-05-19 21:09:24.49&amp;#x27; as timestamp) &lt;&#x3D; cast(&amp;#">
+  <meta name="description" content="在使用上游提供的表的时候，我们默认是信任的。但现实往往不如人意，上游表的质量不能保证，需要自己先检验再使用。最近我们的数据出现问题，排查到源头是上游一个拉链表出现了数据重复&#x2F;重叠。 解决方法是我们下游设置一个Data Quality Rule，每天对上游的这个拉链表进行检测，如果发现重叠&#x2F;重复，就发邮件给Owner解决。 一个正常的拉链表应该如同user_id &#x3D; 101的数据这样衔接，而不是像u">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hive时间戳的踩坑">
-<meta property="og:url" content="https://mapan.tech/cn/2a2e.html">
+<meta property="og:title" content="拉链表的数据质量">
+<meta property="og:url" content="https://mapan.tech/cn/f729.html">
 <meta property="og:site_name" content="马攀的个人站">
-<meta property="og:description" content="公司的数据处理是用的Spark on Hive, 在处理时间戳的时候，又踩了坑。在一个过滤条件中，带毫秒的时间戳没有得到期待的结果。 比如下面的SQL中，按照理解49ms早于118毫秒的，所以SQL执行结果是 True,但实际结果却是False 123select cast(&amp;#x27;2022-05-19 21:09:24.49&amp;#x27; as timestamp) &lt;&#x3D; cast(&amp;#">
+<meta property="og:description" content="在使用上游提供的表的时候，我们默认是信任的。但现实往往不如人意，上游表的质量不能保证，需要自己先检验再使用。最近我们的数据出现问题，排查到源头是上游一个拉链表出现了数据重复&#x2F;重叠。 解决方法是我们下游设置一个Data Quality Rule，每天对上游的这个拉链表进行检测，如果发现重叠&#x2F;重复，就发邮件给Owner解决。 一个正常的拉链表应该如同user_id &#x3D; 101的数据这样衔接，而不是像u">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-05-30T07:20:09.000Z">
-<meta property="article:modified_time" content="2022-05-30T09:33:49.018Z">
+<meta property="article:published_time" content="2022-06-05T14:15:58.000Z">
+<meta property="article:modified_time" content="2022-06-05T14:42:06.615Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/2a2e.html">
+<link rel="canonical" href="https://mapan.tech/cn/f729.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/2a2e.html","path":"2a2e.html","title":"Hive时间戳的踩坑"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/f729.html","path":"f729.html","title":"拉链表的数据质量"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Hive时间戳的踩坑 | 马攀的个人站</title>
+<title>拉链表的数据质量 | 马攀的个人站</title>
   
 
 
@@ -203,7 +203,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/2a2e.html">
+    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/f729.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/cn/images/avatar.gif">
@@ -216,7 +216,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hive时间戳的踩坑
+          拉链表的数据质量
         </h1>
 
         <div class="post-meta-container">
@@ -228,7 +228,16 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2022-05-30 15:20:09 / 修改时间：17:33:49" itemprop="dateCreated datePublished" datetime="2022-05-30T15:20:09+08:00">2022-05-30</time>
+      <time title="创建时间：2022-06-05 22:15:58 / 修改时间：22:42:06" itemprop="dateCreated datePublished" datetime="2022-06-05T22:15:58+08:00">2022-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/cn/categories/Hive/" itemprop="url" rel="index"><span itemprop="name">Hive</span></a>
+        </span>
     </span>
 
   
@@ -240,8 +249,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/2a2e.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/cn/2a2e.html" itemprop="commentCount"></span>
+    <a title="waline" href="/cn/f729.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/cn/f729.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -255,16 +264,64 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>公司的数据处理是用的Spark on Hive, 在处理时间戳的时候，又踩了坑。在一个过滤条件中，带毫秒的时间戳没有得到期待的结果。</p>
-<p>比如下面的SQL中，按照理解49ms早于118毫秒的，所以SQL执行结果是 <code>True</code>,但实际结果却是<code>False</code></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line"><span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.49&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>) <span class="operator">&lt;=</span> <span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.118&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+        <p>在使用上游提供的表的时候，我们默认是信任的。但现实往往不如人意，上游表的质量不能保证，需要自己先检验再使用。最近我们的数据出现问题，排查到源头是上游一个拉链表出现了数据重复/重叠。</p>
+<p>解决方法是我们下游设置一个Data Quality Rule，每天对上游的这个拉链表进行检测，如果发现重叠/重复，就发邮件给Owner解决。</p>
+<p>一个正常的拉链表应该如同<code>user_id = 101</code>的数据这样衔接，而不是像<code>user_id = 102</code> 这样时间范围有重叠，从业务角度来说，一个用户在同一个时间点不能有两个互斥状态（比如一个用户，在同一个时刻即是男又是女）。</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>status_cd</th>
+<th>start_ts</th>
+<th>end_ts</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>101</td>
+<td>A</td>
+<td><code>2022-01-01 00:00:00</code></td>
+<td><code>2022-01-08 00:00:00</code></td>
+</tr>
+<tr>
+<td>101</td>
+<td>B</td>
+<td><code>2022-01-09 00:00:00</code></td>
+<td><code>2022-01-12 00:00:00</code></td>
+</tr>
+<tr>
+<td>101</td>
+<td>C</td>
+<td><code>2022-01-12 00:00:00</code></td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td>102</td>
+<td>A</td>
+<td><code>2022-01-01 00:00:00</code></td>
+<td><code>2022-01-08 00:00:00</code></td>
+</tr>
+<tr>
+<td>102</td>
+<td>B</td>
+<td><code>2022-01-06 00:00:00</code></td>
+<td><code>2022-01-10 00:00:00</code></td>
+</tr>
+<tr>
+<td>102</td>
+<td>C</td>
+<td><code>2022-01-10 00:00:00</code></td>
+<td><code>NULL</code></td>
+</tr>
+</tbody></table>
+<p>检测Overlap：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line"><span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span> <span class="keyword">table</span> t1</span><br><span class="line"><span class="keyword">join</span> <span class="keyword">table</span> t2</span><br><span class="line"><span class="keyword">on</span> t1.user_id <span class="operator">=</span> t2.user_id</span><br><span class="line"><span class="keyword">where</span> t1.start_ts <span class="operator">&lt;</span> t2.end_ts</span><br><span class="line"><span class="keyword">and</span> t2.start_ts <span class="operator">&lt;</span> t1.end_ts</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
 
+<p>正常情况下，是没有数据可以被查询出来的，如果有重叠的情况则可以查出重叠的数据。</p>
+<p>检测Duplicate：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">     user_id</span><br><span class="line">   , start_ts</span><br><span class="line">   , end_ts</span><br><span class="line">   , <span class="built_in">count</span>(<span class="number">1</span>) <span class="keyword">as</span> cnt</span><br><span class="line"><span class="keyword">from</span> <span class="keyword">table</span></span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br><span class="line"><span class="keyword">having</span> cnt <span class="operator">&gt;</span> <span class="number">1</span></span><br><span class="line">;</span><br></pre></td></tr></table></figure>
 
-
-<p>若想要得到期待的结果，需要转换成13位的，带毫秒的时间戳，再进行转换。</p>
-<p>可以使用如下的方式（其中ts2ms为自定义UDF函数）：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">ts2ms(<span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.49&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>), <span class="string">&#x27;yyyy-MM-dd HH:mm:ss.SSS&#x27;</span>) <span class="operator">&lt;=</span></span><br><span class="line">ts2ms(<span class="built_in">cast</span>(<span class="string">&#x27;2022-05-19 21:09:24.118&#x27;</span> <span class="keyword">as</span> <span class="type">timestamp</span>), <span class="string">&#x27;yyyy-MM-dd HH:mm:ss.SSS&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
+<p>如果某用户有多条起止日期相同的记录，则会被查询出来。</p>
+<p>可以用上述SQL设置为Daily DQ Rule来监测上游的数据质量。</p>
 
     </div>
 
@@ -278,14 +335,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/913d.html" rel="prev" title="搭建gitea服务">
-                  <i class="fa fa-chevron-left"></i> 搭建gitea服务
+                <a href="/cn/2a2e.html" rel="prev" title="Hive时间戳的踩坑">
+                  <i class="fa fa-chevron-left"></i> Hive时间戳的踩坑
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/f729.html" rel="next" title="拉链表的数据质量">
-                  拉链表的数据质量 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -334,7 +388,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/2a2e.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/f729.html"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
