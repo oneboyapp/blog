@@ -7147,4 +7147,31 @@ CUBE8光立方
         <category>数据仓库</category>
       </categories>
   </entry>
+  <entry>
+    <title>debian设置UFW防火墙</title>
+    <url>/cn/fa86.html</url>
+    <content><![CDATA[<p>在服务器上部署了许多服务，通过nginx反向代理共用443端口，通过不同的域名来区分不同的服务。</p>
+<p>但是搬瓦工默认的防火墙是不开的，也就是说这些服务除了443端口能访问外，原始端口也可以访问。对此我有一些安全上的顾虑，所以考虑到把防火墙打开，只把443端口和ssh的端口放出去。</p>
+<p>UFW</p>
+<p>ufw是一个主机端的iptables防火墙配置工具，帮助我们简单化配置iptables。</p>
+<p>查看iptable规则</p>
+<p><code>sudo iptables --list-rule</code></p>
+<p>UFW常用命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo apt-get install ufw #安装</span><br><span class="line">sudo ufw enable #启动</span><br><span class="line">sudo ufw disable #禁用</span><br><span class="line">sudo ufw reload #重新载入</span><br><span class="line">sudo ufw reset #回复初始化设置</span><br><span class="line">sudo ufw status #防火墙状态</span><br></pre></td></tr></table></figure>
+
+<p>UFW防火墙的默认行为是阻止所有传入和转发流量，并允许所有出站流量。</p>
+<p>在开启UFW之前，首先把ssh端口加入到允许列表</p>
+<p>ssh端口是7722，设置如下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sudo ufw allow 7722/tcp</span><br></pre></td></tr></table></figure>
+
+<p>打开443端口，作为网站默认的端口</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw allow 443/tcp</span><br></pre></td></tr></table></figure>
+
+<p>另外发现在设置好防火墙后，我的docker服务中的其他端口，依然能通过外网访问？</p>
+<p>查了<a href="https://askubuntu.com/questions/652556/uncomplicated-firewall-ufw-is-not-blocking-anything-when-using-docker">相关问题</a>,发现是docker也会修改防火墙的设置</p>
+<p>把docker的配置文件<code>/etc/docker/daemon.json</code> （没有则新建）加一行，重启docker服务即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123; &quot;iptables&quot; : false &#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
 </search>
