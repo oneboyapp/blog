@@ -7168,7 +7168,7 @@ CUBE8光立方
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw allow 443/tcp</span><br></pre></td></tr></table></figure>
 
 <p>另外发现在设置好防火墙后，我的docker服务中的其他端口，依然能通过外网访问？</p>
-<p>查了<a href="https://askubuntu.com/questions/652556/uncomplicated-firewall-ufw-is-not-blocking-anything-when-using-docker">相关问题</a>，发现是docker也会修改防火墙的设置</p>
+<p>查了<a href="https://askubuntu.com/questions/652556/uncomplicated-firewall-ufw-is-not-blocking-anything-when-using-docker">相关问题</a>,<a href="https://www.zhaokeli.com/article/8613.html">相关问题</a>，发现是docker也会修改防火墙的设置</p>
 <p>把docker的配置文件<code>/etc/docker/daemon.json</code> （没有则新建）加一行，重启docker服务即可。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123; &quot;iptables&quot; : false &#125;</span><br></pre></td></tr></table></figure>
 
