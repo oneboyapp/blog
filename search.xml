@@ -7168,12 +7168,22 @@ CUBE8光立方
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw allow 443/tcp</span><br></pre></td></tr></table></figure>
 
 <p>另外发现在设置好防火墙后，我的docker服务中的其他端口，依然能通过外网访问？</p>
-<p>查了<a href="https://askubuntu.com/questions/652556/uncomplicated-firewall-ufw-is-not-blocking-anything-when-using-docker">相关问题</a>,<a href="https://www.zhaokeli.com/article/8613.html">相关问题</a>，发现是docker也会修改防火墙的设置</p>
+<p>查了<a href="https://askubuntu.com/questions/652556/uncomplicated-firewall-ufw-is-not-blocking-anything-when-using-docker">相关问题</a>，<a href="https://www.zhaokeli.com/article/8613.html">相关问题</a>，发现是docker也会修改防火墙的设置</p>
 <p>把docker的配置文件<code>/etc/docker/daemon.json</code> （没有则新建）加一行，重启docker服务即可。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123; &quot;iptables&quot; : false &#125;</span><br></pre></td></tr></table></figure>
 
 <p>UFW 删除规则</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ufw status numbered <span class="comment"># 列出所有规则</span></span><br><span class="line"></span><br><span class="line">sudo ufw delete 3 <span class="comment"># 删除3号规则</span></span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>crontab用法</title>
+    <url>/cn/6711.html</url>
+    <content><![CDATA[<p>最近有个需求每天07:00 和 23:00各运行一个脚本（断网，为了健康夜里就不上网了吧），有现成的可视化框架可以用，那就是青龙面板。但用青龙有点杀鸡用牛刀的感觉，所以就学习一下crontab的用法。</p>
+<p>首先编写两个需要运行的脚本 <code>0700.sh</code> 和<code>2300.sh</code>（根据自己需求来），并给予运行权限。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前的crontab</span></span><br><span class="line">crontab -l</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑crontab</span></span><br><span class="line">crontab -e</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用vim命令添加如下两行</span></span><br><span class="line">* 7 * * * bash /path/to/file/0700.sh</span><br><span class="line">* 7 * * * bash /path/to/file/2300.sh</span><br><span class="line"><span class="comment"># 这里建议使用绝对路径</span></span><br></pre></td></tr></table></figure>
+
+<p>测试脚步正常，收工。</p>
 ]]></content>
   </entry>
 </search>
