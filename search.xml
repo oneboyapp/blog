@@ -7235,4 +7235,28 @@ CUBE8光立方
 </tbody></table>
 ]]></content>
   </entry>
+  <entry>
+    <title>SparkSQL踩坑</title>
+    <url>/cn/a1cd.html</url>
+    <content><![CDATA[<p>在开发中，遇到了一个奇怪的Join结果。简化之后的模型如下，目测执行的结果第一个为<code>true</code>，第二个为<code>false</code>，而实际的结果却是两个True。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace temp <span class="keyword">view</span> test1 <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span></span><br><span class="line">      <span class="string">&#x27;23843968833490313&#x27;</span> <span class="keyword">as</span> s1</span><br><span class="line">    , <span class="built_in">cast</span>(<span class="string">&#x27;23843968833490313&#x27;</span> <span class="keyword">as</span> <span class="type">decimal</span>(<span class="number">18</span>,<span class="number">0</span>)) <span class="keyword">as</span> s2</span><br><span class="line">    , <span class="built_in">cast</span>(<span class="string">&#x27;23843968833490312&#x27;</span> <span class="keyword">as</span> <span class="type">decimal</span>(<span class="number">18</span>,<span class="number">0</span>)) <span class="keyword">as</span> s4</span><br><span class="line">;</span><br><span class="line"><span class="keyword">select</span></span><br><span class="line">      s1 <span class="operator">=</span> s2</span><br><span class="line">    , s1 <span class="operator">=</span> s4</span><br><span class="line"><span class="keyword">from</span> test1</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+
+<p>究其原因是在不同类型的比较中，Spark会把其先转为Double类型再进行比较，而Double类型的精度有限，这样就会出现让人匪夷所思的现象。在实际复杂的Join中，往往会忽视数据类型的检查。</p>
+<p>所以在实际开发中，一定要保证join两边的数据类型一致，特别是join条件两边存在表达式的情况，例如：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tableA </span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> tableB</span><br><span class="line"><span class="keyword">on</span> <span class="built_in">coalesce</span>(tableA.id1 , tableA.id2) <span class="operator">=</span> tableB.id</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+
+<p>建议写成：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tableA </span><br><span class="line"><span class="keyword">left</span> <span class="keyword">join</span> tableB</span><br><span class="line"><span class="keyword">on</span> <span class="built_in">cast</span>(<span class="built_in">coalesce</span>(tableA.id1 , tableA.id2) <span class="keyword">AS</span> decmial(<span class="number">18</span>,<span class="number">0</span>)) <span class="operator">=</span> tableB.id</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+
+<p>在有表达式的地方，加上类型转换。</p>
+<p>如果能在建表之初，根据业务含义和开发规范合适的选择字段的类型，则可以在很大程度上避免这类情况的发生。</p>
+<p>比如xxx_ID 统一使用<code>Decimal(位数,0)</code> ，xxFlag统一使用<code>Boolean</code>等，而不是String和这类情况混用。</p>
+]]></content>
+      <categories>
+        <category>ETL</category>
+      </categories>
+  </entry>
 </search>
