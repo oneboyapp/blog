@@ -6,52 +6,52 @@
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/cn/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
 
-<link rel="stylesheet" href="/cn/css/all.min.css">
-  <link rel="stylesheet" href="/cn/css/animate.min.css">
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
   <meta name="description" content="Flink运行时的组件Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作：作业管理器（JobManager）、资源管理器（ResourceManager）、任务管理器（TaskManager），以及分发器（Dispatcher）。因为Flink是用Java和Scala实现的，所以所有组件都会运行在Java虚拟机上。每个组件的职责如下： 作业管理器（JobManager">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flink运行架构">
-<meta property="og:url" content="https://mapan.tech/cn/6799.html">
+<meta property="og:url" content="https://oneboy.app/blog/6799.html">
 <meta property="og:site_name" content="马攀的个人站">
 <meta property="og:description" content="Flink运行时的组件Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作：作业管理器（JobManager）、资源管理器（ResourceManager）、任务管理器（TaskManager），以及分发器（Dispatcher）。因为Flink是用Java和Scala实现的，所以所有组件都会运行在Java虚拟机上。每个组件的职责如下： 作业管理器（JobManager">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image001.png">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image002.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image003.png">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image004.png">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image005.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image001.png">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image002.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image003.png">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image004.png">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image005.jpg">
 <meta property="og:image" content="https://img-blog.csdn.net/20170824162738505?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="https://img-blog.csdn.net/20170824162117401?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image008.png">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image009.png">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image010.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image011.png">
-<meta property="og:image" content="https://mapan.tech/cn/6799/clip_image012.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image008.png">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image009.png">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image010.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image011.png">
+<meta property="og:image" content="https://oneboy.app/blog/6799/clip_image012.jpg">
 <meta property="article:published_time" content="2019-06-18T12:57:34.000Z">
 <meta property="article:modified_time" content="2019-10-20T13:01:10.104Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mapan.tech/cn/6799/clip_image001.png">
+<meta name="twitter:image" content="https://oneboy.app/blog/6799/clip_image001.png">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/6799.html">
+<link rel="canonical" href="https://oneboy.app/blog/6799.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/6799.html","path":"6799.html","title":"Flink运行架构"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/6799.html","path":"6799.html","title":"Flink运行架构"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>Flink运行架构 | 马攀的个人站</title>
@@ -62,7 +62,7 @@
 
 <link rel="dns-prefetch" href="https://comment.mapan.tech">
   <noscript>
-    <link rel="stylesheet" href="/cn/css/noscript.css">
+    <link rel="stylesheet" href="/blog/css/noscript.css">
   </noscript>
 </head>
 
@@ -82,7 +82,7 @@
 
   <div class="site-meta">
 
-    <a href="/cn/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">马攀的个人站</p>
       <i class="logo-line"></i>
@@ -100,11 +100,11 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
-        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
-        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
-        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
-        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+        <li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -173,7 +173,7 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-categories">
-          <a href="/cn/categories.html">
+          <a href="/blog/categories.html">
         <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
@@ -217,10 +217,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/6799.html">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/6799.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
       <meta itemprop="name" content="Pan">
       <meta itemprop="description" content="">
     </span>
@@ -256,7 +256,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/cn/categories/Flink/" itemprop="url" rel="index"><span itemprop="name">Flink</span></a>
+          <a href="/blog/categories/Flink/" itemprop="url" rel="index"><span itemprop="name">Flink</span></a>
         </span>
     </span>
 
@@ -269,8 +269,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/6799.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/cn/6799.html" itemprop="commentCount"></span>
+    <a title="waline" href="/blog/6799.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/6799.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -290,16 +290,16 @@
 <h3 id="任务管理器（TaskManager）"><a href="#任务管理器（TaskManager）" class="headerlink" title="任务管理器（TaskManager）"></a>任务管理器（TaskManager）</h3><p>Flink中的工作进程。通常在Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能够执行的任务数量。启动之后，TaskManager会向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给JobManager调用。JobManager就可以向插槽分配任务（tasks）来执行了。在执行过程中，一个TaskManager可以跟其它运行同一应用程序的TaskManager交换数据。</p>
 <h3 id="分发器（Dispatcher）"><a href="#分发器（Dispatcher）" class="headerlink" title="分发器（Dispatcher）"></a>分发器（Dispatcher）</h3><p>可以跨作业运行，它为应用提交提供了REST接口。当一个应用被提交执行时，分发器就会启动并将应用移交给一个JobManager。由于是REST接口，所以Dispatcher可以作为集群的一个HTTP接入点，这样就能够不受防火墙阻挡。Dispatcher也会启动一个Web UI，用来方便地展示和监控作业执行的信息。Dispatcher在架构中可能并不是必需的，这取决于应用提交运行的方式。</p>
 <h2 id="任务提交流程"><a href="#任务提交流程" class="headerlink" title="任务提交流程"></a>任务提交流程</h2><p>我们来看看当一个应用提交执行时，Flink的各个组件是如何交互协作的：</p>
-<img src="/cn/6799/clip_image001.png" class="img">
+<img src="/blog/6799/clip_image001.png" class="img">
 
 <p>图 任务提交和组件交互流程</p>
 <p>上图是从一个较为高层级的视角，来看应用中各组件的交互协作。如果部署的集群环境不同（例如YARN，Mesos，Kubernetes，standalone等），其中一些步骤可以被省略，或是有些组件会运行在同一个JVM进程中。</p>
 <p>具体地，如果我们将Flink集群部署到YARN上，那么就会有如下的提交流程：</p>
-<img src="/cn/6799/clip_image002.jpg" class="img">
+<img src="/blog/6799/clip_image002.jpg" class="img">
 
 <p>图 Yarn模式任务提交流程</p>
 <p>Flink任务提交后，Client向HDFS上传Flink的Jar包和配置，之后向Yarn ResourceManager提交任务，ResourceManager分配Container资源并通知对应的NodeManager启动ApplicationMaster，ApplicationMaster启动后加载Flink的Jar包和配置构建环境，然后启动JobManager，之后ApplicationMaster向ResourceManager申请资源启动TaskManager，ResourceManager分配Container资源后，由ApplicationMaster通知资源所在节点的NodeManager启动TaskManager，NodeManager加载Flink的Jar包和配置构建环境并启动TaskManager，TaskManager启动后向JobManager发送心跳包，并等待JobManager向其分配任务。</p>
-<h2 id="任务调度原理"><a href="#任务调度原理" class="headerlink" title="任务调度原理"></a>任务调度原理</h2><img src="/cn/6799/clip_image003.png" class="img">
+<h2 id="任务调度原理"><a href="#任务调度原理" class="headerlink" title="任务调度原理"></a>任务调度原理</h2><img src="/blog/6799/clip_image003.png" class="img">
 
 <p>图 任务调度原理</p>
 <p>客户端不是运行时和程序执行的一部分，但它用于准备并发送dataflow(JobGraph)给Master(JobManager)，然后，客户端断开连接或者维持连接以等待接收计算结果。</p>
@@ -310,10 +310,10 @@
 <h3 id="TaskManger与Slots"><a href="#TaskManger与Slots" class="headerlink" title="TaskManger与Slots"></a>TaskManger与Slots</h3><p>Flink中每一个worker(TaskManager)都是一个<strong>JVM进程</strong>，它可能会在<strong>独立的线程</strong>上执行一个或多个subtask。为了控制一个worker能接收多少个task，worker通过task slot来进行控制（一个worker至少有一个task slot）。</p>
 <p>每个task slot表示TaskManager拥有资源的<strong>一个固定大小的子集</strong>。假如一个TaskManager有三个slot，那么它会将其管理的内存分成三份给各个slot。资源slot化意味着一个subtask将不需要跟来自其他job的subtask竞争被管理的内存，取而代之的是它将拥有一定数量的内存储备。需要注意的是，这里不会涉及到CPU的隔离，slot目前仅仅用来隔离task的受管理的内存。</p>
 <p>通过调整task slot的数量，允许用户定义subtask之间如何互相隔离。如果一个TaskManager一个slot，那将意味着每个task group运行在独立的JVM中（该JVM可能是通过一个特定的容器启动的），而一个TaskManager多个slot意味着更多的subtask可以共享同一个JVM。而在同一个JVM进程中的task将共享TCP连接（基于多路复用）和心跳消息。它们也可能共享数据集和数据结构，因此这减少了每个task的负载。</p>
-<img src="/cn/6799/clip_image004.png" class="img">
+<img src="/blog/6799/clip_image004.png" class="img">
 
 <p>图 TaskManager与Slot</p>
-<img src="/cn/6799/clip_image005.jpg" class="img">
+<img src="/blog/6799/clip_image005.jpg" class="img">
 
 <p>图 子任务共享Slot</p>
 <p>默认情况下，Flink允许子任务共享slot，即使它们是不同任务的子任务（前提是它们来自同一个job）。 这样的结果是，一个slot可以保存作业的整个管道。</p>
@@ -323,12 +323,12 @@
 
 <img src="https://img-blog.csdn.net/20170824162117401?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTY4MjIzNDI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" class="说明:" title="&#x2F;6799&#x2F;clip_image007.jpg">
 
-<h3 id="程序与数据流（DataFlow）"><a href="#程序与数据流（DataFlow）" class="headerlink" title="程序与数据流（DataFlow）"></a><strong>程序与数据流（DataFlow）</strong></h3><img src="/cn/6799/clip_image008.png" class="img">
+<h3 id="程序与数据流（DataFlow）"><a href="#程序与数据流（DataFlow）" class="headerlink" title="程序与数据流（DataFlow）"></a><strong>程序与数据流（DataFlow）</strong></h3><img src="/blog/6799/clip_image008.png" class="img">
 
 <p>所有的Flink程序都是由三部分组成的：  <strong>Source</strong> 、<strong>Transformation</strong>和<strong>Sink</strong>。</p>
 <p>Source负责读取数据源，Transformation利用各种算子进行处理加工，Sink负责输出。</p>
 <p>在运行时，Flink上运行的程序会被映射成“逻辑数据流”（dataflows），它包含了这三部分。<strong>每一个dataflow以一个或多个sources开始以一个或多个sinks结束</strong>。dataflow类似于任意的有向无环图（DAG）。在大部分情况下，程序中的转换运算（transformations）跟dataflow中的算子（operator）是一一对应的关系，但有时候，一个transformation可能对应多个operator。</p>
-<img src="/cn/6799/clip_image009.png" class="img">
+<img src="/blog/6799/clip_image009.png" class="img">
 
 <p>图 程序与数据流</p>
 <h3 id="执行图（ExecutionGraph）"><a href="#执行图（ExecutionGraph）" class="headerlink" title="执行图（ExecutionGraph）"></a><strong>执行图（ExecutionGraph）</strong></h3><p>由Flink程序直接映射成的数据流图是StreamGraph，也被称为逻辑流图，因为它们表示的是计算逻辑的高级视图。为了执行一个流处理程序，Flink需要将逻辑流图转换为物理数据流图（也叫执行图），详细说明程序的执行方式。</p>
@@ -337,19 +337,19 @@
 <p><strong>JobGraph</strong>：StreamGraph经过优化后生成了 JobGraph，提交给 JobManager 的数据结构。主要的优化为，将多个符合条件的节点 chain 在一起作为一个节点，这样可以减少数据在节点之间流动所需要的序列化/反序列化/传输消耗。</p>
 <p><strong>ExecutionGraph</strong>：JobManager 根据 JobGraph 生成ExecutionGraph。ExecutionGraph是JobGraph的并行化版本，是调度层最核心的数据结构。</p>
 <p><strong>物理执行图</strong>：JobManager 根据 ExecutionGraph 对 Job 进行调度后，在各个TaskManager 上部署 Task 后形成的“图”，并不是一个具体的数据结构。</p>
-<img src="/cn/6799/clip_image010.jpg" class="img">
+<img src="/blog/6799/clip_image010.jpg" class="img">
 
 <h3 id="并行度（Parallelism）"><a href="#并行度（Parallelism）" class="headerlink" title="并行度（Parallelism）"></a><strong>并行度（Parallelism）</strong></h3><p>Flink程序的执行具有<strong>并行、分布式</strong>的特性。</p>
 <p>在执行过程中，一个流（stream）包含一个或多个分区（stream partition），而每一个算子（operator）可以包含一个或多个子任务（operator subtask），这些子任务在不同的线程、不同的物理机或不同的容器中彼此互不依赖地执行。</p>
 <p><strong>一个特定算子的子任务（subtask）的个数被称之为其并行度（parallelism）</strong>。一般情况下，一个流程序的并行度，可以认为就是其所有算子中最大的并行度。一个程序中，不同的算子可能具有不同的并行度。</p>
-<img src="/cn/6799/clip_image011.png" class="img">
+<img src="/blog/6799/clip_image011.png" class="img">
 
 <p>图 并行数据流</p>
 <p>Stream在算子之间传输数据的形式可以是one-to-one(forwarding)的模式也可以是redistributing的模式，具体是哪一种形式，取决于算子的种类。</p>
 <p><strong>One-to-one</strong>：stream(比如在source和map operator之间)维护着分区以及元素的顺序。那意味着map 算子的子任务看到的元素的个数以及顺序跟source 算子的子任务生产的元素的个数、顺序相同，map、fliter、flatMap等算子都是one-to-one的对应关系。</p>
 <h4 id="类似于spark中的窄依赖"><a href="#类似于spark中的窄依赖" class="headerlink" title="类似于spark中的窄依赖"></a>类似于spark中的<strong>窄依赖</strong></h4><p><strong>Redistributing</strong>：stream(map()跟keyBy/window之间或者keyBy/window跟sink之间)的分区会发生改变。每一个算子的子任务依据所选择的transformation发送数据到不同的目标任务。例如，keyBy() 基于hashCode重分区、broadcast和rebalance会随机重新分区，这些算子都会引起redistribute过程，而redistribute过程就类似于Spark中的shuffle过程。</p>
 <h4 id="类似于spark中的宽依赖"><a href="#类似于spark中的宽依赖" class="headerlink" title="类似于spark中的宽依赖"></a>类似于spark中的<strong>宽依赖</strong></h4><h3 id="任务链（Operator-Chains）"><a href="#任务链（Operator-Chains）" class="headerlink" title="任务链（Operator Chains）"></a><strong>任务链（Operator Chains）</strong></h3><p><strong>相同并行度的one to one操作</strong>，Flink这样相连的算子链接在一起形成一个task，原来的算子成为里面的一部分。将算子链接成task是非常有效的优化：它能减少线程之间的切换和基于缓存区的数据交换，在减少时延的同时提升吞吐量。链接的行为可以在编程API中进行指定。</p>
-<img src="/cn/6799/clip_image012.jpg" class="img">
+<img src="/blog/6799/clip_image012.jpg" class="img">
 
 <p>图 task与operator chains</p>
 
@@ -365,12 +365,12 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/d552.html" rel="prev" title="初识Flink">
+                <a href="/blog/d552.html" rel="prev" title="初识Flink">
                   <i class="fa fa-chevron-left"></i> 初识Flink
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/788d.html" rel="next" title="数据仓库相关概念">
+                <a href="/blog/788d.html" rel="next" title="数据仓库相关概念">
                   数据仓库相关概念 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -405,12 +405,12 @@
   </footer>
 
   
-  <script src="/cn/js/anime.min.js"></script>
-<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+  <script src="/blog/js/anime.min.js"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/schemes/muse.js"></script><script src="/blog/js/next-boot.js"></script>
 
   
-<script src="/cn/js/search.js"></script>
-<script src="/cn/js/third-party/search/local-search.js"></script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
 
 
 
@@ -421,7 +421,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/6799.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/blog/6799.html"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {

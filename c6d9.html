@@ -6,47 +6,47 @@
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/cn/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
 
-<link rel="stylesheet" href="/cn/css/all.min.css">
-  <link rel="stylesheet" href="/cn/css/animate.min.css">
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
   <meta name="description" content="大学时候学习的单片机原理和微机原理有用到汇编语言，但是当时觉得太过晦涩难懂，就没有学太懂。最近开始学习汇编语言，决定把汇编好好学习一下，网友介绍了王爽老师的《汇编语言》第三版 (提取码nc3c)，但为了学习还是买了一本实体书，这样更便于学习和翻阅。 汇编环境要求比较古老，所以在虚拟机装了一个XP。首先是带x的寄存器（常用16位寄存器）AX，BX，CX，DX 另有CS:IPCS是段寄存器，段寄存器是">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编初识">
-<meta property="og:url" content="https://mapan.tech/cn/c6d9.html">
+<meta property="og:url" content="https://oneboy.app/blog/c6d9.html">
 <meta property="og:site_name" content="马攀的个人站">
 <meta property="og:description" content="大学时候学习的单片机原理和微机原理有用到汇编语言，但是当时觉得太过晦涩难懂，就没有学太懂。最近开始学习汇编语言，决定把汇编好好学习一下，网友介绍了王爽老师的《汇编语言》第三版 (提取码nc3c)，但为了学习还是买了一本实体书，这样更便于学习和翻阅。 汇编环境要求比较古老，所以在虚拟机装了一个XP。首先是带x的寄存器（常用16位寄存器）AX，BX，CX，DX 另有CS:IPCS是段寄存器，段寄存器是">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1cshmohbj30fi07fdgh.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1cw1kq9yj30hv0eggo1.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1czkzhn8j30hw03a74e.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1dszeespj30hu0eedib.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1emj4k8hj30hs0gl0vn.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1f3br5wdj30ht0guacq.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1fo0l6rsj30hu07tt9t.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1cshmohbj30fi07fdgh.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1cw1kq9yj30hv0eggo1.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1czkzhn8j30hw03a74e.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1dszeespj30hu0eedib.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1emj4k8hj30hs0gl0vn.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1f3br5wdj30ht0guacq.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1fo0l6rsj30hu07tt9t.jpg">
 <meta property="article:published_time" content="2015-07-07T06:10:57.000Z">
 <meta property="article:modified_time" content="2019-11-09T03:32:26.249Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mapan.tech/cn/c6d9/005vwoCyly1ft1cshmohbj30fi07fdgh.jpg">
+<meta name="twitter:image" content="https://oneboy.app/blog/c6d9/005vwoCyly1ft1cshmohbj30fi07fdgh.jpg">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/c6d9.html">
+<link rel="canonical" href="https://oneboy.app/blog/c6d9.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/c6d9.html","path":"c6d9.html","title":"汇编初识"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/c6d9.html","path":"c6d9.html","title":"汇编初识"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>汇编初识 | 马攀的个人站</title>
@@ -57,7 +57,7 @@
 
 <link rel="dns-prefetch" href="https://comment.mapan.tech">
   <noscript>
-    <link rel="stylesheet" href="/cn/css/noscript.css">
+    <link rel="stylesheet" href="/blog/css/noscript.css">
   </noscript>
 </head>
 
@@ -77,7 +77,7 @@
 
   <div class="site-meta">
 
-    <a href="/cn/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">马攀的个人站</p>
       <i class="logo-line"></i>
@@ -95,11 +95,11 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
-        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
-        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
-        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
-        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+        <li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -168,7 +168,7 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-categories">
-          <a href="/cn/categories.html">
+          <a href="/blog/categories.html">
         <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
@@ -212,10 +212,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/c6d9.html">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/c6d9.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
       <meta itemprop="name" content="Pan">
       <meta itemprop="description" content="">
     </span>
@@ -251,7 +251,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/cn/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+          <a href="/blog/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
         </span>
     </span>
 
@@ -264,8 +264,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/c6d9.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/cn/c6d9.html" itemprop="commentCount"></span>
+    <a title="waline" href="/blog/c6d9.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/c6d9.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -289,27 +289,27 @@
 <p>按照国际惯例第一个程序应该是’hello world’才对，但是对于masm5.0来说‘hello world’已经相当复杂了。</p>
 <h3 id="第一个程序"><a href="#第一个程序" class="headerlink" title="第一个程序"></a>第一个程序</h3><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; 计算（0123h + 0456h) x 2的值</span></span><br><span class="line"><span class="meta">assume</span> <span class="built_in">cs</span>:wahaha     <span class="comment">;wahaha程序入口地址</span></span><br><span class="line"></span><br><span class="line">wahaha <span class="meta">segment</span>   <span class="comment">;代码段开始</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">0123h</span>  <span class="comment">; 0123h赋值给AX</span></span><br><span class="line">        <span class="keyword">mov</span> <span class="built_in">bx</span>,<span class="number">0456h</span>  <span class="comment">; 0456赋值给BX</span></span><br><span class="line">        <span class="keyword">add</span> <span class="built_in">ax</span>,<span class="built_in">bx</span>   <span class="comment">; BX的值加到AX中去</span></span><br><span class="line">        <span class="keyword">add</span> <span class="built_in">ax</span>,<span class="built_in">ax</span>   <span class="comment">; AX的两倍放到AX中去</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">4c00h</span>  <span class="comment">;程序结束返回</span></span><br><span class="line">        <span class="keyword">int</span> <span class="number">21h</span></span><br><span class="line"></span><br><span class="line">wahaha ends</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>依次执行<code>masm 1.asm</code>和<code>link 1.obj</code>如下图</p>
-<img src="/cn/c6d9/005vwoCyly1ft1cshmohbj30fi07fdgh.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1cshmohbj30fi07fdgh.jpg" class="">
 
 <p>进如debug进行调试<br>使用u命令查看汇编指令，使用r命令查看当前当前CPU寄存器的状态，使用t命令执行一条指令，如下图</p>
-<img src="/cn/c6d9/005vwoCyly1ft1cw1kq9yj30hv0eggo1.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1cw1kq9yj30hv0eggo1.jpg" class="">
 
 <p>遇到<code>int 21</code>使用p命令进行结束<br>最后使用q命令退出debug模式</p>
-<img src="/cn/c6d9/005vwoCyly1ft1czkzhn8j30hw03a74e.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1czkzhn8j30hw03a74e.jpg" class="">
 
 <h3 id="第二个程序："><a href="#第二个程序：" class="headerlink" title="第二个程序："></a>第二个程序：</h3><p>计算2x2的值，并保存在ax中</p>
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">assume</span> <span class="built_in">cs</span>:code</span><br><span class="line">code <span class="meta">segment</span></span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">2</span>   <span class="comment">;把2放到AX中</span></span><br><span class="line">	<span class="keyword">add</span> <span class="built_in">ax</span>,<span class="built_in">ax</span>  <span class="comment">;AX自加一次，也可以用 inc ax</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">4c00h</span> <span class="comment">; 程序结束，返回</span></span><br><span class="line">	<span class="keyword">int</span> <span class="number">21h</span></span><br><span class="line">code ends</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 <p>deug查看寄存器中的值，</p>
-<img src="/cn/c6d9/005vwoCyly1ft1dszeespj30hu0eedib.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1dszeespj30hu0eedib.jpg" class="">
 <p>我们有发现ds：0B26,但是程序存放在0B36起始的地址中，那么这265个（0B36H x 10H - B26H x 10H = 100H）个字节的空间跑哪里去了呢？<br>其实这256字节的空间叫做PSP，是debug程序需要占用的一段内存。</p>
 <h3 id="第三个程序：计算5x4的值"><a href="#第三个程序：计算5x4的值" class="headerlink" title="第三个程序：计算5x4的值"></a>第三个程序：计算5x4的值</h3><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">assume</span> <span class="built_in">cs</span>:wusi</span><br><span class="line">wusi <span class="meta">segment</span></span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">5h</span>   <span class="comment">;赋初值</span></span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">bx</span>,<span class="number">0h</span>   <span class="comment">;累加到BX，bx置0</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">add</span> <span class="built_in">bx</span>,<span class="built_in">ax</span>    <span class="comment">;第一次累加</span></span><br><span class="line">	<span class="keyword">add</span> <span class="built_in">bx</span>,<span class="built_in">ax</span></span><br><span class="line">	<span class="keyword">add</span> <span class="built_in">bx</span>,<span class="built_in">ax</span></span><br><span class="line">	<span class="keyword">add</span> <span class="built_in">bx</span>,<span class="built_in">ax</span>    <span class="comment">;第四次累加</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">4c00H</span>   <span class="comment">;程序返回</span></span><br><span class="line">	<span class="keyword">int</span> <span class="number">21h</span></span><br><span class="line">wusi ends             <span class="comment">;这一段程序结束</span></span><br><span class="line">end                   <span class="comment">;所有程序结束</span></span><br></pre></td></tr></table></figure>
-<img src="/cn/c6d9/005vwoCyly1ft1emj4k8hj30hs0gl0vn.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1emj4k8hj30hs0gl0vn.jpg" class="">
 <p>计算机是非常笨的，他不会做乘法，乘法是通过一次次累加得出的。<br>计算5x4需要5 累加4次，如果5x100呢？<br>换个思路100x5,可以用100累加5次，那如果88568x58755呢？难道累加五万多次？<br>很好，和C语言一样，汇编也有自己的循环程序，只需要写一段代码，让他循环五万多次就可以了</p>
 <h3 id="第四个程序：-计算285x168"><a href="#第四个程序：-计算285x168" class="headerlink" title="第四个程序： 计算285x168"></a>第四个程序： 计算285x168</h3><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">assume</span> <span class="built_in">cs</span>:laila</span><br><span class="line">laila <span class="meta">segment</span></span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">bx</span>,<span class="number">0</span>       <span class="comment">;累加器置零</span></span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">cx</span>,<span class="number">168</span>     <span class="comment">;循环次数168</span></span><br><span class="line"><span class="symbol">	</span></span><br><span class="line"><span class="symbol">s:</span>	<span class="keyword">add</span> <span class="built_in">bx</span>,<span class="number">286</span>    <span class="comment">;循环体</span></span><br><span class="line">	<span class="keyword">loop</span> s        <span class="comment">;若cx不等于0 跳转执行s</span></span><br><span class="line">		</span><br><span class="line">	<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">4c00h</span>   <span class="comment">;程序结束，返回</span></span><br><span class="line">	<span class="keyword">int</span> <span class="number">21h</span></span><br><span class="line">	</span><br><span class="line">laila ends</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 
-<img src="/cn/c6d9/005vwoCyly1ft1f3br5wdj30ht0guacq.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1f3br5wdj30ht0guacq.jpg" class="">
 <p>使用lopp循环168次，循环次数默认存放在CX中</p>
-<img src="/cn/c6d9/005vwoCyly1ft1fo0l6rsj30hu07tt9t.jpg" class="">
+<img src="/blog/c6d9/005vwoCyly1ft1fo0l6rsj30hu07tt9t.jpg" class="">
 <p>结果是BX中存放的BBB0H<br>十进制就是48048,可以用计算器验证一下,算的没错。</p>
 
     </div>
@@ -324,12 +324,12 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/63be.html" rel="prev" title="数据库事务">
+                <a href="/blog/63be.html" rel="prev" title="数据库事务">
                   <i class="fa fa-chevron-left"></i> 数据库事务
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/dcaf.html" rel="next" title="开关三极管的剖析">
+                <a href="/blog/dcaf.html" rel="next" title="开关三极管的剖析">
                   开关三极管的剖析 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -364,12 +364,12 @@
   </footer>
 
   
-  <script src="/cn/js/anime.min.js"></script>
-<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+  <script src="/blog/js/anime.min.js"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/schemes/muse.js"></script><script src="/blog/js/next-boot.js"></script>
 
   
-<script src="/cn/js/search.js"></script>
-<script src="/cn/js/third-party/search/local-search.js"></script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
 
 
 
@@ -380,7 +380,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/c6d9.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/blog/c6d9.html"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {

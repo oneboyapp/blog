@@ -6,44 +6,44 @@
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/cn/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
 
-<link rel="stylesheet" href="/cn/css/all.min.css">
-  <link rel="stylesheet" href="/cn/css/animate.min.css">
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
   <meta name="description" content="第五个程序堆栈的学习 1234567891011121314151617181920assume cs:codesgcodesg segment	mov ax,2000h  	;地址2000h赋值给ax	mov ss,ax  	;ax的值传递给段寄存器ss	mov sp,0  	;堆栈指针sp赋初值0	pop ax  	;出栈到ax	pop bx  	;出栈到bx	push ax  	;ax入栈">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编基本语法实现">
-<meta property="og:url" content="https://mapan.tech/cn/fac.html">
+<meta property="og:url" content="https://oneboy.app/blog/fac.html">
 <meta property="og:site_name" content="马攀的个人站">
 <meta property="og:description" content="第五个程序堆栈的学习 1234567891011121314151617181920assume cs:codesgcodesg segment	mov ax,2000h  	;地址2000h赋值给ax	mov ss,ax  	;ax的值传递给段寄存器ss	mov sp,0  	;堆栈指针sp赋初值0	pop ax  	;出栈到ax	pop bx  	;出栈到bx	push ax  	;ax入栈">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mapan.tech/cn/fac/005vwoCyly1ftgg3f8onvj30i40grads.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/fac/005vwoCyly1ftgkj8qz6sj30ht0fwtd6.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/fac/005vwoCyly1ftgkacor6pj30hs0au0v7.jpg">
-<meta property="og:image" content="https://mapan.tech/cn/fac/005vwoCyly1ftgmdm9gqqj30hm0e6gm9.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/fac/005vwoCyly1ftgg3f8onvj30i40grads.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/fac/005vwoCyly1ftgkj8qz6sj30ht0fwtd6.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/fac/005vwoCyly1ftgkacor6pj30hs0au0v7.jpg">
+<meta property="og:image" content="https://oneboy.app/blog/fac/005vwoCyly1ftgmdm9gqqj30hm0e6gm9.jpg">
 <meta property="article:published_time" content="2015-07-20T08:01:02.000Z">
 <meta property="article:modified_time" content="2019-11-08T06:20:51.840Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mapan.tech/cn/fac/005vwoCyly1ftgg3f8onvj30i40grads.jpg">
+<meta name="twitter:image" content="https://oneboy.app/blog/fac/005vwoCyly1ftgg3f8onvj30i40grads.jpg">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/fac.html">
+<link rel="canonical" href="https://oneboy.app/blog/fac.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/fac.html","path":"fac.html","title":"汇编基本语法实现"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/fac.html","path":"fac.html","title":"汇编基本语法实现"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>汇编基本语法实现 | 马攀的个人站</title>
@@ -54,7 +54,7 @@
 
 <link rel="dns-prefetch" href="https://comment.mapan.tech">
   <noscript>
-    <link rel="stylesheet" href="/cn/css/noscript.css">
+    <link rel="stylesheet" href="/blog/css/noscript.css">
   </noscript>
 </head>
 
@@ -74,7 +74,7 @@
 
   <div class="site-meta">
 
-    <a href="/cn/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">马攀的个人站</p>
       <i class="logo-line"></i>
@@ -92,11 +92,11 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
-        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
-        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
-        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
-        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+        <li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -165,7 +165,7 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-categories">
-          <a href="/cn/categories.html">
+          <a href="/blog/categories.html">
         <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
@@ -209,10 +209,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/fac.html">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/fac.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
       <meta itemprop="name" content="Pan">
       <meta itemprop="description" content="">
     </span>
@@ -248,7 +248,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/cn/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
+          <a href="/blog/categories/%E6%B1%87%E7%BC%96/" itemprop="url" rel="index"><span itemprop="name">汇编</span></a>
         </span>
     </span>
 
@@ -261,8 +261,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/fac.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/cn/fac.html" itemprop="commentCount"></span>
+    <a title="waline" href="/blog/fac.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/fac.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -282,7 +282,7 @@
 
 
 <p>通过debug观察各个寄存器的值，通过现象学习堆栈的<em>后进先出</em>的操作规则。</p>
-<img src="/cn/fac/005vwoCyly1ftgg3f8onvj30i40grads.jpg" class="">
+<img src="/blog/fac/005vwoCyly1ftgg3f8onvj30i40grads.jpg" class="">
 <p>可以看到进行<br>出栈出栈<br>入栈入栈<br>再出栈出栈<br>之后<br>ax和bx寄存器的值进行了交换。</p>
 <p>类似生活中的一瓶糖水，一瓶盐水，现在需要交换两个瓶子的液体。使用“堆栈”这个容器进行了一个中转。</p>
 <hr>
@@ -296,14 +296,14 @@
 <h3 id="第七个程序"><a href="#第七个程序" class="headerlink" title="第七个程序"></a>第七个程序</h3><p>交换内存中数据段前两个双字单元的数据</p>
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">assume</span> <span class="built_in">cs</span>:code,<span class="built_in">ds</span>:data,<span class="built_in">ss</span>:stack</span><br><span class="line"></span><br><span class="line">data <span class="meta">segment</span>  	<span class="comment">;定义数据段</span></span><br><span class="line">	<span class="built_in">dw</span> <span class="number">0123h</span>,<span class="number">0456h</span>,<span class="number">0798h</span>,<span class="number">0abch</span>,<span class="number">0defh</span>,<span class="number">0fdeh</span>,<span class="number">0cbah</span>,<span class="number">0987h</span></span><br><span class="line">data ends</span><br><span class="line"></span><br><span class="line">stack <span class="meta">segment</span>  	<span class="comment">;定义栈段</span></span><br><span class="line">	<span class="built_in">dw</span> <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line">stack ends</span><br><span class="line"></span><br><span class="line">code <span class="meta">segment</span>  	<span class="comment">;定义代码段</span></span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">start:</span> 		<span class="keyword">mov</span> <span class="built_in">ax</span>,data  	<span class="comment">;数据段地址给到ds</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ds</span>,<span class="built_in">ax</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ax</span>,stack  	<span class="comment">;栈段地址给到ss</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ss</span>,<span class="built_in">ax</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">sp</span>,<span class="number">16</span>  	<span class="comment">;栈段指针指向栈底</span></span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">push</span> <span class="built_in">ds</span>:[<span class="number">0</span>]  	<span class="comment">;把数据段的ds:[0]单元的双字内容 压入栈</span></span><br><span class="line">		<span class="keyword">push</span> <span class="built_in">ds</span>:[<span class="number">2</span>]  	<span class="comment">;把数据段的ds:[2]单元的双字内容 压入栈</span></span><br><span class="line">		<span class="keyword">pop</span> <span class="built_in">ds</span>:[<span class="number">0</span>]  	<span class="comment">;出栈到ds:[0]单元</span></span><br><span class="line">		<span class="keyword">pop</span> <span class="built_in">ds</span>:[<span class="number">2</span>]  	<span class="comment">;出栈到ds:[2]单元</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">4c00h</span></span><br><span class="line">		<span class="keyword">int</span> <span class="number">21h</span></span><br><span class="line"></span><br><span class="line">code ends</span><br><span class="line"></span><br><span class="line">end start</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>通过<code>debug调试器</code>可以即将运行的代码看到<code>date段</code>的地址为<code>0b36h</code>,通过<code>d命令</code>查看内存<code>0b36</code>处的内容，正是在程序中定义的数据段<code>0123h，0456h,···，0987h</code><br>栈段地址为0b37h，在内存中<code>0b36:0010</code>单元处即为在程序中定义的全0的栈段。</p>
-<img src="/cn/fac/005vwoCyly1ftgkj8qz6sj30ht0fwtd6.jpg" class="">
+<img src="/blog/fac/005vwoCyly1ftgkj8qz6sj30ht0fwtd6.jpg" class="">
 <p>经过两次入栈和出栈之后，可以看出date段的前两个双字节中的数据已经交换了位置。</p>
-<img src="/cn/fac/005vwoCyly1ftgkacor6pj30hs0au0v7.jpg" class="">
+<img src="/blog/fac/005vwoCyly1ftgkacor6pj30hs0au0v7.jpg" class="">
 
 <h3 id="第八个程序"><a href="#第八个程序" class="headerlink" title="第八个程序"></a>第八个程序</h3><p>使用push指令将a段中的前八个字形数据逆序存储到b段中</p>
 <figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">assume</span> <span class="built_in">cs</span>:code</span><br><span class="line"></span><br><span class="line">a <span class="meta">segment</span>  			<span class="comment">;a段数据</span></span><br><span class="line">	<span class="built_in">dw</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0ah</span>,<span class="number">0bh</span>,<span class="number">0ch</span>,<span class="number">0dh</span>,<span class="number">0eh</span>,<span class="number">0fh</span>,<span class="number">0ffh</span>  </span><br><span class="line">a ends</span><br><span class="line"></span><br><span class="line">b <span class="meta">segment</span></span><br><span class="line">	<span class="built_in">dw</span> <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>  	<span class="comment">;b段数据</span></span><br><span class="line">b ends</span><br><span class="line"></span><br><span class="line">code <span class="meta">segment</span>  			<span class="comment">;代码段</span></span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">start:</span> 	<span class="keyword">mov</span> <span class="built_in">ax</span>,b  		<span class="comment">;把栈段指针指向b数据段</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ss</span>,<span class="built_in">ax</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">sp</span>,<span class="number">16</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ax</span>,a  	<span class="comment">;数据指针指向a段数据</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ds</span>,<span class="built_in">ax</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">cx</span>,<span class="number">8</span>  	<span class="comment">;设置8次循环</span></span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">bx</span>,<span class="number">0</span>  	<span class="comment">;变量bx初值为0</span></span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">	s:</span>  <span class="keyword">push</span> <span class="built_in">ds</span>:[<span class="built_in">bx</span>]  	<span class="comment">;开始8次压栈</span></span><br><span class="line">		<span class="keyword">add</span> <span class="built_in">bx</span>,<span class="number">2</span>  	<span class="comment">;bx自加2</span></span><br><span class="line">		<span class="keyword">loop</span> s</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">mov</span> <span class="built_in">ax</span>,<span class="number">4c00h</span></span><br><span class="line">		<span class="keyword">int</span> <span class="number">21h</span></span><br><span class="line">code ends</span><br><span class="line"></span><br><span class="line">end start</span><br></pre></td></tr></table></figure>
 <p>如图执行数次循环后，a段数据已经逆序存储在b段中</p>
-<img src="/cn/fac/005vwoCyly1ftgmdm9gqqj30hm0e6gm9.jpg" class="">
+<img src="/blog/fac/005vwoCyly1ftgmdm9gqqj30hm0e6gm9.jpg" class="">
     </div>
 
     
@@ -316,12 +316,12 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/b1d.html" rel="prev" title="基于51单片机的心形全彩灯">
+                <a href="/blog/b1d.html" rel="prev" title="基于51单片机的心形全彩灯">
                   <i class="fa fa-chevron-left"></i> 基于51单片机的心形全彩灯
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/348d.html" rel="next" title="自制遥控玩具车">
+                <a href="/blog/348d.html" rel="next" title="自制遥控玩具车">
                   自制遥控玩具车 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -356,12 +356,12 @@
   </footer>
 
   
-  <script src="/cn/js/anime.min.js"></script>
-<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+  <script src="/blog/js/anime.min.js"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/schemes/muse.js"></script><script src="/blog/js/next-boot.js"></script>
 
   
-<script src="/cn/js/search.js"></script>
-<script src="/cn/js/third-party/search/local-search.js"></script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/fac.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/blog/fac.html"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {

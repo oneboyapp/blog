@@ -6,43 +6,43 @@
 <meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.1">
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/cn/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/cn/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/cn/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/cn/images/logo.svg" color="#222">
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/cn/css/main.css">
+<link rel="stylesheet" href="/blog/css/main.css">
 
 
 
-<link rel="stylesheet" href="/cn/css/all.min.css">
-  <link rel="stylesheet" href="/cn/css/animate.min.css">
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"mapan.tech","root":"/cn/","images":"/cn/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/cn/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/cn/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.10.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
 
   <meta name="description" content="什么是OLAP&#x2F;OLTP?联机事务处理：OLTP，全称On-line Transaction Processing 联机分析处理：OLAP，全称On-line Analytical Processing     孤立性我们常常称为隔离性。 上钻：从粗粒度往细粒度进行细化 上卷：从细粒度往粗粒度进行汇总 多个维度的数据形成了数据立方体，我们在对部分维度进行限制的时候，就相当于对数据立方体进行了切块，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据仓库相关概念">
-<meta property="og:url" content="https://mapan.tech/cn/788d.html">
+<meta property="og:url" content="https://oneboy.app/blog/788d.html">
 <meta property="og:site_name" content="马攀的个人站">
 <meta property="og:description" content="什么是OLAP&#x2F;OLTP?联机事务处理：OLTP，全称On-line Transaction Processing 联机分析处理：OLAP，全称On-line Analytical Processing     孤立性我们常常称为隔离性。 上钻：从粗粒度往细粒度进行细化 上卷：从细粒度往粗粒度进行汇总 多个维度的数据形成了数据立方体，我们在对部分维度进行限制的时候，就相当于对数据立方体进行了切块，">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://mapan.tech/cn/788d/image-20200524105954281.png">
-<meta property="og:image" content="https://mapan.tech/cn/788d/image-20200524113843986.png">
-<meta property="og:image" content="https://mapan.tech/cn/788d/image-20200524121215144.png">
+<meta property="og:image" content="https://oneboy.app/blog/788d/image-20200524105954281.png">
+<meta property="og:image" content="https://oneboy.app/blog/788d/image-20200524113843986.png">
+<meta property="og:image" content="https://oneboy.app/blog/788d/image-20200524121215144.png">
 <meta property="article:published_time" content="2019-07-24T13:11:46.000Z">
 <meta property="article:modified_time" content="2020-05-26T13:17:13.752Z">
 <meta property="article:author" content="Pan">
 <meta property="article:tag" content="大数据,BigData,数据开发,Hadoop,Spark,Flink,Hive,HBase">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://mapan.tech/cn/788d/image-20200524105954281.png">
+<meta name="twitter:image" content="https://oneboy.app/blog/788d/image-20200524105954281.png">
 
 
-<link rel="canonical" href="https://mapan.tech/cn/788d.html">
+<link rel="canonical" href="https://oneboy.app/blog/788d.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://mapan.tech/cn/788d.html","path":"788d.html","title":"数据仓库相关概念"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/788d.html","path":"788d.html","title":"数据仓库相关概念"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>数据仓库相关概念 | 马攀的个人站</title>
@@ -53,7 +53,7 @@
 
 <link rel="dns-prefetch" href="https://comment.mapan.tech">
   <noscript>
-    <link rel="stylesheet" href="/cn/css/noscript.css">
+    <link rel="stylesheet" href="/blog/css/noscript.css">
   </noscript>
 </head>
 
@@ -73,7 +73,7 @@
 
   <div class="site-meta">
 
-    <a href="/cn/" class="brand" rel="start">
+    <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
       <p class="site-title">马攀的个人站</p>
       <i class="logo-line"></i>
@@ -91,11 +91,11 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/cn/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
-        <li class="menu-item menu-item-about"><a href="/cn/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
-        <li class="menu-item menu-item-categories"><a href="/cn/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
-        <li class="menu-item menu-item-message"><a href="/cn/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
-        <li class="menu-item menu-item-links"><a href="/cn/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+        <li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-message"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li>
+        <li class="menu-item menu-item-links"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -164,7 +164,7 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-categories">
-          <a href="/cn/categories.html">
+          <a href="/blog/categories.html">
         <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
@@ -208,10 +208,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://mapan.tech/cn/788d.html">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/788d.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/cn/images/avatar.gif">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
       <meta itemprop="name" content="Pan">
       <meta itemprop="description" content="">
     </span>
@@ -247,7 +247,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/cn/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据仓库</span></a>
+          <a href="/blog/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据仓库</span></a>
         </span>
     </span>
 
@@ -260,8 +260,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/cn/788d.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/cn/788d.html" itemprop="commentCount"></span>
+    <a title="waline" href="/blog/788d.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/788d.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -277,7 +277,7 @@
     <div class="post-body" itemprop="articleBody">
         <h1 id="什么是OLAP-OLTP"><a href="#什么是OLAP-OLTP" class="headerlink" title="什么是OLAP/OLTP?"></a>什么是OLAP/OLTP?</h1><p>联机事务处理：OLTP，全称On-line Transaction Processing</p>
 <p>联机分析处理：OLAP，全称On-line Analytical Processing</p>
-<img src="/cn/788d/image-20200524105954281.png" class="image-20200524105954281">
+<img src="/blog/788d/image-20200524105954281.png" class="image-20200524105954281">
 
 
 
@@ -286,14 +286,14 @@
 <p>上卷：从细粒度往粗粒度进行汇总</p>
 <p>多个维度的数据形成了数据立方体，我们在对部分维度进行限制的时候，就相当于对数据立方体进行了切块，当限制部分维度的值为固定值的时候，数据立方体就被切成了片，非常形象化。</p>
 <p>旋转：把行和列进行对调，例如按照地区统计各产品销量信息，和按照产品统计各地区销量。</p>
-<img src="/cn/788d/image-20200524113843986.png" class="image-20200524113843986">
+<img src="/blog/788d/image-20200524113843986.png" class="image-20200524113843986">
 
 
 
 <p>OLAP是业务分析导向，一般不符合范式规则，常常有很多数据冗余，传递依赖等，优点是查询效率很高，很少的join操作，一般一张业务报表仅来源于一张底层表，常见于各种即席分析系统如Kylin，Druid等。早期也会使用关系型数据库，现在常见使用分布式集群进行处理，如Hive等。</p>
 <p>OLTP是业务效率导向，几乎没有数据冗余，表非常多，各种维表码表，符合三范式，增删改查频繁，常见如ERP，SAP，企业OA等系统。一般使用关系型数据库，MySQL，Oracle等。</p>
 <p>数仓整体开发流程</p>
-<img src="/cn/788d/image-20200524121215144.png" class="image-20200524121215144">
+<img src="/blog/788d/image-20200524121215144.png" class="image-20200524121215144">
     </div>
 
     
@@ -306,12 +306,12 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/cn/6799.html" rel="prev" title="Flink运行架构">
+                <a href="/blog/6799.html" rel="prev" title="Flink运行架构">
                   <i class="fa fa-chevron-left"></i> Flink运行架构
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/cn/f544.html" rel="next" title="什么是数据仓库">
+                <a href="/blog/f544.html" rel="next" title="什么是数据仓库">
                   什么是数据仓库 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -346,12 +346,12 @@
   </footer>
 
   
-  <script src="/cn/js/anime.min.js"></script>
-<script src="/cn/js/comments.js"></script><script src="/cn/js/utils.js"></script><script src="/cn/js/motion.js"></script><script src="/cn/js/schemes/muse.js"></script><script src="/cn/js/next-boot.js"></script>
+  <script src="/blog/js/anime.min.js"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/motion.js"></script><script src="/blog/js/schemes/muse.js"></script><script src="/blog/js/next-boot.js"></script>
 
   
-<script src="/cn/js/search.js"></script>
-<script src="/cn/js/third-party/search/local-search.js"></script>
+<script src="/blog/js/search.js"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
 
 
 
@@ -362,7 +362,7 @@
 
 
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/cn/788d.html"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://comment.mapan.tech","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":10,"visitor":true,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","copyright":false,"el":"#waline","comment":true,"path":"/blog/788d.html"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
