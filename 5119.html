@@ -24,7 +24,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="MR的shuffle过程">
 <meta property="og:url" content="https://oneboy.app/blog/5119.html">
-<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:site_name" content="OneBoy">
 <meta property="og:description" content="1）MapReduce计算模型主要由两个阶段构成：Map、Reduce，其中在Map方法之后，Reduce方法之前的这段处理过程叫Shuffle。   2）Map方法之后，数据首先进入到分区方法，把数据标记好分区，然后把数据发送到环形缓冲区；环形缓冲区默认大小100m，环形缓冲区达到80%时，进行溢写；溢写前对数据进行排序，排序按照对key的索引进行字典顺序排序，排序的手段为快排；溢写产生大量的溢">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://oneboy.app/blog/5119/20151017151302759">
@@ -44,7 +44,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/5119.html","path":"5119.html","title":"MR的shuffle过程"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>MR的shuffle过程 | 马攀的个人站</title>
+<title>MR的shuffle过程 | OneBoy</title>
   
 
 
@@ -74,7 +74,7 @@
 
     <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">马攀的个人站</p>
+      <p class="site-title">OneBoy</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -215,7 +215,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="马攀的个人站">
+      <meta itemprop="name" content="OneBoy">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">

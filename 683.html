@@ -24,7 +24,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark共享变量底层实现">
 <meta property="og:url" content="https://oneboy.app/blog/683.html">
-<meta property="og:site_name" content="马攀的个人站">
+<meta property="og:site_name" content="OneBoy">
 <meta property="og:description" content="Spark一个非常重要的特性就是共享变量。 默认情况下，如果在一个算子的函数中使用到了某个外部的变量，那么这个变量的值会被拷贝到每个task中，此时每个task只能操作自己的那份变量副本。如果多个task想要共享某个变量，那么这种方式是做不到的。 Spark为此提供了两种共享变量，一种是Broadcast Variable（广播变量），另一种是Accumulator（累加变量）。Broadcast">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://oneboy.app/blog/683/clip_image001.jpg">
@@ -47,7 +47,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/683.html","path":"683.html","title":"Spark共享变量底层实现"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Spark共享变量底层实现 | 马攀的个人站</title>
+<title>Spark共享变量底层实现 | OneBoy</title>
   
 
 
@@ -77,7 +77,7 @@
 
     <a href="/blog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">马攀的个人站</p>
+      <p class="site-title">OneBoy</p>
       <i class="logo-line"></i>
     </a>
   </div>
@@ -219,7 +219,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="马攀的个人站">
+      <meta itemprop="name" content="OneBoy">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
