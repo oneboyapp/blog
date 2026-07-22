@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-oneboy.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-oneboy.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-oneboy.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js" defer></script>
+
+    <meta name="description" content="前言之前一直使用的搬瓦工（2018网络星期一）年付$27配置，2核 1G RAM + 40G SSD + 1000G&#x2F;月 Bindwidth + 洛杉矶DC2机房，从2018年开始一共续费了6年。最初的目的很简单，为了加速访问一些网站，比如Github等等。随着对Linux的熟悉，陆续搭建了一些服务，其中也有重装过几次系统，然后学习了容器化，这简直是一把非常好用的工具。虽然docker已">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VPS到手后的配置">
+<meta property="og:url" content="https://oneboy.app/blog/59db.html">
+<meta property="og:site_name" content="OneBoy">
+<meta property="og:description" content="前言之前一直使用的搬瓦工（2018网络星期一）年付$27配置，2核 1G RAM + 40G SSD + 1000G&#x2F;月 Bindwidth + 洛杉矶DC2机房，从2018年开始一共续费了6年。最初的目的很简单，为了加速访问一些网站，比如Github等等。随着对Linux的熟悉，陆续搭建了一些服务，其中也有重装过几次系统，然后学习了容器化，这简直是一把非常好用的工具。虽然docker已">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-13T07:28:55.000Z">
+<meta property="article:modified_time" content="2026-07-22T09:49:47.641Z">
+<meta property="article:author" content="OneBoy">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://oneboy.app/blog/59db.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/59db.html","path":"59db.html","title":"VPS到手后的配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>VPS到手后的配置 | OneBoy</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/js/anime.min.js" defer></script>
+<script src="/blog/js/utils.js" defer></script><script src="/blog/js/motion.js" defer></script><script src="/blog/js/sidebar.js" defer></script><script src="/blog/js/next-boot.js" defer></script>
+
+  <script src="/blog/js/search.js" defer></script>
+<script src="/blog/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.vip.oneboy.app/">
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">OneBoy</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-留言"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li><li class="menu-item menu-item-友链"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-number">2.2.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">OneBoy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories.html">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/59db.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="OneBoy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneBoy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="VPS到手后的配置 | OneBoy">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VPS到手后的配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-01-13 15:28:55" itemprop="dateCreated datePublished" datetime="2025-01-13T15:28:55+08:00">2025-01-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-22 17:49:47" itemprop="dateModified" datetime="2026-07-22T17:49:47+08:00">2026-07-22</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/blog/59db.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/59db.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/59db.html"></span>
+    </span>
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前一直使用的搬瓦工（2018网络星期一）年付$27配置，2核 1G RAM + 40G SSD + 1000G&#x2F;月 Bindwidth + 洛杉矶DC2机房，从2018年开始一共续费了6年。<br>最初的目的很简单，为了加速访问一些网站，比如Github等等。<br>随着对Linux的熟悉，陆续搭建了一些服务，其中也有重装过几次系统，然后学习了容器化，这简直是一把非常好用的工具。虽然docker已经逐渐式微，被K8S移除支持，但对于个人项目使用是完全够用的。<br>虽然Podman等也很优秀，解决了一些问题，但有一些项目支持的并不太友好，为了节约时间少走弯路，还是选择使用Docker。</p>
+<p>2024年黑五看到RN的促销活动，加量还降价，果断入手了一台RackNerd的黑五套餐二，年付$18，配置：2核 2.5G RAM + 40G SSD + 3000G&#x2F;月 Bindwidth。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>比较喜欢Debian系，下单时会让选择安装什么系统，我喜欢Debian系，就选了Debian12系统，非常稳定。</p>
+<p>付款后，服务商会提供root密码，或者让你上传ssh key，然后通过ssh访问服务器。</p>
+<h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><ol>
+<li>ssh使用root账户+密码登录；</li>
+<li>创建新用户，设置密码，把用户添加到sudoer；</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd -m -G sudo -s /bin/bash 用户名</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>修改ssh端口为高位端口，禁止root用户密码登录，禁止用户密码登录，重启sshd服务；</li>
+<li>尝试使用新用户+密钥登录，若无法登录则去检测上一步配置；</li>
+<li>安装常用软件&#x2F;配置UFW防火墙：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt-get install -y curl vim ufw</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sudo ufw default allow outgoing # 默认允许所有数据出站</span><br><span class="line">sudo ufw default deny incoming # 默认禁止所有数据入站</span><br><span class="line"></span><br><span class="line">sudo ufw allow 80,443/tcp # 开启80，443端口的tcp出/入站</span><br><span class="line">sudo ufw allow 443/udp # 开启443端口的udp出/入站</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启刚才设置的ssh高位端口，例如54311</span></span><br><span class="line">sudo ufw allow 54321</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启UFW防火墙</span></span><br><span class="line">sudo ufw enable</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">把 Cloudflare的ip加入白名单</span></span><br><span class="line">RULES=$(sudo ufw status numbered | grep &#x27;Cloudflare IP&#x27; | awk -F&quot;[][]&quot; &#x27;&#123;print $2&#125;&#x27; | sort -nr)</span><br><span class="line">for RULE in $RULES; do</span><br><span class="line">    echo &quot;Deleting rule $RULE&quot;</span><br><span class="line">    echo &quot;y&quot; | sudo ufw delete $RULE</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">for cfip in `curl -sw &#x27;\n&#x27; https://www.cloudflare.com/ips-v&#123;4,6&#125;`; do ufw allow proto tcp from $cfip to any port 443 comment &#x27;Cloudflare IP&#x27;; done</span><br><span class="line"></span><br><span class="line">ufw reload &gt; /dev/null</span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>开启BBR内核加速<br>编辑<code>/etc/sysctl.conf</code>文件，添加以下两行以启用BBR：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net.core.default_qdisc = fq</span><br><span class="line">net.ipv4.tcp_congestion_control = bbr</span><br></pre></td></tr></table></figure>
+
+<p>应用更改，然后检测是否生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo sysctl -p</span><br><span class="line">sysctl net.ipv4.tcp_congestion_control</span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>参考<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/">Docker官网文档</a>，安装Docker：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add Docker<span class="string">&#x27;s official GPG key:</span></span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install ca-certificates curl</span><br><span class="line">sudo install -m 0755 -d /etc/apt/keyrings</span><br><span class="line">sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc</span><br><span class="line">sudo chmod a+r /etc/apt/keyrings/docker.asc</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Add the repository to Apt sources:</span></span></span><br><span class="line">echo \</span><br><span class="line">  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \</span><br><span class="line"><span class="meta prompt_">  $</span><span class="language-bash"><span class="string">(. /etc/os-release &amp;&amp; echo &quot;$VERSION_CODENAME&quot;) stable&quot; | \</span></span></span><br><span class="line"><span class="string"><span class="language-bash">  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span></span></span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line"></span><br><span class="line">sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y</span><br></pre></td></tr></table></figure>
+<ol start="8">
+<li>切换到刚创建的用户，给用户docker权限，并创建两个文件夹用来放容器数据：</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add user to docker group</span></span><br><span class="line">groupadd docker</span><br><span class="line">usermod -aG docker $USER</span><br><span class="line">newgrp docker</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Create 2 folder <span class="keyword">for</span> docker</span></span><br><span class="line">mkdir ~/docker</span><br><span class="line">mkdir ~/compose</span><br></pre></td></tr></table></figure>
+
+<ol start="9">
+<li>创建一个docker子网，例如创建名为<code>npm_default</code>的子网，并指定网段为<code>172.20.0.0/24</code>：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker network create \</span><br><span class="line"> --driver=bridge \</span><br><span class="line"> --subnet=172.20.0.0/24 \</span><br><span class="line"> --gateway=172.20.0.1 \</span><br><span class="line"> npm_default</span><br></pre></td></tr></table></figure>
+<ol start="10">
+<li>在Cloudflare中使用A记录方式绑定一个子域名，例如<code>host.yourdomain.com</code>，不开云朵。后续所有新记录均使用<code>CNAME</code>方式添加，并开启云朵；</li>
+<li>安装的第一个容器为<code>Nginx Proxy Manager</code>（下称npm），先用 <code>http://ip:81</code> 的方式登录npm的管理界面，修改用户名+密码，同时在CF中使用CNAME方式绑定子域名，例如<code>npm.yourdomain.com</code>，然后把81端口反代到这这个域名上。尝试通过 <code>npm.yourdomain.com</code> 访问npm，成功后进行下一步;<br>compose.yml文件示例：</li>
+</ol>
+ <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">default:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">$&#123;DOCKER_MY_NETWORK&#125;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">jc21/nginx-proxy-manager:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">npm</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">80</span><span class="string">:80</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">443</span><span class="string">:443</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">81</span><span class="string">:81</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">DISABLE_IPV6:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">$&#123;DOCKER_HOME&#125;/npm/data:/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">$&#123;DOCKER_HOME&#125;/npm/letsencrypt:/etc/letsencrypt</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/localtime:/etc/localtime:ro</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/etc/timezone:/etc/timezone:ro</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="attr">ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.2</span></span><br><span class="line">    <span class="attr">deploy:</span></span><br><span class="line">      <span class="attr">resources:</span></span><br><span class="line">        <span class="attr">limits:</span></span><br><span class="line">          <span class="attr">cpus:</span> <span class="string">&quot;0.5&quot;</span></span><br><span class="line">          <span class="attr">memory:</span> <span class="string">300M</span></span><br></pre></td></tr></table></figure>
+<p><code>compose.yml</code>同目录下的<code>.env</code>文件:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DOCKER_HOME=/home/username/docker</span><br><span class="line">DOCKER_MY_NETWORK=npm_default</span><br></pre></td></tr></table></figure>
+<p>如果已经可以通过域名访问npm，则可以把81端口也注释掉，然后<code>docker compose up -d</code> 重新部署npm：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ports:</span><br><span class="line">  - 80:80</span><br><span class="line">  - 443:443</span><br><span class="line"># - 81:81</span><br></pre></td></tr></table></figure>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>用户home目录结构，也就是 <code>/home/username</code>目录：<br>其中 <code>~/docker</code> 用来存放容器运行产生的需要持久化的数据。个人不喜欢用volumn的方式，感觉管理不方便，所以采用目录方式来管理数据。</p>
+<p><code>~/compose</code>顾名思义，用来存放<code>docker compose</code>文件，可以很方便的统一化管理<code>compose.yml</code>，对每个容器的配置可以做到固定，方便更新，重启，迁移。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">~</span><br><span class="line">│</span><br><span class="line">│─ docker</span><br><span class="line">│   ├── npm</span><br><span class="line">│   │    ├──data</span><br><span class="line">│   │    └──letsencrypt</span><br><span class="line">│   └─── nexterm</span><br><span class="line">│        └───data</span><br><span class="line">├── compose</span><br><span class="line">│       ├── npm</span><br><span class="line">│       │   ├─compose.yml</span><br><span class="line">│       │   └─.env</span><br><span class="line">│       ├── nexterm</span><br><span class="line">│       │   ├─compose.yml</span><br><span class="line">│       │   └─.env</span><br><span class="line">│       ├── ...</span><br><span class="line">│       ├── ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述步骤已经完成了VPS基本配置，所有服务皆通过<code>Nginx</code>反向代理，通过<code>https</code>在<code>443</code>端口访问，开启<code>Cloudflare</code>的云朵，开启一切皆容器之旅吧。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>OneBoy
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://oneboy.app/blog/59db.html" title="VPS到手后的配置">https://oneboy.app/blog/59db.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/39cb.html" rel="prev" title="Github持续部署测试">
+                  <i class="fa fa-angle-left"></i> Github持续部署测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/b54.html" rel="next" title="升级站点主页">
+                  升级站点主页 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">OneBoy</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.vip.oneboy.app/","cssUrl":"https://unpkg.com/@waline/client@v3/dist/waline.css","commentCount":true,"pageview":true,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":20,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v3/dist/waline.umd.js","noCopyright":true,"noRss":true,"login":"disable","reaction":false,"el":"#waline","comment":true,"path":"/blog/59db.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-oneboy.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-oneboy.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-oneboy.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js" defer></script>
+
+    <meta name="description" content="在软件开发的过程中，接手或者写出低质量代码（屎山代码）几乎是每一位程序员都会遇到的事情，不管是在小公司还是在互联网大厂，接手代码后越写越恶心，就像在像屎一样的代码里加新功能和改需求。 低质量代码是如何写出来的为什么要写出低质量代码，为什么不一开始就严格按照规范要求来写出高质量，维护性好，可读性高的代码？ 1. 需求的不断变化在软件开发的初期阶段，团队通常会详细讨论项目的需求和设计。然而，事先定好的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="屎山代码是不可避免的吗">
+<meta property="og:url" content="https://oneboy.app/blog/ce2a.html">
+<meta property="og:site_name" content="OneBoy">
+<meta property="og:description" content="在软件开发的过程中，接手或者写出低质量代码（屎山代码）几乎是每一位程序员都会遇到的事情，不管是在小公司还是在互联网大厂，接手代码后越写越恶心，就像在像屎一样的代码里加新功能和改需求。 低质量代码是如何写出来的为什么要写出低质量代码，为什么不一开始就严格按照规范要求来写出高质量，维护性好，可读性高的代码？ 1. 需求的不断变化在软件开发的初期阶段，团队通常会详细讨论项目的需求和设计。然而，事先定好的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-02-12T06:42:48.000Z">
+<meta property="article:modified_time" content="2026-07-22T09:49:47.641Z">
+<meta property="article:author" content="OneBoy">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://oneboy.app/blog/ce2a.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/ce2a.html","path":"ce2a.html","title":"屎山代码是不可避免的吗"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>屎山代码是不可避免的吗 | OneBoy</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/js/anime.min.js" defer></script>
+<script src="/blog/js/utils.js" defer></script><script src="/blog/js/motion.js" defer></script><script src="/blog/js/sidebar.js" defer></script><script src="/blog/js/next-boot.js" defer></script>
+
+  <script src="/blog/js/search.js" defer></script>
+<script src="/blog/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.vip.oneboy.app/">
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">OneBoy</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-留言"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li><li class="menu-item menu-item-友链"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%8E%E8%B4%A8%E9%87%8F%E4%BB%A3%E7%A0%81%E6%98%AF%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BA%E6%9D%A5%E7%9A%84"><span class="nav-number">1.</span> <span class="nav-text">低质量代码是如何写出来的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%9C%80%E6%B1%82%E7%9A%84%E4%B8%8D%E6%96%AD%E5%8F%98%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">1. 需求的不断变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%96%B0%E9%9C%80%E6%B1%82%E7%9A%84%E5%A2%9E%E5%8A%A0%E4%B8%8E%E5%8E%9F%E5%A7%8B%E8%AE%BE%E8%AE%A1%E7%9A%84%E8%84%B1%E8%8A%82"><span class="nav-number">1.2.</span> <span class="nav-text">2. 新需求的增加与原始设计的脱节</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%8F%90%E9%AB%98%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">如何提高代码质量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%9A%E6%9C%9F%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E8%AF%84%E5%AE%A1"><span class="nav-number">2.1.</span> <span class="nav-text">1. 定期进行代码评审</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BC%95%E5%85%A5%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95"><span class="nav-number">2.2.</span> <span class="nav-text">2. 引入自动化测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%9A%E6%9C%9F%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E9%87%8D%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">3. 定期进行代码重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8%E6%B8%85%E6%99%B0%E7%9A%84%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83"><span class="nav-number">2.4.</span> <span class="nav-text">4. 使用清晰的编码规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%8A%A0%E5%BC%BA%E4%B8%8E%E4%B8%9A%E5%8A%A1%E6%96%B9%E7%9A%84%E6%B2%9F%E9%80%9A"><span class="nav-number">2.5.</span> <span class="nav-text">5. 加强与业务方的沟通</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">OneBoy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories.html">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/ce2a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="OneBoy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneBoy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="屎山代码是不可避免的吗 | OneBoy">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          屎山代码是不可避免的吗
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-02-12 14:42:48" itemprop="dateCreated datePublished" datetime="2025-02-12T14:42:48+08:00">2025-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-22 17:49:47" itemprop="dateModified" datetime="2026-07-22T17:49:47+08:00">2026-07-22</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/blog/ce2a.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/ce2a.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/ce2a.html"></span>
+    </span>
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在软件开发的过程中，接手或者写出低质量代码（屎山代码）几乎是每一位程序员都会遇到的事情，不管是在小公司还是在互联网大厂，接手代码后越写越恶心，就像在像屎一样的代码里加新功能和改需求。</p>
+<h2 id="低质量代码是如何写出来的"><a href="#低质量代码是如何写出来的" class="headerlink" title="低质量代码是如何写出来的"></a>低质量代码是如何写出来的</h2><p>为什么要写出低质量代码，为什么不一开始就严格按照规范要求来写出高质量，维护性好，可读性高的代码？</p>
+<h3 id="1-需求的不断变化"><a href="#1-需求的不断变化" class="headerlink" title="1. 需求的不断变化"></a>1. 需求的不断变化</h3><p>在软件开发的初期阶段，团队通常会详细讨论项目的需求和设计。然而，事先定好的需求往往会随着业务环境的变化、市场的动态调整以及客户反馈的更新而被推翻或修改。这种变化性要求开发人员具备灵活性，但灵活性往往伴随着妥协，导致代码结构复杂化。说人话就是技术必须向业务妥协，毕竟直接挣钱的是业务，而不是代码。</p>
+<h3 id="2-新需求的增加与原始设计的脱节"><a href="#2-新需求的增加与原始设计的脱节" class="headerlink" title="2. 新需求的增加与原始设计的脱节"></a>2. 新需求的增加与原始设计的脱节</h3><p>随着项目的发展，新的需求不断涌现。理想情况下，开发团队会对整个代码进行重构，以适应新的需求。然而，重写整体代码需要大量的时间和资源，现实中往往难以实现。因此，开发人员通常选择在代码的局部进行定制化修改，久而久之，代码变得难以理解，维护困难。</p>
+<h2 id="如何提高代码质量"><a href="#如何提高代码质量" class="headerlink" title="如何提高代码质量"></a>如何提高代码质量</h2><h3 id="1-定期进行代码评审"><a href="#1-定期进行代码评审" class="headerlink" title="1. 定期进行代码评审"></a>1. 定期进行代码评审</h3><p>代码评审是确保代码质量的重要手段。通过定期的代码评审，团队成员可以相互学习，识别潜在的问题，并在早期阶段进行修正。这不仅能提高代码质量，还能促进团队的知识共享。</p>
+<h3 id="2-引入自动化测试"><a href="#2-引入自动化测试" class="headerlink" title="2. 引入自动化测试"></a>2. 引入自动化测试</h3><p>自动化测试可以帮助开发人员快速识别代码中的错误和潜在问题。通过编写单元测试、集成测试和端到端测试，可以确保代码在修改后仍然保持其功能完整性。</p>
+<h3 id="3-定期进行代码重构"><a href="#3-定期进行代码重构" class="headerlink" title="3. 定期进行代码重构"></a>3. 定期进行代码重构</h3><p>代码重构是改善代码结构和可维护性的重要步骤。通过定期重构，开发人员可以消除冗余代码、优化代码架构，并使代码更易于理解和维护。</p>
+<h3 id="4-使用清晰的编码规范"><a href="#4-使用清晰的编码规范" class="headerlink" title="4. 使用清晰的编码规范"></a>4. 使用清晰的编码规范</h3><p>制定并遵循统一的编码规范可以提高代码的可读性和一致性。编码规范应包括命名约定、代码格式化规则以及注释标准等。</p>
+<h3 id="5-加强与业务方的沟通"><a href="#5-加强与业务方的沟通" class="headerlink" title="5. 加强与业务方的沟通"></a>5. 加强与业务方的沟通</h3><p>与业务方保持良好的沟通可以减少需求变更带来的影响。通过定期的需求评审和反馈会议，开发团队可以更准确地理解业务需求，从而减少不必要的修改。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>低质量代码的出现是软件开发过程中常见的挑战，但通过采取适当的措施，开发团队可以显著提高代码质量。通过代码评审、自动化测试、定期重构以及加强沟通，团队可以更好地应对复杂和变化的需求，保持代码的可维护性和稳定性。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>OneBoy
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://oneboy.app/blog/ce2a.html" title="屎山代码是不可避免的吗">https://oneboy.app/blog/ce2a.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/d06b.html" rel="prev" title="提交信息和版本号">
+                  <i class="fa fa-angle-left"></i> 提交信息和版本号
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/5696.html" rel="next" title="照片添加水印小工具">
+                  照片添加水印小工具 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">OneBoy</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.vip.oneboy.app/","cssUrl":"https://unpkg.com/@waline/client@v3/dist/waline.css","commentCount":true,"pageview":true,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":20,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v3/dist/waline.umd.js","noCopyright":true,"noRss":true,"login":"disable","reaction":false,"el":"#waline","comment":true,"path":"/blog/ce2a.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.2">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-oneboy.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-oneboy.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-oneboy.png">
+  <link rel="mask-icon" href="/blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="/blog/css/all.min.css">
+  <link rel="stylesheet" href="/blog/css/animate.min.css">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"oneboy.app","root":"/blog/","images":"/blog/images","scheme":"Mist","darkmode":false,"version":"8.28.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js" defer></script>
+
+    <meta name="description" content="AT24C32和驱动和AT24C02基本一致。由于容量增加了，数据地址的地址由原来的8位也相应的增加到16位。    芯片 容量    AT24C01 128字节   AT24C02 256字节   AT24C04 512字节   AT24C08 1K字节   AT24C016 2K字节   AT24C0132 4K字节   AT24C064 8K字节   AT24C0128 16K字节   AT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单片机IO口模拟I2C时序驱动AT24C32">
+<meta property="og:url" content="https://oneboy.app/blog/e12d.html">
+<meta property="og:site_name" content="OneBoy">
+<meta property="og:description" content="AT24C32和驱动和AT24C02基本一致。由于容量增加了，数据地址的地址由原来的8位也相应的增加到16位。    芯片 容量    AT24C01 128字节   AT24C02 256字节   AT24C04 512字节   AT24C08 1K字节   AT24C016 2K字节   AT24C0132 4K字节   AT24C064 8K字节   AT24C0128 16K字节   AT">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-12-24T09:05:00.000Z">
+<meta property="article:modified_time" content="2026-07-22T09:49:47.473Z">
+<meta property="article:author" content="OneBoy">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://oneboy.app/blog/e12d.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://oneboy.app/blog/e12d.html","path":"e12d.html","title":"单片机IO口模拟I2C时序驱动AT24C32"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>单片机IO口模拟I2C时序驱动AT24C32 | OneBoy</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="/blog/js/anime.min.js" defer></script>
+<script src="/blog/js/utils.js" defer></script><script src="/blog/js/motion.js" defer></script><script src="/blog/js/sidebar.js" defer></script><script src="/blog/js/next-boot.js" defer></script>
+
+  <script src="/blog/js/search.js" defer></script>
+<script src="/blog/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="dns-prefetch" href="https://comments.vip.oneboy.app/">
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">OneBoy</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/index.html" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/blog/about.html" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories.html" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-留言"><a href="/blog/message.html" rel="section"><i class="fas fa-comment fa-fw"></i>留言</a></li><li class="menu-item menu-item-友链"><a href="/blog/links.html" rel="section"><i class="fab fa-grav fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">OneBoy</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories.html">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://oneboy.app/blog/e12d.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="name" content="OneBoy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="OneBoy">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="单片机IO口模拟I2C时序驱动AT24C32 | OneBoy">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          单片机IO口模拟I2C时序驱动AT24C32
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2016-12-24 17:05:00" itemprop="dateCreated datePublished" datetime="2016-12-24T17:05:00+08:00">2016-12-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-07-22 17:49:47" itemprop="dateModified" datetime="2026-07-22T17:49:47+08:00">2026-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E7%94%B5%E5%AD%90/" itemprop="url" rel="index"><span itemprop="name">电子</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/blog/e12d.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/e12d.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/e12d.html"></span>
+    </span>
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>AT24C32和驱动和AT24C02基本一致。由于容量增加了，数据地址的地址由原来的8位也相应的增加到16位。</p>
+<table>
+<thead>
+<tr>
+<th align="center">芯片</th>
+<th align="center">容量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">AT24C01</td>
+<td align="center">128字节</td>
+</tr>
+<tr>
+<td align="center">AT24C02</td>
+<td align="center">256字节</td>
+</tr>
+<tr>
+<td align="center">AT24C04</td>
+<td align="center">512字节</td>
+</tr>
+<tr>
+<td align="center">AT24C08</td>
+<td align="center">1K字节</td>
+</tr>
+<tr>
+<td align="center">AT24C016</td>
+<td align="center">2K字节</td>
+</tr>
+<tr>
+<td align="center">AT24C0132</td>
+<td align="center">4K字节</td>
+</tr>
+<tr>
+<td align="center">AT24C064</td>
+<td align="center">8K字节</td>
+</tr>
+<tr>
+<td align="center">AT24C0128</td>
+<td align="center">16K字节</td>
+</tr>
+<tr>
+<td align="center">AT24C0256</td>
+<td align="center">32K字节</td>
+</tr>
+<tr>
+<td align="center">AT24C0512</td>
+<td align="center">64K字节</td>
+</tr>
+</tbody></table>
+<p>1字节 &#x3D; 1 Byte</p>
+<p>以下程序适用于上面型号的EEPROM芯片<br>使用22.1184MHz晶振、读出的数据送P0口显示</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;reg52.h&quot;</span> </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;intrins.h&quot;</span>  </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> uchar unsigned char </span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> uint unsigned int </span></span><br><span class="line"></span><br><span class="line">sbit sda=P3^<span class="number">7</span>;<span class="comment">//;模拟I2C 数据 </span></span><br><span class="line">sbit scl=P3^<span class="number">6</span>;<span class="comment">//;模拟I2C 时钟 </span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">delay1</span><span class="params">(uint z)</span><span class="comment">//延时为 1ms </span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> a,b,i;</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;z;i++)</span><br><span class="line">		<span class="keyword">for</span>(b=<span class="number">80</span>;b&gt;<span class="number">0</span>;b--)</span><br><span class="line">			<span class="keyword">for</span>(a=<span class="number">10</span>;a&gt;<span class="number">0</span>;a--);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">delay</span><span class="params">()</span><span class="comment">//5us延时 </span></span><br><span class="line">  <span class="comment">//22.1184误差 -0.1171875us</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> a;</span><br><span class="line">    <span class="keyword">for</span>(a=<span class="number">3</span>;a&gt;<span class="number">0</span>;a--);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">star</span><span class="params">()</span><span class="comment">//开始 </span></span><br><span class="line">&#123; </span><br><span class="line">	sda=<span class="number">1</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line">	scl=<span class="number">1</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line">	sda=<span class="number">0</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">stop</span><span class="params">()</span><span class="comment">//停止 </span></span><br><span class="line">&#123; </span><br><span class="line">	sda=<span class="number">0</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line">	scl=<span class="number">1</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line">	sda=<span class="number">1</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">ack</span><span class="params">()</span><span class="comment">//应答 </span></span><br><span class="line">&#123; </span><br><span class="line">	uchar z=<span class="number">0</span>; </span><br><span class="line">	<span class="keyword">while</span>((sda==<span class="number">1</span>)&amp;&amp;(z&lt;<span class="number">50</span>))z++;<span class="comment">//条件判断， sda=1，则没有应答。如果没有应答则延时：z&lt;50，z++;后返回 </span></span><br><span class="line">	scl=<span class="number">0</span>; </span><br><span class="line">	delay();<span class="comment">//5us延时 </span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">write</span><span class="params">(uchar slave_write_address,uchar byte_High_address,uchar byte_Low_address,uchar data_data)</span><span class="comment">//写一个数据 </span></span><br><span class="line">&#123; </span><br><span class="line">	uchar temp,temp1,i,ii; </span><br><span class="line"></span><br><span class="line">	star();<span class="comment">//开始 </span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(ii=<span class="number">0</span>;ii&lt;<span class="number">4</span>;ii++)<span class="comment">//根据 24CXX文档资料，和时序图，按顺序送：器件写地址，字节地址，数据 </span></span><br><span class="line">	&#123;  </span><br><span class="line">		<span class="keyword">if</span>(ii==<span class="number">0</span>) </span><br><span class="line">		&#123; </span><br><span class="line">		temp=slave_write_address;<span class="comment">//送 器件写地址 </span></span><br><span class="line">		temp1=slave_write_address; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(ii==<span class="number">1</span>) </span><br><span class="line">		&#123; </span><br><span class="line">			temp=byte_High_address;<span class="comment">//送 字节高地址 </span></span><br><span class="line">			temp1=byte_High_address; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(ii==<span class="number">2</span>) </span><br><span class="line">		&#123; </span><br><span class="line">			temp=byte_Low_address;<span class="comment">//送 字节低地址 </span></span><br><span class="line">			temp1=byte_Low_address; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(ii==<span class="number">3</span>) </span><br><span class="line">		&#123; </span><br><span class="line">			temp=data_data;<span class="comment">//送 数据 </span></span><br><span class="line">			temp1=data_data; </span><br><span class="line">		&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++) </span><br><span class="line">		&#123; </span><br><span class="line">			scl=<span class="number">0</span>; </span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			temp=temp1; </span><br><span class="line">			temp=temp&amp;<span class="number">0x80</span>;<span class="comment">// 相 与 后，把不相关的位清零 </span></span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(temp==<span class="number">0x80</span>)<span class="comment">//根据前面 相 与 后，判断 temp是否等于0x80，是则该位为 1 </span></span><br><span class="line"></span><br><span class="line">			sda=<span class="number">1</span>;  </span><br><span class="line">			<span class="keyword">else</span> </span><br><span class="line">			sda=<span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			scl=<span class="number">1</span>; </span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			scl=<span class="number">0</span>; </span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			temp1=temp1&lt;&lt;<span class="number">1</span>;<span class="comment">//向左移出1位 </span></span><br><span class="line"></span><br><span class="line">		&#125; </span><br><span class="line">		sda=<span class="number">1</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line">		scl=<span class="number">1</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line">		ack(); </span><br><span class="line">	&#125; </span><br><span class="line">	stop();<span class="comment">//停止 </span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">read(uchar slave_write_address,byte_High_address,byte_Low_address,uchar slave_read_address)<span class="comment">//读一个数据 </span></span><br><span class="line">&#123; </span><br><span class="line">	uchar temp,temp1,i,ii,x,data_data; </span><br><span class="line"></span><br><span class="line">	star();<span class="comment">//开始 </span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(ii=<span class="number">0</span>;ii&lt;<span class="number">4</span>;ii++)<span class="comment">//根据 24CXX文档资料，和时序图，按顺序送：器件写地址，字节地址，器件读地址 </span></span><br><span class="line">	&#123;  </span><br><span class="line">		<span class="keyword">if</span>(ii==<span class="number">0</span>) </span><br><span class="line">		&#123; </span><br><span class="line">			temp=slave_write_address;<span class="comment">//送 器件写地址 </span></span><br><span class="line">			temp1=slave_write_address; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(ii==<span class="number">1</span>) </span><br><span class="line">		&#123; </span><br><span class="line">			temp=byte_High_address;<span class="comment">//送 字节高地址 </span></span><br><span class="line">			temp1=byte_High_address; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(ii==<span class="number">2</span>) </span><br><span class="line">		&#123; </span><br><span class="line">			temp=byte_Low_address;<span class="comment">//送 字节低地址 </span></span><br><span class="line">			temp1=byte_Low_address; </span><br><span class="line">		&#125; </span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(ii==<span class="number">3</span>) </span><br><span class="line">		&#123;  </span><br><span class="line">			star();<span class="comment">//开始 </span></span><br><span class="line"></span><br><span class="line">			temp=slave_read_address;<span class="comment">//送 器件读地址 </span></span><br><span class="line">			temp1=slave_read_address; </span><br><span class="line">		&#125; </span><br><span class="line"></span><br><span class="line">		  </span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">8</span>;i++)<span class="comment">//开始读数据 </span></span><br><span class="line">		&#123; </span><br><span class="line">			scl=<span class="number">0</span>; </span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			temp=temp1; </span><br><span class="line">			temp=temp&amp;<span class="number">0x80</span>;<span class="comment">// 相 与 后，把不相关的位清零 </span></span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(temp==<span class="number">0x80</span>)<span class="comment">//根据前面 相 与 后，判断 temp是否等于0x80，是则该位为 1 </span></span><br><span class="line"></span><br><span class="line">			sda=<span class="number">1</span>;  </span><br><span class="line">			<span class="keyword">else</span> </span><br><span class="line">			sda=<span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			scl=<span class="number">1</span>; </span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			scl=<span class="number">0</span>; </span><br><span class="line">			delay();<span class="comment">//5us延时 </span></span><br><span class="line">			temp1=temp1&lt;&lt;<span class="number">1</span>;<span class="comment">//向左移出1位 </span></span><br><span class="line">		&#125; </span><br><span class="line">		sda=<span class="number">1</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line">		scl=<span class="number">1</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line">		ack();<span class="comment">//应答 </span></span><br><span class="line">	&#125; </span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span>(x=<span class="number">0</span>;x&lt;<span class="number">8</span>;x++) </span><br><span class="line">	&#123; </span><br><span class="line">		data_data=data_data&lt;&lt;<span class="number">1</span>;<span class="comment">//向左移入1位 </span></span><br><span class="line"></span><br><span class="line">		sda=<span class="number">1</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line">		scl=<span class="number">0</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line">		scl=<span class="number">1</span>; </span><br><span class="line">		delay();<span class="comment">//5us延时 </span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(sda==<span class="number">1</span>)<span class="comment">//判断 数据线是否是高电平 </span></span><br><span class="line">		data_data|=<span class="number">0x01</span>;<span class="comment">//把读到的数据 或 0X01  </span></span><br><span class="line">		<span class="comment">//else  </span></span><br><span class="line">		<span class="comment">//data_data|=0x00; </span></span><br><span class="line">	&#125; </span><br><span class="line">	ack();<span class="comment">//应答 </span></span><br><span class="line">	stop();<span class="comment">//停止 </span></span><br><span class="line">	<span class="keyword">return</span> data_data;<span class="comment">//返回读到的数据 </span></span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span> </span><br><span class="line">&#123;  </span><br><span class="line"></span><br><span class="line">	write(<span class="number">0xa0</span>,<span class="number">0x00</span>,<span class="number">0x01</span>,<span class="number">0xaa</span>);<span class="comment">//向器件写一个数据: </span></span><br><span class="line">	<span class="comment">//（0xa0 是器件写地址；0x00 是字节高地址；0x01 是字节低地址；0x66 是待写入的数据） </span></span><br><span class="line"></span><br><span class="line">	delay1(<span class="number">5</span>);<span class="comment">//写与读的时间间隔应大于5ms,取决于器件 24C02的响应速度 </span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//向器件读一个数据 </span></span><br><span class="line">	<span class="comment">//把读出的数据送 P1口显示 </span></span><br><span class="line">	P0=read(<span class="number">0xa0</span>,<span class="number">0x00</span>,<span class="number">0x01</span>,<span class="number">0xa1</span>);<span class="comment">//向器件读一个数据： </span></span><br><span class="line">	<span class="comment">//（0xa0 是器件写地址；0x00 是字节高地址；0x01 是字节低地址；0xa1 是器件读地址） </span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">while</span>(<span class="number">1</span>);<span class="comment">//跳转，相当于汇编指令 JUMP $ </span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>OneBoy
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://oneboy.app/blog/e12d.html" title="单片机IO口模拟I2C时序驱动AT24C32">https://oneboy.app/blog/e12d.html</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/a414.html" rel="prev" title="旋转星空作为网页背景">
+                  <i class="fa fa-angle-left"></i> 旋转星空作为网页背景
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/2817.html" rel="next" title="HEX和BCD互转">
+                  HEX和BCD互转 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">OneBoy</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comments.vip.oneboy.app/","cssUrl":"https://unpkg.com/@waline/client@v3/dist/waline.css","commentCount":true,"pageview":true,"placeholder":"说点什么吧...","avatar":"mp","meta":["nick","mail","link"],"pageSize":20,"comment_count":false,"requiredFields":["nick","mail"],"libUrl":"https://unpkg.com/@waline/client@v3/dist/waline.umd.js","noCopyright":true,"noRss":true,"login":"disable","reaction":false,"el":"#waline","comment":true,"path":"/blog/e12d.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>
