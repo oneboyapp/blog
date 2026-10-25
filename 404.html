@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, follow">
+    <title>404 · 页面不见了</title>
+    <!-- 全部为站内本地资源（/blog/css、/blog/images、/blog/webfonts），不依赖任何境外 CDN -->
+    <link rel="shortcut icon" href="/blog/images/favicon-32x32-oneboy.png">
+    <link rel="apple-touch-icon" href="/blog/images/apple-touch-icon-oneboy.png">
+    <link rel="stylesheet" href="/blog/css/all.min.css">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        body {
+            background: #1f2d3d;
+            background: linear-gradient(160deg, #1b2a41 0%, #28405c 55%, #3c5a7d 100%);
+            background-attachment: fixed;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .cloud {
+            position: fixed;
+            color: rgba(255, 255, 255, .18);
+            pointer-events: none;
+            animation: drift 22s ease-in-out infinite;
+        }
+        .cloud.pos1 { top: 12%; left: 6%; font-size: 72px; animation-delay: -3s; }
+        .cloud.pos2 { top: 22%; right: 10%; font-size: 48px; animation-delay: -9s; }
+        .cloud.pos3 { top: 46%; left: 16%; font-size: 36px; animation-delay: -14s; }
+        .cloud.pos4 { top: 60%; right: 18%; font-size: 60px; animation-delay: -6s; }
+        @keyframes drift {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(14px, -16px, 0); }
+        }
+        #wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .code {
+            font-size: 96px;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin: 0 0 8px;
+            color: rgba(255, 255, 255, .92);
+        }
+        .subtitle {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.9;
+            margin: 0 0 28px;
+            color: rgba(255, 255, 255, .82);
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .45);
+            background: transparent;
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            font-family: inherit;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: background-color .2s ease, border-color .2s ease;
+        }
+        .btn:hover,
+        .btn:focus {
+            background: rgba(255, 255, 255, .14);
+            border-color: rgba(255, 255, 255, .8);
+        }
+        .btn.primary {
+            background: #fff;
+            border-color: #fff;
+            color: #1b2a41;
+        }
+        .btn.primary:hover,
+        .btn.primary:focus {
+            background: rgba(255, 255, 255, .86);
+        }
+        @media (max-width: 480px) {
+            .code { font-size: 64px; }
+            .subtitle { font-size: 16px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .cloud { animation: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <i class="fas fa-cloud cloud pos1" aria-hidden="true"></i>
+    <i class="fas fa-cloud cloud pos2" aria-hidden="true"></i>
+    <i class="fas fa-cloud cloud pos3" aria-hidden="true"></i>
+    <i class="fas fa-cloud cloud pos4" aria-hidden="true"></i>
+
+    <div id="wrapper">
+        <div class="container">
+            <p class="code">404</p>
+            <h1 class="subtitle">
+                您要找的页面不见了<br>
+                <span id="num">5</span> 秒后自动跳转到主页
+            </h1>
+            <div class="actions">
+                <a class="btn primary" href="/blog/">立刻返回主页</a>
+                <button type="button" class="btn" id="back">返回上一页</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        (function () {
+            document.getElementById('back').addEventListener('click', function () {
+                history.back();
+            });
+
+            var HOME = '/blog/';
+            var num = 5;
+            var el = document.getElementById('num');
+            var timer = setInterval(function () {
+                num--;
+                if (num <= 0) {
+                    clearInterval(timer);
+                    el.innerHTML = '0';
+                    location.href = HOME;
+                    return;
+                }
+                el.innerHTML = num;
+            }, 1000);
+        })();
+    </script>
+</body>
+</html>
